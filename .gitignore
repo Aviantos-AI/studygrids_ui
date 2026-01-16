@@ -1,0 +1,199 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.build/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+migrate_working_dir/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# The .vscode folder contains launch configuration and tasks you configure in
+# VS Code which you may wish to be included in version control, so this line
+# is commented out by default.
+#.vscode/
+
+# Flutter/Dart/Pub related
+**/doc/api/
+**/ios/Flutter/.last_build_id
+.dart_tool/
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+/build/
+/coverage/
+
+# Symbolication related
+app.*.symbols
+
+# Obfuscation related
+app.*.map.json
+
+# Android Studio will place build artifacts here
+/android/app/debug
+/android/app/profile
+/android/app/release
+
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.build/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+migrate_working_dir/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# The .vscode folder contains launch configuration and tasks you configure in
+# VS Code which you may wish to be included in version control, so this line
+# is commented out by default.
+#.vscode/
+
+# Flutter/Dart/Pub related
+**/doc/api/
+**/ios/Flutter/.last_build_id
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+/build/
+
+# Symbolication related
+app.*.symbols
+
+# Obfuscation related
+app.*.map.json
+
+# Android Studio will place build artifacts here
+/android/app/debug
+/android/app/profile
+/android/app/release
+
+
+# ============================================
+# Flutter Web Project - .gitignore
+# ============================================
+
+# Flutter build files
+build/
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+generated_plugin_registrant.dart
+
+# Web-specific build artifacts
+web/.dart_tool/
+web/.idea/
+web/.vscode/
+web/build/
+
+# IDE files
+.vscode/
+.idea/
+*.iml
+
+# Environment / Secrets
+.env
+.env.*
+*.key
+*.pem
+*.p12
+*.crt
+*.der
+
+# OS generated files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Icon?
+Desktop.ini
+
+# Logs
+*.log
+
+# Cache / Temp
+.cache/
+tmp/
+temp/
+
+# Coverage
+coverage/
+
+# Firebase / Config (if any)
+firebase.json
+firebase-debug.log
+google-services.json
+GoogleService-Info.plist
+
+# Android / iOS platform dirs (if using web only)
+android/
+ios/
+macos/
+windows/
+linux/
+
+# Other generated files
+*.lock
+*.swp
+*.swo
+*.orig
+*.bak
+*.tmp
+
+# ============================================
+# Optional: Example Environment Template
+# ============================================
+# Keep this file to show other devs what env vars to add manually
+!.env.example
+
+# 3. Unnecessary files ignore rules डालो
+cat <<EOF > .gitignore
+.vscode/
+*.code-workspace
+.build/
+.dart_tool/
+.packages
+.pub/
+.pub-cache/
+flutter_export_environment.sh
+android/.gradle/
+android/local.properties
+android/app/debug/
+android/app/profile/
+android/app/release/
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/Flutter.framework
+ios/Flutter/App.framework
+ios/Flutter/engine/
+ios/Flutter/Flutter.podspec
+ios/Flutter/Generated.xcconfig
+ios/Flutter/ephemeral/
+.DS_Store
+Thumbs.db
+*.log
+EOF
