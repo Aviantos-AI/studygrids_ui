@@ -29,12 +29,7 @@ import 'package:pie_study/widgets/app_colors.dart';
 import 'package:pie_study/widgets/brand_title.dart';
 import 'package:pie_study/widgets/pie_footer.dart';
 
-// neeche wali imports apne actual paths ke hisaab se adjust kar lena
-// import 'package:pie_study/screens/faq_page.dart';
-// import 'package:pie_study/screens/agentic_managers_detail_page.dart';
-// import 'package:pie_study/screens/agentic_developers_detail_page.dart';
-// import 'package:pie_study/screens/data_science_internship_detail_page.dart';
-// import 'package:pie_study/screens/data_science_foundation_detail_page.dart';
+
 const Color _pieBlue = Color(0xFF0B3558); // deep navy
 
 class PieStudyHomePage extends StatelessWidget {
@@ -68,7 +63,7 @@ class PieStudyHomePage extends StatelessWidget {
           ),
         ),
         actions: [
-          // 👇 mobile screen par hi menu icon dikhana hai
+          //  mobile screen par hi menu icon dikhana hai
           if (!isWide)
             Builder(
               builder: (ctx) => IconButton(
