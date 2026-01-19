@@ -179,6 +179,7 @@ class PieTopNav extends StatelessWidget {
   final PieNavTap onItemTap;
   final String? ctaLabel;
   final VoidCallback? onCtaTap;
+  final VoidCallback? onEnrollTap;
 
   /// Jis page par ho, uska id yaha pass karna (e.g. 'home', 'about')
   final String? activeId;
@@ -189,6 +190,7 @@ class PieTopNav extends StatelessWidget {
     this.ctaLabel,
     this.onCtaTap,
     this.activeId,
+    this.onEnrollTap,
   });
 
   @override
@@ -207,12 +209,38 @@ class PieTopNav extends StatelessWidget {
                 onItemTap: onItemTap,
                 activeId: activeId,
               ),
+              if (onEnrollTap != null) ...[
+                const SizedBox(width: 12),
+                ElevatedButton(
+                  onPressed: onEnrollTap,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.orange,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 10,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    elevation: 0,
+                  ),
+                  child: const Text(
+                    'Enroll Now',
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontWeight: FontWeight.w700,
+                      fontSize: 13,
+                    ),
+                  ),
+                ),
+              ],
               if (ctaLabel != null && onCtaTap != null) ...[
                 const SizedBox(width: 16),
                 ElevatedButton(
                   onPressed: onCtaTap,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.navy,
+                    backgroundColor: AppColors.blue,
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(
                       horizontal: 16,
@@ -285,7 +313,7 @@ class PieNavRow extends StatelessWidget {
                       isActive ? FontWeight.w700 : FontWeight.w600,
                   fontSize: 14,
                   color:
-                      isActive ? AppColors.navy : Colors.black87,
+                      isActive ? AppColors.blue : Colors.black87,
                 ),
               ),
             ),
@@ -344,7 +372,7 @@ class PieNavDrawer extends StatelessWidget {
                       fontWeight:
                           isActive ? FontWeight.w700 : FontWeight.w500,
                       color:
-                          isActive ? AppColors.navy : Colors.black87,
+                          isActive ? AppColors.blue : Colors.black87,
                     ),
                   ),
                   onTap: () => onItemTap(e.value),

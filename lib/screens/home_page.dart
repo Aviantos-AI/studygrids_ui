@@ -1,39 +1,51 @@
 import 'dart:async';
-import 'dart:ui' as html show window, ImageFilter;
-
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:url_launcher/url_launcher.dart';
 import 'package:pie_study/main.dart';
 import 'package:pie_study/screens/Data_science_internship_page.dart';
 import 'package:pie_study/screens/agentic_ai_developer_page.dart';
 import 'package:pie_study/screens/agentic_ai_manager_program.dart';
 import 'package:pie_study/screens/data_science_course_page.dart';
-import 'package:pie_study/screens/faq_page.dart';
 import 'package:pie_study/screens/main_navigation.dart';
 import 'package:pie_study/widgets/app_colors.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'dart:ui' as ui hide window;
-
-
-
-
-
-
-
-import 'package:flutter/foundation.dart' show kIsWeb;
-
-import 'dart:html' as html; // ignore: avoid_web_libraries_in_flutter
-
-import 'package:flutter/material.dart';
-import 'package:pie_study/main.dart'; // handlePieNavTap yahi hai
-import 'package:pie_study/widgets/app_colors.dart';
-import 'package:pie_study/widgets/brand_title.dart';
 import 'package:pie_study/widgets/pie_footer.dart';
-
+import 'package:pie_study/widgets/global_floating_button.dart';
 
 const Color _pieBlue = Color(0xFF0B3558); // deep navy
 
-class PieStudyHomePage extends StatelessWidget {
+class PieStudyHomePage extends StatefulWidget {
   const PieStudyHomePage({super.key});
+
+  @override
+  State<PieStudyHomePage> createState() => _PieStudyHomePageState();
+}
+
+class _PieStudyHomePageState extends State<PieStudyHomePage> {
+  Timer? _popupTimer;
+  bool _isDialogOpen = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _popupTimer = Timer.periodic(const Duration(seconds: 4), (_) {
+      if (mounted && !_isDialogOpen) {
+        _isDialogOpen = true;
+        showDialog(
+          context: context,
+          builder: (ctx) => const EnrollmentFormDialog(),
+        ).then((_) {
+          _isDialogOpen = false;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _popupTimer?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +54,6 @@ class PieStudyHomePage extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.bg,
 
-
       appBar: AppBar(
         elevation: 0.5,
         backgroundColor: Colors.white.withOpacity(0.96),
@@ -50,16 +61,18 @@ class PieStudyHomePage extends StatelessWidget {
         shadowColor: Colors.black12,
         toolbarHeight: 68,
         titleSpacing: 0,
-        
+
         title: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 4),
           child: PieTopNav(
             onItemTap: (id) => handlePieNavTap(context, id),
-            activeId: 'home', // ✅ highlight Home
-            // ctaLabel: 'Explore Programs',
-            // onCtaTap: () {
-            //   handlePieNavTap(context, 'programs');
-            // },
+            activeId: 'home',
+            onEnrollTap: () {
+              showDialog(
+                context: context,
+                builder: (ctx) => const EnrollmentFormDialog(),
+              );
+            },
           ),
         ),
         actions: [
@@ -67,10 +80,7 @@ class PieStudyHomePage extends StatelessWidget {
           if (!isWide)
             Builder(
               builder: (ctx) => IconButton(
-                icon: const Icon(
-                  Icons.menu_rounded,
-                  color: Colors.black87,
-                ),
+                icon: const Icon(Icons.menu_rounded, color: Colors.black87),
                 onPressed: () => Scaffold.of(ctx).openEndDrawer(),
               ),
             ),
@@ -98,8 +108,9 @@ class PieStudyHomePage extends StatelessWidget {
         ),
         child: LayoutBuilder(
           builder: (context, constraints) {
-            final maxWidth =
-                constraints.maxWidth > 1320 ? 1320.0 : constraints.maxWidth;
+            final maxWidth = constraints.maxWidth > 1320
+                ? 1320.0
+                : constraints.maxWidth;
 
             // full-page scroll + content (centered) + footer (full width)
             return SingleChildScrollView(
@@ -108,7 +119,9 @@ class PieStudyHomePage extends StatelessWidget {
                   // -------- Centered main content with maxWidth --------
                   Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 24),
+                      horizontal: 16,
+                      vertical: 24,
+                    ),
                     child: Center(
                       child: ConstrainedBox(
                         constraints: BoxConstraints(maxWidth: maxWidth),
@@ -126,7 +139,7 @@ class PieStudyHomePage extends StatelessWidget {
                             _WhoWeServeSection(),
                             SizedBox(height: 32),
                             // CtaCardMinimal(),
-                             CtaJourneySection(),
+                            CtaJourneySection(),
                             SizedBox(height: 40),
                           ],
                         ),
@@ -142,8 +155,7 @@ class PieStudyHomePage extends StatelessWidget {
                         case 'managers':
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (_) =>
-                                  const AgenticManagersDetailPage(),
+                              builder: (_) => const AgenticManagersDetailPage(),
                             ),
                           );
                           break;
@@ -160,8 +172,7 @@ class PieStudyHomePage extends StatelessWidget {
                         case 'ds_intern':
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (_) =>
-                                  DataScienceInternshipDetailPage(),
+                              builder: (_) => DataScienceInternshipDetailPage(),
                             ),
                           );
                           break;
@@ -217,54 +228,25 @@ class PieStudyHomePage extends StatelessWidget {
   }
 }
 
-
-
-
-
-
-/*------------url launcher -------------*/
-
-
-/* ================== HERO SECTION ================== */
-
-
-
-/* ---------- LEFT: heading, buttons, highlights ---------- */
-
-
-
 const String mailchimpUrl = 'https://mailchi.mp/ad52932183fa/piestudy';
 
-/* ---------- HERO SECTION MAIN LAYOUT ---------- */
-
-
-
-/*-----version of MAIL chimp---- */
-
-
-  Future<void> _openMailchimp(BuildContext context) async {
-    final uri = Uri.parse(mailchimpUrl);
-    if (kIsWeb) {
-      // open in same tab on web
-      await launchUrl(uri, webOnlyWindowName: '_self');
-      return;
-    }
-
-    // native: open external browser
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Unable to open signup page.')),
-      );
-    }
+Future<void> _openMailchimp(BuildContext context) async {
+  final uri = Uri.parse(mailchimpUrl);
+  if (kIsWeb) {
+    // open in same tab on web
+    await launchUrl(uri, webOnlyWindowName: '_self');
+    return;
   }
 
-
-
-
-
-/*---------New Updated  card----------- */
+  // native: open external browser
+  if (await canLaunchUrl(uri)) {
+    await launchUrl(uri, mode: LaunchMode.externalApplication);
+  } else {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Unable to open signup page.')),
+    );
+  }
+}
 
 class _HeroSection extends StatelessWidget {
   const _HeroSection();
@@ -290,11 +272,7 @@ class _HeroSection extends StatelessWidget {
         } else {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              leftSection,
-              SizedBox(height: 40),
-              rightSection,
-            ],
+            children: const [leftSection, SizedBox(height: 40), rightSection],
           );
         }
       },
@@ -302,26 +280,8 @@ class _HeroSection extends StatelessWidget {
   }
 }
 
-/* ==========================================================================
-   2. LEFT SIDE CONTENT (Heading, Text, Buttons)
-   ========================================================================== */
 class _HeroLeft extends StatelessWidget {
   const _HeroLeft();
-
-  // Future<void> _onEnrollTap(BuildContext context) async {
-  //   final Uri uri = Uri.parse(mailchimpUrl);
-  //   try {
-  //     if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
-  //       throw 'Could not launch $uri';
-  //     }
-  //   } catch (e) {
-  //     if (context.mounted) {
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //         const SnackBar(content: Text('Could not open link. Check URL.')),
-  //       );
-  //     }
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -392,10 +352,15 @@ class _HeroLeft extends StatelessWidget {
             ElevatedButton(
               onPressed: () => handlePieNavTap(context, 'programs'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFFFFC61A),
-                foregroundColor: const Color(0xFF111827),
-                padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 16),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
+                backgroundColor: AppColors.orange,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 28,
+                  vertical: 16,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(100),
+                ),
                 elevation: 0,
               ),
               child: const Text(
@@ -408,11 +373,13 @@ class _HeroLeft extends StatelessWidget {
               ),
             ),
 
-            // 🔥 CHANGED: Replaced static Builder/Stack with new Pulsing Widget
             _PulsingEnrollButtonLeft(
-              // onTap: () => _onEnrollTap(context),
-                              onTap: () => _openMailchimp(context),
-
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (ctx) => const EnrollmentFormDialog(),
+                );
+              },
             ),
           ],
         ),
@@ -425,33 +392,32 @@ class _HeroLeft extends StatelessWidget {
   }
 }
 
-/* ==========================================================================
-   🔥 NEW WIDGET: PULSING LEFT BUTTON (Logic Extracted for Senior Arch)
-   ========================================================================== */
 class _PulsingEnrollButtonLeft extends StatefulWidget {
   final VoidCallback onTap;
   const _PulsingEnrollButtonLeft({required this.onTap});
 
   @override
-  State<_PulsingEnrollButtonLeft> createState() => _PulsingEnrollButtonLeftState();
+  State<_PulsingEnrollButtonLeft> createState() =>
+      _PulsingEnrollButtonLeftState();
 }
 
-class _PulsingEnrollButtonLeftState extends State<_PulsingEnrollButtonLeft> with SingleTickerProviderStateMixin {
+class _PulsingEnrollButtonLeftState extends State<_PulsingEnrollButtonLeft>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
 
   @override
   void initState() {
     super.initState();
-    // Pulse Animation Setup
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1200),
     )..repeat(reverse: true);
 
-    _scaleAnimation = Tween<double>(begin: 1.0, end: 1.05).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
-    );
+    _scaleAnimation = Tween<double>(
+      begin: 1.0,
+      end: 1.05,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
   }
 
   @override
@@ -470,7 +436,6 @@ class _PulsingEnrollButtonLeftState extends State<_PulsingEnrollButtonLeft> with
           child: Stack(
             alignment: Alignment.center,
             children: [
-              // subtle warm background (behind the black button)
               Container(
                 margin: const EdgeInsets.only(bottom: 2),
                 decoration: BoxDecoration(
@@ -488,17 +453,20 @@ class _PulsingEnrollButtonLeftState extends State<_PulsingEnrollButtonLeft> with
                     ),
                   ],
                 ),
-                child: const SizedBox(width: 0, height: 0), // purely decorative
+                child: const SizedBox(width: 0, height: 0),
               ),
-
-              // actual black pill button
               ElevatedButton(
                 onPressed: widget.onTap,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor:_pieBlue,
+                  backgroundColor: _pieBlue,
                   foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 16),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 28,
+                    vertical: 16,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(100),
+                  ),
                   elevation: 6,
                   shadowColor: Colors.black.withOpacity(0.35),
                 ),
@@ -519,7 +487,6 @@ class _PulsingEnrollButtonLeftState extends State<_PulsingEnrollButtonLeft> with
   }
 }
 
-// Left Side Helper Components
 class _FeatureChipsRow extends StatelessWidget {
   const _FeatureChipsRow();
 
@@ -556,7 +523,6 @@ class _FeatureChip extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // tick color green
           const Icon(Icons.check_circle, size: 16, color: Color(0xFF16A34A)),
           const SizedBox(width: 8),
           Text(
@@ -574,13 +540,9 @@ class _FeatureChip extends StatelessWidget {
   }
 }
 
-/* ==========================================================================
-   3. RIGHT SIDE: ANIMATED CARD WITH TIMER (CARD MADE FULLY CLICKABLE)
-   ========================================================================== */
 class _RightHeroCardAnimated extends StatelessWidget {
   const _RightHeroCardAnimated();
 
-  // open mailchimp same as enroll button
   Future<void> _openMailchimp(BuildContext context) async {
     final Uri uri = Uri.parse(mailchimpUrl);
     try {
@@ -598,14 +560,12 @@ class _RightHeroCardAnimated extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Wrap inside Material+InkWell so whole card is tappable with ripple on tap
     return Material(
       color: Colors.transparent,
       child: InkWell(
         onTap: () => _openMailchimp(context),
         borderRadius: BorderRadius.circular(32),
         child: Container(
-          // Outer White Card — slightly compact as before
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(32),
@@ -624,7 +584,6 @@ class _RightHeroCardAnimated extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                // --- TOP YELLOW BANNER (reduced padding) ---
                 Stack(
                   children: [
                     Container(
@@ -634,26 +593,23 @@ class _RightHeroCardAnimated extends StatelessWidget {
                         gradient: LinearGradient(
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
-                          colors: [
-                            Color(0xFFFFD700), // Gold
-                            Color(0xFFF59E0B), // Deep Amber
-                          ],
+                          colors: [AppColors.orange, Color(0xFFFF8C42)],
                         ),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // Header Row
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: const [
-                              _StatusBadge(text: 'Live Cohort', icon: Icons.sensors_rounded),
+                              _StatusBadge(
+                                text: 'Live Cohort',
+                                icon: Icons.sensors_rounded,
+                              ),
                               _PulsingBadge(text: 'Limited Seats Left 🔥'),
                             ],
                           ),
                           const SizedBox(height: 14),
-
-                          // Title
                           const Text(
                             'Agentic AI Course',
                             style: TextStyle(
@@ -666,8 +622,6 @@ class _RightHeroCardAnimated extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: 6),
-
-                          // Subtitle + bolded start text
                           RichText(
                             text: TextSpan(
                               children: [
@@ -684,7 +638,7 @@ class _RightHeroCardAnimated extends StatelessWidget {
                                   text: '· Starts From 7th Feb',
                                   style: const TextStyle(
                                     fontFamily: 'Inter',
-                                    fontWeight: FontWeight.w900, // bold for the start date
+                                    fontWeight: FontWeight.w900,
                                     fontSize: 16,
                                     color: Color(0xFF78350F),
                                   ),
@@ -693,13 +647,8 @@ class _RightHeroCardAnimated extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: 14),
-
-                          // TIMER
                           const CountdownTimerWidget(),
-
                           const SizedBox(height: 14),
-
-                          // Chips
                           Wrap(
                             spacing: 8,
                             runSpacing: 8,
@@ -712,8 +661,6 @@ class _RightHeroCardAnimated extends StatelessWidget {
                         ],
                       ),
                     ),
-
-                    // Decorative Circle Overlay (reduced)
                     Positioned(
                       top: -36,
                       right: -36,
@@ -728,8 +675,6 @@ class _RightHeroCardAnimated extends StatelessWidget {
                     ),
                   ],
                 ),
-
-                // --- BOTTOM CTA SECTION (reduced padding) ---
                 Container(
                   padding: const EdgeInsets.all(18),
                   color: const Color(0xFFFFFBEB),
@@ -748,15 +693,19 @@ class _RightHeroCardAnimated extends StatelessWidget {
                       const SizedBox(height: 12),
                       SizedBox(
                         width: double.infinity,
-                        child: ElevatedButton(                   
+                        child: ElevatedButton(
                           onPressed: () => _openMailchimp(context),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFFB45309),
                             foregroundColor: Colors.white,
                             padding: const EdgeInsets.symmetric(vertical: 14),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
                             elevation: 4,
-                            shadowColor: const Color(0xFFB45309).withOpacity(0.4),
+                            shadowColor: const Color(
+                              0xFFB45309,
+                            ).withOpacity(0.4),
                           ),
                           child: const Text(
                             'Secure Your Spot Now',
@@ -790,11 +739,6 @@ class _RightHeroCardAnimated extends StatelessWidget {
   }
 }
 
-/* ==========================================================================
-   4. HELPER WIDGETS (Animation, Timer, Badges) - unchanged logic
-   ========================================================================== */
-
-// Pulsing Badge 
 class _PulsingBadge extends StatefulWidget {
   final String text;
   const _PulsingBadge({required this.text});
@@ -803,7 +747,8 @@ class _PulsingBadge extends StatefulWidget {
   State<_PulsingBadge> createState() => _PulsingBadgeState();
 }
 
-class _PulsingBadgeState extends State<_PulsingBadge> with SingleTickerProviderStateMixin {
+class _PulsingBadgeState extends State<_PulsingBadge>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
 
@@ -815,9 +760,10 @@ class _PulsingBadgeState extends State<_PulsingBadge> with SingleTickerProviderS
       duration: const Duration(milliseconds: 1000),
     )..repeat(reverse: true);
 
-    _scaleAnimation = Tween<double>(begin: 1.0, end: 1.08).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
-    );
+    _scaleAnimation = Tween<double>(
+      begin: 1.0,
+      end: 1.08,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
   }
 
   @override
@@ -836,15 +782,17 @@ class _PulsingBadgeState extends State<_PulsingBadge> with SingleTickerProviderS
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
-                color: const Color(0xFF7C2D12),
-                borderRadius: BorderRadius.circular(100),
-                boxShadow: [
-                  BoxShadow(
-                    color: const Color(0xFF7C2D12).withOpacity(0.3 * _controller.value),
-                    blurRadius: 8 * _scaleAnimation.value,
-                    spreadRadius: 2 * _controller.value,
-                  )
-                ]
+              color: const Color(0xFF7C2D12),
+              borderRadius: BorderRadius.circular(100),
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(
+                    0xFF7C2D12,
+                  ).withOpacity(0.3 * _controller.value),
+                  blurRadius: 8 * _scaleAnimation.value,
+                  spreadRadius: 2 * _controller.value,
+                ),
+              ],
             ),
             child: Text(
               widget.text,
@@ -862,7 +810,6 @@ class _PulsingBadgeState extends State<_PulsingBadge> with SingleTickerProviderS
   }
 }
 
-// Countdown Timer Widget (unchanged logic)
 class CountdownTimerWidget extends StatefulWidget {
   const CountdownTimerWidget({super.key});
 
@@ -879,16 +826,23 @@ class _CountdownTimerWidgetState extends State<CountdownTimerWidget> {
   void initState() {
     super.initState();
     _calculateTimeLeft();
-    _timer = Timer.periodic(const Duration(seconds: 1), (_) => _calculateTimeLeft());
+    _timer = Timer.periodic(
+      const Duration(seconds: 1),
+      (_) => _calculateTimeLeft(),
+    );
   }
 
   void _calculateTimeLeft() {
     final now = DateTime.now();
     if (now.isAfter(_targetDate)) {
-      setState(() { _timeLeft = Duration.zero; });
+      setState(() {
+        _timeLeft = Duration.zero;
+      });
       _timer.cancel();
     } else {
-      setState(() { _timeLeft = _targetDate.difference(now); });
+      setState(() {
+        _timeLeft = _targetDate.difference(now);
+      });
     }
   }
 
@@ -904,12 +858,15 @@ class _CountdownTimerWidgetState extends State<CountdownTimerWidget> {
       return Container(
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
         decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.3),
-            borderRadius: BorderRadius.circular(12)
+          color: Colors.white.withOpacity(0.3),
+          borderRadius: BorderRadius.circular(12),
         ),
         child: const Text(
-            "Batch Started!",
-            style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF451A03))
+          "Batch Started!",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF451A03),
+          ),
         ),
       );
     }
@@ -956,15 +913,15 @@ class _TimerUnit extends StatelessWidget {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
           decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.08),
-                  blurRadius: 6,
-                  offset: const Offset(0, 3),
-                )
-              ]
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.08),
+                blurRadius: 6,
+                offset: const Offset(0, 3),
+              ),
+            ],
           ),
           child: Text(
             value.toString().padLeft(2, '0'),
@@ -1071,9 +1028,6 @@ class _BannerChip extends StatelessWidget {
   }
 }
 
-
-// /* ================== WHY THOUSANDS TRUST ================== */
-
 class _WhyTrustSection extends StatelessWidget {
   const _WhyTrustSection();
 
@@ -1111,14 +1065,13 @@ class _WhyTrustSection extends StatelessWidget {
             child: Container(
               width: 4,
               decoration: BoxDecoration(
-                color: const Color(0xFFFFC61A),
+                color: AppColors.orange,
                 borderRadius: BorderRadius.circular(999),
               ),
             ),
           ),
           Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 24, vertical: 22),
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 22),
             child: LayoutBuilder(
               builder: (context, constraints) {
                 final wide = constraints.maxWidth > 700;
@@ -1198,7 +1151,9 @@ class _WhyTrustSection extends StatelessWidget {
                     const SizedBox(height: 16),
                     Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 6),
+                        horizontal: 12,
+                        vertical: 6,
+                      ),
                       decoration: BoxDecoration(
                         color: const Color(0xFFFFF3C4),
                         borderRadius: BorderRadius.circular(999),
@@ -1224,20 +1179,6 @@ class _WhyTrustSection extends StatelessWidget {
   }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-/* ================== CAREER IMPACT ================== */
-
 class _CareerImpactSection extends StatelessWidget {
   const _CareerImpactSection();
 
@@ -1257,8 +1198,8 @@ class _CareerImpactSection extends StatelessWidget {
           textAlign: TextAlign.center,
           style: TextStyle(
             fontFamily: 'Inter',
-            fontWeight: FontWeight.w900, // extra bold
-            fontSize: 24, // bigger
+            fontWeight: FontWeight.w900,
+            fontSize: 24,
             color: Color(0xFF111827),
           ),
         ),
@@ -1321,8 +1262,6 @@ class _CareerImpactSection extends StatelessWidget {
   }
 }
 
-/* ================== LEARNERS TESTIMONIALS ================== */
-
 class _LearnersSection extends StatelessWidget {
   const _LearnersSection();
 
@@ -1332,17 +1271,17 @@ class _LearnersSection extends StatelessWidget {
       (
         '“Agentic AI training helped me automate 60% of our operational processes.”',
         'Priya S',
-        'Operations Manager'
+        'Operations Manager',
       ),
       (
         '“Built and deployed my first multi-agent RAG project during the course.”',
         'Rohan K',
-        'Software Engineer'
+        'Software Engineer',
       ),
       (
         '“The 3-month DS internship program landed me interviews in 3 companies.”',
         'Aakash M',
-        'Student'
+        'Student',
       ),
     ];
 
@@ -1386,7 +1325,9 @@ class _LearnersSection extends StatelessWidget {
                     width: cardWidth,
                     child: Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 18),
+                        horizontal: 16,
+                        vertical: 18,
+                      ),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(16),
@@ -1454,8 +1395,6 @@ class _LearnersSection extends StatelessWidget {
   }
 }
 
-/* ================== WHO WE SERVE ================== */
-
 class _WhoWeServeSection extends StatelessWidget {
   const _WhoWeServeSection();
 
@@ -1465,17 +1404,17 @@ class _WhoWeServeSection extends StatelessWidget {
       (
         Icons.person_outline_rounded,
         'B2C – Individual Learners',
-        'AI upskilling • Data Science • Agentic AI • Internships'
+        'AI upskilling • Data Science • Agentic AI • Internships',
       ),
       (
         Icons.business_center_outlined,
         'B2B – Companies',
-        'Corporate AI training • Workshops • Automation design • AI strategy'
+        'Corporate AI training • Workshops • Automation design • AI strategy',
       ),
       (
         Icons.account_balance_rounded,
         'B2G – Government',
-        'AI literacy • Capacity building • Public-sector automation'
+        'AI literacy • Capacity building • Public-sector automation',
       ),
     ];
 
@@ -1486,8 +1425,8 @@ class _WhoWeServeSection extends StatelessWidget {
           textAlign: TextAlign.center,
           style: TextStyle(
             fontFamily: 'Inter',
-            fontWeight: FontWeight.w900, // more bold
-            fontSize: 26, // bigger
+            fontWeight: FontWeight.w900,
+            fontSize: 26,
             color: Color(0xFF111827),
           ),
         ),
@@ -1508,17 +1447,16 @@ class _WhoWeServeSection extends StatelessWidget {
                   SizedBox(
                     width: cardWidth,
                     child: ConstrainedBox(
-                      constraints: const BoxConstraints(
-                        minHeight: 190,
-                      ),
+                      constraints: const BoxConstraints(minHeight: 190),
                       child: Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 18, vertical: 18),
+                          horizontal: 18,
+                          vertical: 18,
+                        ),
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(18),
-                          border:
-                              Border.all(color: const Color(0xFFE5E7EB)),
+                          border: Border.all(color: const Color(0xFFE5E7EB)),
                           boxShadow: const [
                             BoxShadow(
                               color: Color.fromRGBO(15, 23, 42, 0.03),
@@ -1550,8 +1488,8 @@ class _WhoWeServeSection extends StatelessWidget {
                                     i.$2 as String,
                                     style: const TextStyle(
                                       fontFamily: 'Inter',
-                                      fontWeight: FontWeight.w800, // bolder
-                                      fontSize: 17, // bigger
+                                      fontWeight: FontWeight.w800,
+                                      fontSize: 17,
                                       color: Color(0xFF111827),
                                     ),
                                   ),
@@ -1582,32 +1520,8 @@ class _WhoWeServeSection extends StatelessWidget {
   }
 }
 
-
-
-
-
-/**--------------Version2--- */
-
-
-
-
-
-
-
-
-
-
-
-
 class CtaJourneySection extends StatelessWidget {
   const CtaJourneySection({Key? key}) : super(key: key);
-
-  // Brand Colors
-  static const Color navy = Color(0xFF0B2545);
-  static const Color black = Colors.black;
-  static const Color white = Colors.white;
-  static const Color gold = Color(0xFFFFD700);
-  static const Color amber = Color(0xFFF59E0B);
 
   @override
   Widget build(BuildContext context) {
@@ -1623,8 +1537,8 @@ class CtaJourneySection extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            navy,
-            Color.lerp(navy, gold, 0.18)!,
+            AppColors.blue,
+            Color.lerp(AppColors.blue, AppColors.orange, 0.18)!,
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -1637,7 +1551,7 @@ class CtaJourneySection extends StatelessWidget {
             offset: const Offset(0, 16),
           ),
           BoxShadow(
-            color: gold.withOpacity(0.10),
+            color: AppColors.orange.withOpacity(0.10),
             blurRadius: 22,
             offset: const Offset(0, 10),
           ),
@@ -1650,23 +1564,25 @@ class CtaJourneySection extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // ---- SMALL BADGE ----
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
                 decoration: BoxDecoration(
-                  color: white.withOpacity(0.06),
+                  color: Colors.white.withOpacity(0.06),
                   borderRadius: BorderRadius.circular(999),
-                  border: Border.all(color: white.withOpacity(0.10)),
+                  border: Border.all(color: Colors.white.withOpacity(0.10)),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.auto_awesome, size: 16, color: gold),
+                    Icon(Icons.auto_awesome, size: 16, color: AppColors.orange),
                     const SizedBox(width: 8),
                     Text(
                       "AI Career Boost",
                       style: TextStyle(
-                        color: white.withOpacity(0.95),
+                        color: Colors.white.withOpacity(0.95),
                         fontWeight: FontWeight.w700,
                         fontSize: 12,
                         letterSpacing: 0.5,
@@ -1677,8 +1593,6 @@ class CtaJourneySection extends StatelessWidget {
               ),
 
               const SizedBox(height: 20),
-
-              // ---- TITLE ----
               Text(
                 'Start Your AI Journey Today',
                 textAlign: TextAlign.center,
@@ -1687,7 +1601,7 @@ class CtaJourneySection extends StatelessWidget {
                   fontWeight: FontWeight.w900,
                   fontSize: isDesktop ? 34 : 24,
                   height: 1.1,
-                  color: white,
+                  color: Colors.white,
                   shadows: [
                     Shadow(
                       blurRadius: 14,
@@ -1699,8 +1613,6 @@ class CtaJourneySection extends StatelessWidget {
               ),
 
               const SizedBox(height: 12),
-
-              // ---- SUBTITLE ----
               Text(
                 'Join thousands of professionals upgrading their careers with AI skills.',
                 textAlign: TextAlign.center,
@@ -1708,24 +1620,21 @@ class CtaJourneySection extends StatelessWidget {
                   fontFamily: 'Inter',
                   height: 1.55,
                   fontSize: isDesktop ? 16 : 14,
-                  color: white.withOpacity(0.92),
+                  color: Colors.white.withOpacity(0.92),
                 ),
               ),
 
               const SizedBox(height: 28),
-
-              // ---- CTA BUTTONS ----
               Wrap(
                 alignment: WrapAlignment.center,
                 spacing: 14,
                 runSpacing: 12,
                 children: [
-                  // PRIMARY BUTTON
                   ElevatedButton(
                     onPressed: () => handlePieNavTap(context, 'programs'),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: navy,
-                      shadowColor: gold.withOpacity(0.22),
+                      backgroundColor: AppColors.blue,
+                      shadowColor: AppColors.orange.withOpacity(0.22),
                       elevation: 8,
                       padding: const EdgeInsets.symmetric(
                         horizontal: 26,
@@ -1738,7 +1647,11 @@ class CtaJourneySection extends StatelessWidget {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: const [
-                        Icon(Icons.school_outlined, size: 18, color: white),
+                        Icon(
+                          Icons.school_outlined,
+                          size: 18,
+                          color: Colors.white,
+                        ),
                         SizedBox(width: 8),
                         Text(
                           'Explore Programs',
@@ -1746,18 +1659,16 @@ class CtaJourneySection extends StatelessWidget {
                             fontFamily: 'Inter',
                             fontWeight: FontWeight.w700,
                             fontSize: 14,
-                            color: white,
+                            color: Colors.white,
                           ),
                         ),
                       ],
                     ),
                   ),
-
-                  // SECONDARY OUTLINE BUTTON
                   OutlinedButton(
                     onPressed: () => handlePieNavTap(context, 'contact'),
                     style: OutlinedButton.styleFrom(
-                      side: BorderSide(color: white.withOpacity(0.26)),
+                      side: BorderSide(color: Colors.white.withOpacity(0.26)),
                       padding: const EdgeInsets.symmetric(
                         horizontal: 24,
                         vertical: 14,
@@ -1765,12 +1676,16 @@ class CtaJourneySection extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(999),
                       ),
-                      foregroundColor: white,
+                      foregroundColor: Colors.white,
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: const [
-                        Icon(Icons.chat_bubble_outline, size: 18, color: white),
+                        Icon(
+                          Icons.chat_bubble_outline,
+                          size: 18,
+                          color: Colors.white,
+                        ),
                         SizedBox(width: 8),
                         Text(
                           'Talk to an Advisor',
@@ -1778,7 +1693,7 @@ class CtaJourneySection extends StatelessWidget {
                             fontFamily: 'Inter',
                             fontWeight: FontWeight.w600,
                             fontSize: 14,
-                            color: white,
+                            color: Colors.white,
                           ),
                         ),
                       ],
@@ -1792,12 +1707,12 @@ class CtaJourneySection extends StatelessWidget {
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.verified, size: 16, color: gold),
+                  Icon(Icons.verified, size: 16, color: AppColors.orange),
                   const SizedBox(width: 8),
                   Text(
                     "Trusted by 1,000+ learners",
                     style: TextStyle(
-                      color: white.withOpacity(0.85),
+                      color: Colors.white.withOpacity(0.85),
                       fontSize: 13,
                     ),
                   ),
@@ -1810,121 +1725,3 @@ class CtaJourneySection extends StatelessWidget {
     );
   }
 }
-
-
-
-
-
-
-
-/**------------version4-------- */
-
-
-
-
-
-// class CtaCardMinimal extends StatelessWidget {
-//   const CtaCardMinimal({Key? key}) : super(key: key);
-
-//   static const Color _navy = Color(0xFF0B2545);
-//   static const Color _gold = Color(0xFFFFD700);
-//   static const Color _amber = Color(0xFFF59E0B);
-//   static const Color _white = Colors.white;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     final w = MediaQuery.of(context).size.width;
-//     final isDesktop = w > 900;
-//     final paddingH = isDesktop ? 36.0 : 16.0;
-//     final paddingV = isDesktop ? 28.0 : 20.0;
-
-//     return Padding(
-//       padding: const EdgeInsets.all(12.0),
-//       child: Container(
-//         width: double.infinity,
-//         padding: EdgeInsets.symmetric(horizontal: paddingH, vertical: paddingV),
-//         decoration: BoxDecoration(
-//           color: _navy,
-//           borderRadius: BorderRadius.circular(16),
-//           boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.25), blurRadius: 16, offset: const Offset(0, 8))],
-//         ),
-//         child: Column(
-//           mainAxisSize: MainAxisSize.min,
-//           children: [
-//             // small badge
-//             Container(
-//               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-//               decoration: BoxDecoration(color: _white.withOpacity(0.04), borderRadius: BorderRadius.circular(999)),
-//               child: Row(mainAxisSize: MainAxisSize.min, children: const [
-//                 Icon(Icons.auto_awesome, size: 14, color: _gold),
-//                 SizedBox(width: 8),
-//                 Text('AI Career Boost', style: TextStyle(color: _white, fontWeight: FontWeight.w700, fontSize: 12)),
-//               ]),
-//             ),
-//             const SizedBox(height: 12),
-
-//             // title (center)
-//             Text(
-//               'Start Your AI Journey Today',
-//               textAlign: TextAlign.center,
-//               style: TextStyle(color: _white, fontSize: isDesktop ? 28 : 20, fontWeight: FontWeight.w800),
-//             ),
-//             const SizedBox(height: 8),
-
-//             // subtitle
-//             Text(
-//               'Join thousands upgrading their careers with practical AI skills.',
-//               textAlign: TextAlign.center,
-//               style: TextStyle(color: _white.withOpacity(0.9), fontSize: isDesktop ? 15 : 13),
-//             ),
-//             const SizedBox(height: 18),
-
-//             // buttons at bottom center
-//             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-//               ElevatedButton(
-//                 onPressed: () {
-//                   // Replace this with your navigation helper if you want:
-//                   // handlePieNavTap(context, 'programs');
-//                   debugPrint('Explore Programs tapped');
-//                 },
-//                 style: ElevatedButton.styleFrom(
-//                   backgroundColor: _gold,
-//                   foregroundColor: _navy,
-//                   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-//                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(999)),
-//                   elevation: 6,
-//                 ),
-//                 child: const Text('Explore Programs', style: TextStyle(fontWeight: FontWeight.w700)),
-//               ),
-
-//               const SizedBox(width: 12),
-
-//               OutlinedButton(
-//                 onPressed: () {
-//                   // Replace with: handlePieNavTap(context, 'contact');
-//                   debugPrint('Talk to an Advisor tapped');
-//                 },
-//                 style: OutlinedButton.styleFrom(
-//                   side: BorderSide(color: _white.withOpacity(0.18)),
-//                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-//                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(999)),
-//                   foregroundColor: _white,
-//                 ),
-//                 child: const Text('Talk to an Advisor', style: TextStyle(fontWeight: FontWeight.w600)),
-//               ),
-//             ]),
-
-//             const SizedBox(height: 12),
-
-//             // trust text
-//             Row(mainAxisSize: MainAxisSize.min, children: [
-//               Icon(Icons.verified, size: 14, color: _gold),
-//               const SizedBox(width: 8),
-//               Text('Trusted by 25,000+ learners', style: TextStyle(color: _white.withOpacity(0.9), fontSize: 12)),
-//             ]),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }

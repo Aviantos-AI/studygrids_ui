@@ -1010,15 +1010,7 @@
 //   }
 // }
 
-
-
-
-
-
-
 //version 2
-
-
 
 // import 'package:flutter/material.dart';
 // import 'package:pie_study/screens/main_navigation.dart';
@@ -2018,10 +2010,6 @@
 //   }
 // }
 
-
-
-
-
 import 'package:flutter/material.dart';
 import 'package:pie_study/screens/Data_science_internship_page.dart';
 import 'package:pie_study/screens/agentic_ai_developer_page.dart';
@@ -2044,9 +2032,6 @@ const Color _pieGold = Color(0xFFFDB515); // warm golden
 
 class B2CPage extends StatelessWidget {
   const B2CPage({super.key});
-
-   
-
 
   @override
   Widget build(BuildContext context) {
@@ -2103,8 +2088,10 @@ class B2CPage extends StatelessWidget {
                   _B2CHeroSection(isMobile: isMobile, maxWidth: maxWidth),
                   const SizedBox(height: 40),
                   Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 0,
+                    ),
                     child: Center(
                       child: ConstrainedBox(
                         constraints: BoxConstraints(maxWidth: maxWidth),
@@ -2124,19 +2111,16 @@ class B2CPage extends StatelessWidget {
                           ],
                         ),
                       ),
-                      
                     ),
-                    
                   ),
-                                    PieFooter(
+                  PieFooter(
                     // ✅ 4 Programs → specific detail pages
                     onProgramTap: (id) {
                       switch (id) {
                         case 'managers':
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (_) =>
-                                  const AgenticManagersDetailPage(),
+                              builder: (_) => const AgenticManagersDetailPage(),
                             ),
                           );
                           break;
@@ -2214,10 +2198,7 @@ class _B2CHeroSection extends StatelessWidget {
   final bool isMobile;
   final double maxWidth;
 
-  const _B2CHeroSection({
-    required this.isMobile,
-    required this.maxWidth,
-  });
+  const _B2CHeroSection({required this.isMobile, required this.maxWidth});
 
   @override
   Widget build(BuildContext context) {
@@ -2233,19 +2214,16 @@ class _B2CHeroSection extends StatelessWidget {
           end: Alignment.bottomCenter,
         ),
       ),
-      padding: EdgeInsets.symmetric(
-        vertical: isMobile ? 28 : 44,
-      ),
+      padding: EdgeInsets.symmetric(vertical: isMobile ? 28 : 44),
       child: Center(
         child: ConstrainedBox(
           constraints: BoxConstraints(maxWidth: maxWidth),
           child: Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: isMobile ? 16 : 24,
-            ),
+            padding: EdgeInsets.symmetric(horizontal: isMobile ? 16 : 24),
             child: Column(
-              crossAxisAlignment:
-                  isMobile ? CrossAxisAlignment.start : CrossAxisAlignment.center,
+              crossAxisAlignment: isMobile
+                  ? CrossAxisAlignment.start
+                  : CrossAxisAlignment.center,
               children: [
                 // small badge
                 Row(
@@ -2268,11 +2246,7 @@ class _B2CHeroSection extends StatelessWidget {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: const [
-                          Icon(
-                            Icons.bolt_rounded,
-                            size: 16,
-                            color: _pieGold,
-                          ),
+                          Icon(Icons.bolt_rounded, size: 16, color: _pieGold),
                           SizedBox(width: 6),
                           Text(
                             'Admissions open • Limited seats',
@@ -2317,15 +2291,16 @@ class _B2CHeroSection extends StatelessWidget {
                 Wrap(
                   spacing: 12,
                   runSpacing: 12,
-                  alignment:
-                      isMobile ? WrapAlignment.start : WrapAlignment.center,
+                  alignment: isMobile
+                      ? WrapAlignment.start
+                      : WrapAlignment.center,
                   children: [
                     // gold button with white text
                     ElevatedButton(
                       // onPressed: () {},
                       onPressed: () => handlePieNavTap(context, 'programs'),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: _pieGold,
+                        backgroundColor: AppColors.orange,
                         foregroundColor: Colors.white,
                         padding: EdgeInsets.symmetric(
                           horizontal: isMobile ? 18 : 24,
@@ -2428,8 +2403,7 @@ class _B2CWhyChooseSection extends StatelessWidget {
         Wrap(
           spacing: 24,
           runSpacing: 24,
-          alignment:
-              isMobile ? WrapAlignment.start : WrapAlignment.center,
+          alignment: isMobile ? WrapAlignment.start : WrapAlignment.center,
           children: items
               .map(
                 (e) => SizedBox(
@@ -2438,7 +2412,7 @@ class _B2CWhyChooseSection extends StatelessWidget {
                 ),
               )
               .toList(),
-        )
+        ),
       ],
     );
   }
@@ -2465,8 +2439,7 @@ class _B2CProgramsSection extends StatelessWidget {
       ),
       _Program(
         title: 'Weekend AI Cohorts',
-        description:
-            'Live weekend batches tailored for working professionals.',
+        description: 'Live weekend batches tailored for working professionals.',
       ),
       _Program(
         title: 'College Launchpad Program',
@@ -2495,9 +2468,6 @@ class _B2CProgramsSection extends StatelessWidget {
   }
 }
 
-
-
-
 /// ---------------- LEARNERS WE SUPPORT ----------------
 
 class _B2CLearnersSection extends StatelessWidget {
@@ -2522,10 +2492,7 @@ class _B2CLearnersSection extends StatelessWidget {
       title: 'Learners We Support',
       subtitle:
           'Designed for ambitious learners from diverse academic and professional backgrounds.',
-      child: _ChipList(
-        isMobile: isMobile,
-        labels: learners,
-      ),
+      child: _ChipList(isMobile: isMobile, labels: learners),
     );
   }
 }
@@ -2589,27 +2556,25 @@ class _B2CLearningJourneySection extends StatelessWidget {
   }
 }
 
-
 /**---------------MAIL CHIMP FUNCTION--------- */
 
-
- Future<void> _openMailchimp(BuildContext context) async {
-    final uri = Uri.parse(mailchimpUrl);
-    if (kIsWeb) {
-      // open in same tab on web
-      await launchUrl(uri, webOnlyWindowName: '_self');
-      return;
-    }
-
-    // native: open external browser
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Unable to open signup page.')),
-      );
-    }
+Future<void> _openMailchimp(BuildContext context) async {
+  final uri = Uri.parse(mailchimpUrl);
+  if (kIsWeb) {
+    // open in same tab on web
+    await launchUrl(uri, webOnlyWindowName: '_self');
+    return;
   }
+
+  // native: open external browser
+  if (await canLaunchUrl(uri)) {
+    await launchUrl(uri, mode: LaunchMode.externalApplication);
+  } else {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Unable to open signup page.')),
+    );
+  }
+}
 
 /// ---------------- HIGHLIGHT CTA (NAVY + GOLD) ----------------
 
@@ -2697,7 +2662,7 @@ class _B2CHighlightCTASection extends StatelessWidget {
                       ),
                       OutlinedButton(
                         // onPressed: () {},
-                      onPressed: () => handlePieNavTap(context, 'contact'),
+                        onPressed: () => handlePieNavTap(context, 'contact'),
                         style: OutlinedButton.styleFrom(
                           side: const BorderSide(color: Colors.white70),
                           padding: const EdgeInsets.symmetric(
@@ -2719,7 +2684,7 @@ class _B2CHighlightCTASection extends StatelessWidget {
                         ),
                       ),
                     ],
-                  )
+                  ),
                 ],
               )
             : Row(
@@ -2757,9 +2722,9 @@ class _B2CHighlightCTASection extends StatelessWidget {
                     children: [
                       ElevatedButton(
                         // onPressed: () {},
-                                        onPressed: () => _openMailchimp(context),
+                        onPressed: () => _openMailchimp(context),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: _pieGold,
+                          backgroundColor: AppColors.orange,
                           foregroundColor: Colors.white,
                           padding: const EdgeInsets.symmetric(
                             horizontal: 20,
@@ -2781,7 +2746,7 @@ class _B2CHighlightCTASection extends StatelessWidget {
                       ),
                       OutlinedButton(
                         // onPressed: () {},
-                       onPressed: () => handlePieNavTap(context, 'contact'),
+                        onPressed: () => handlePieNavTap(context, 'contact'),
                         style: OutlinedButton.styleFrom(
                           side: const BorderSide(color: Colors.white70),
                           padding: const EdgeInsets.symmetric(
@@ -2889,11 +2854,7 @@ class _IconFeatureTile extends StatelessWidget {
             color: _pieGold.withOpacity(0.14),
             borderRadius: BorderRadius.circular(16),
           ),
-          child: Icon(
-            feature.icon,
-            size: 24,
-            color: _pieBlue,
-          ),
+          child: Icon(feature.icon, size: 24, color: _pieBlue),
         ),
         const SizedBox(height: 10),
         Text(
@@ -2934,10 +2895,7 @@ class _Program {
 class _ProgramsGridSlim extends StatelessWidget {
   final bool isMobile;
   final List<_Program> programs;
-  const _ProgramsGridSlim({
-    required this.isMobile,
-    required this.programs,
-  });
+  const _ProgramsGridSlim({required this.isMobile, required this.programs});
 
   int _crossAxisCount(double width) {
     if (width < 720) return 1; // mobile: 1 column
@@ -2966,14 +2924,11 @@ class _ProgramsGridSlim extends StatelessWidget {
       itemBuilder: (context, index) {
         final program = programs[index];
         return Container(
-          padding:
-              const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(14),
-            border: Border.all(
-              color: AppColors.muted.withOpacity(0.4),
-            ),
+            border: Border.all(color: AppColors.muted.withOpacity(0.4)),
             boxShadow: [
               BoxShadow(
                 blurRadius: 8,
@@ -3021,29 +2976,22 @@ class _ProgramsGridSlim extends StatelessWidget {
 class _ChipList extends StatelessWidget {
   final bool isMobile;
   final List<String> labels;
-  const _ChipList({
-    required this.isMobile,
-    required this.labels,
-  });
+  const _ChipList({required this.isMobile, required this.labels});
 
   @override
   Widget build(BuildContext context) {
     return Wrap(
       spacing: 16,
       runSpacing: 16,
-      alignment:
-          isMobile ? WrapAlignment.start : WrapAlignment.center,
+      alignment: isMobile ? WrapAlignment.start : WrapAlignment.center,
       children: labels
           .map(
             (label) => Container(
-              padding: const EdgeInsets.symmetric(
-                  horizontal: 22, vertical: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 12),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(999),
-                border: Border.all(
-                  color: _pieBlue.withOpacity(0.15),
-                ),
+                border: Border.all(color: _pieBlue.withOpacity(0.15)),
                 boxShadow: [
                   BoxShadow(
                     blurRadius: 8,
@@ -3089,14 +3037,11 @@ class _JourneyStepCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding:
-          const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: AppColors.muted.withOpacity(0.4),
-        ),
+        border: Border.all(color: AppColors.muted.withOpacity(0.4)),
         boxShadow: [
           BoxShadow(
             blurRadius: 8,
@@ -3112,7 +3057,7 @@ class _JourneyStepCard extends StatelessWidget {
             width: 32,
             height: 32,
             decoration: const BoxDecoration(
-              color: _pieGold,
+              color: AppColors.orange,
               shape: BoxShape.circle,
             ),
             alignment: Alignment.center,
@@ -3122,7 +3067,7 @@ class _JourneyStepCard extends StatelessWidget {
                 fontFamily: 'Inter',
                 fontWeight: FontWeight.w700,
                 fontSize: 15,
-                color: _pieBlue,
+                color: Colors.white,
               ),
             ),
           ),
