@@ -4,8 +4,6 @@ import 'package:pie_study/widgets/app_colors.dart';
 import 'package:pie_study/widgets/ghost_button.dart';
 import 'package:pie_study/widgets/primary_button.dart';
 
-
-
 class HeroSection extends StatelessWidget {
   const HeroSection({super.key});
 
@@ -23,8 +21,10 @@ class HeroSection extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
                 decoration: BoxDecoration(
                   color: const Color.fromRGBO(11, 59, 87, 0.06),
                   borderRadius: BorderRadius.circular(999),
@@ -64,10 +64,7 @@ class HeroSection extends StatelessWidget {
                 spacing: 12,
                 runSpacing: 8,
                 children: [
-                  PrimaryButton(
-                    label: 'Explore Programs',
-                    onTap: () {},
-                  ),
+                  PrimaryButton(label: 'Explore Programs', onTap: () {}),
                   GhostButton(
                     label: 'Book Free Counselling Call',
                     onTap: () {},
@@ -78,10 +75,7 @@ class HeroSection extends StatelessWidget {
               const Text(
                 'Live classes • Hands-on projects • Capstone portfolio • '
                 'Internship pathways • Career support',
-                style: TextStyle(
-                  color: AppColors.muted,
-                  fontSize: 14,
-                ),
+                style: TextStyle(color: AppColors.muted, fontSize: 14),
               ),
             ],
           ),
@@ -95,10 +89,7 @@ class HeroSection extends StatelessWidget {
               children: const [
                 Text(
                   'Why Thousands Trust StudyGrids',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 16,
-                  ),
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
                 ),
                 SizedBox(height: 10),
                 _BulletList(
@@ -145,7 +136,6 @@ class _TrustedBadge extends StatelessWidget {
   }
 }
 
-
 class _BulletList extends StatelessWidget {
   final List<String> items;
   const _BulletList({required this.items});
@@ -161,10 +151,7 @@ class _BulletList extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    '• ',
-                    style: TextStyle(fontSize: 14, height: 1.4),
-                  ),
+                  const Text('• ', style: TextStyle(fontSize: 14, height: 1.4)),
                   Expanded(
                     child: Text(
                       e,

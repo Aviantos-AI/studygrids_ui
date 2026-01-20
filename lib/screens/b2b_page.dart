@@ -11,6 +11,7 @@ import 'package:pie_study/main.dart';
 import 'package:pie_study/widgets/pie_footer.dart';
 import 'package:url_launcher/url_launcher.dart'; // handlePieNavTap
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:pie_study/widgets/global_floating_button.dart';
 
 
 /// =======================  B2B PAGE  =======================
@@ -48,7 +49,13 @@ class B2BPage extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
           child: PieTopNav(
             onItemTap: (id) => handlePieNavTap(context, id),
-            activeId: 'b2b', // ✅ B2B highlight
+            activeId: 'b2b',
+            onEnrollTap: () {
+              showDialog(
+                context: context,
+                builder: (ctx) => const EnrollmentFormDialog(),
+              );
+            },
           ),
         ),
         actions: [
@@ -304,8 +311,8 @@ class _B2BHeroSection extends StatelessWidget {
                     ElevatedButton(
                       onPressed: () {},
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.gold,
-                        foregroundColor: Colors.black,
+                        backgroundColor: AppColors.orange,
+                        foregroundColor: Colors.white,
                         padding: EdgeInsets.symmetric(
                           horizontal: isMobile ? 18 : 24,
                           vertical: 13,

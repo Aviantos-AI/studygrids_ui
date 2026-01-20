@@ -94,6 +94,7 @@ import 'package:pie_study/screens/home_page.dart';
 import 'package:pie_study/screens/programs_page.dart';
 import 'package:pie_study/screens/term&Conditions_page.dart';
 import 'package:pie_study/widgets/app_colors.dart';
+import 'package:pie_study/widgets/global_floating_button.dart';
 
 void main() {
   runApp(const PieStudyApp());
@@ -111,18 +112,32 @@ class PieStudyApp extends StatelessWidget {
         useMaterial3: false,
         scaffoldBackgroundColor: AppColors.bg,
       ),
-      // ✅ default page
       initialRoute: '/',
       routes: {
-        '/': (_) => const PieStudyHomePage(),
-        '/programs': (_) => const ProgramsPage(),
-        '/b2b': (_) => const B2BPage(),
-        '/b2g': (_) => const B2CPage(),           // ✅ B2G/B2C page
-        '/about': (_) => const PieStudyAboutPage(),
-        '/tnc': (_) => const TermsAndConditionsPage(),
-        '/contact': (_) => const ContactUsPage(),
-        '/faq': (_) => const FaqPage(),           // FAQ footer se open hoga
+        '/': (_) => const _PageWithFloatingButton(child: PieStudyHomePage()),
+        '/programs': (_) => const _PageWithFloatingButton(child: ProgramsPage()),
+        '/b2b': (_) => const _PageWithFloatingButton(child: B2BPage()),
+        '/b2g': (_) => const _PageWithFloatingButton(child: B2CPage()),
+        '/about': (_) => const _PageWithFloatingButton(child: PieStudyAboutPage()),
+        '/tnc': (_) => const _PageWithFloatingButton(child: TermsAndConditionsPage()),
+        '/contact': (_) => const _PageWithFloatingButton(child: ContactUsPage()),
+        '/faq': (_) => const _PageWithFloatingButton(child: FaqPage()),
       },
+    );
+  }
+}
+
+class _PageWithFloatingButton extends StatelessWidget {
+  final Widget child;
+  const _PageWithFloatingButton({required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        child,
+        const GlobalFloatingButton(),
+      ],
     );
   }
 }

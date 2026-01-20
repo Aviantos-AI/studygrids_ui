@@ -1,7 +1,3 @@
-
-
-
-
 import 'package:flutter/material.dart';
 import 'package:pie_study/screens/Data_science_internship_page.dart';
 import 'package:pie_study/screens/agentic_ai_developer_page.dart';
@@ -9,11 +5,11 @@ import 'package:pie_study/screens/agentic_ai_manager_program.dart';
 import 'package:pie_study/screens/data_science_course_page.dart';
 import 'package:pie_study/screens/main_navigation.dart';
 import 'package:pie_study/widgets/app_colors.dart';
-import 'package:pie_study/main.dart';           // handlePieNavTap
+import 'package:pie_study/main.dart'; // handlePieNavTap
 import 'package:pie_study/widgets/pie_footer.dart'; // ✅ Footer import
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:url_launcher/url_launcher.dart';
-
+import 'package:pie_study/widgets/global_floating_button.dart';
 
 class PieStudyAboutPage extends StatelessWidget {
   const PieStudyAboutPage({super.key});
@@ -30,8 +26,8 @@ class PieStudyAboutPage extends StatelessWidget {
         child: PieNavDrawer(
           activeId: 'about',
           onItemTap: (id) {
-            Navigator.pop(context);          // drawer close
-            handlePieNavTap(context, id);    // global navigation
+            Navigator.pop(context); // drawer close
+            handlePieNavTap(context, id); // global navigation
           },
         ),
       ),
@@ -48,7 +44,13 @@ class PieStudyAboutPage extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
           child: PieTopNav(
             onItemTap: (id) => handlePieNavTap(context, id),
-            activeId: 'about',              // ✅ "About Us" tab highlight
+            activeId: 'about',
+            onEnrollTap: () {
+              showDialog(
+                context: context,
+                builder: (ctx) => const EnrollmentFormDialog(),
+              );
+            },
             ctaLabel: 'FAQ',
             onCtaTap: () => handlePieNavTap(context, 'faq'),
           ),
@@ -58,10 +60,7 @@ class PieStudyAboutPage extends StatelessWidget {
           if (!isWide)
             Builder(
               builder: (ctx) => IconButton(
-                icon: const Icon(
-                  Icons.menu_rounded,
-                  color: Colors.black87,
-                ),
+                icon: const Icon(Icons.menu_rounded, color: Colors.black87),
                 onPressed: () => Scaffold.of(ctx).openEndDrawer(),
               ),
             ),
@@ -70,8 +69,9 @@ class PieStudyAboutPage extends StatelessWidget {
 
       body: LayoutBuilder(
         builder: (context, constraints) {
-          final maxWidth =
-              constraints.maxWidth > 1200 ? 1200.0 : constraints.maxWidth;
+          final maxWidth = constraints.maxWidth > 1200
+              ? 1200.0
+              : constraints.maxWidth;
 
           // ✅ ScrollView ke andar Column: content + full-width footer
           return SingleChildScrollView(
@@ -80,7 +80,9 @@ class PieStudyAboutPage extends StatelessWidget {
                 // Centered content with maxWidth
                 Padding(
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 16, vertical: 24),
+                    horizontal: 16,
+                    vertical: 24,
+                  ),
                   child: Center(
                     child: ConstrainedBox(
                       constraints: BoxConstraints(maxWidth: maxWidth),
@@ -106,76 +108,73 @@ class PieStudyAboutPage extends StatelessWidget {
                 ),
 
                 // Footer full screen width (no ConstrainedBox)
-             PieFooter(
-                    // ✅ 4 Programs → specific detail pages
-                    onProgramTap: (id) {
-                      switch (id) {
-                        case 'managers':
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) =>
-                                  const AgenticManagersDetailPage(),
-                            ),
-                          );
-                          break;
+                PieFooter(
+                  // ✅ 4 Programs → specific detail pages
+                  onProgramTap: (id) {
+                    switch (id) {
+                      case 'managers':
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => const AgenticManagersDetailPage(),
+                          ),
+                        );
+                        break;
 
-                        case 'developers':
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) =>
-                                  const AgenticDevelopersDetailPage(),
-                            ),
-                          );
-                          break;
+                      case 'developers':
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => const AgenticDevelopersDetailPage(),
+                          ),
+                        );
+                        break;
 
-                        case 'ds_intern':
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) =>
-                                  DataScienceInternshipDetailPage(),
-                            ),
-                          );
-                          break;
+                      case 'ds_intern':
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => DataScienceInternshipDetailPage(),
+                          ),
+                        );
+                        break;
 
-                        case 'ds_foundation':
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) =>
-                                  const DataScienceFoundationDetailPage(),
-                            ),
-                          );
-                          break;
-                      }
-                    },
+                      case 'ds_foundation':
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) =>
+                                const DataScienceFoundationDetailPage(),
+                          ),
+                        );
+                        break;
+                    }
+                  },
 
-                    // ✅ About Us link
-                    onAboutTap: () {
-                      handlePieNavTap(context, 'about');
-                    },
+                  // ✅ About Us link
+                  onAboutTap: () {
+                    handlePieNavTap(context, 'about');
+                  },
 
-                    // ✅ Our Verticals → B2G (vertical mapping main.dart me hai)
-                    onVerticalsTap: () {
-                      handlePieNavTap(context, 'verticals');
-                    },
+                  // ✅ Our Verticals → B2G (vertical mapping main.dart me hai)
+                  onVerticalsTap: () {
+                    handlePieNavTap(context, 'verticals');
+                  },
 
-                    // ✅ Terms & Conditions
-                    onBlogTap: () {
-                      handlePieNavTap(context, 'tnc');
-                    },
+                  // ✅ Terms & Conditions
+                  onBlogTap: () {
+                    handlePieNavTap(context, 'tnc');
+                  },
 
-                    // ✅ FAQ
-                    onFaqTap: () {
-                      handlePieNavTap(context, 'faq');
-                    },
+                  // ✅ FAQ
+                  onFaqTap: () {
+                    handlePieNavTap(context, 'faq');
+                  },
 
-                    // ✅ optional: email/phone future ke liye
-                    onEmailTap: () {
-                      // TODO: email launcher
-                    },
-                    onPhoneTap: () {
-                      // TODO: phone dialer
-                    },
-                  ),
+                  // ✅ optional: email/phone future ke liye
+                  onEmailTap: () {
+                    // TODO: email launcher
+                  },
+                  onPhoneTap: () {
+                    // TODO: phone dialer
+                  },
+                ),
               ],
             ),
           );
@@ -184,7 +183,6 @@ class PieStudyAboutPage extends StatelessWidget {
     );
   }
 }
-
 
 /* ============================================================
  * 1. HERO SECTION
@@ -320,29 +318,26 @@ class PieStudyAboutPage extends StatelessWidget {
 //   }
 // }
 
-
-
 /**----------MAILCHIMP FUNCTION-------------- */
 const String mailchimpUrl = 'https://mailchi.mp/ad52932183fa/piestudy';
 
-
-  Future<void> _openMailchimp(BuildContext context) async {
-    final uri = Uri.parse(mailchimpUrl);
-    if (kIsWeb) {
-      // open in same tab on web
-      await launchUrl(uri, webOnlyWindowName: '_self');
-      return;
-    }
-
-    // native: open external browser
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Unable to open signup page.')),
-      );
-    }
+Future<void> _openMailchimp(BuildContext context) async {
+  final uri = Uri.parse(mailchimpUrl);
+  if (kIsWeb) {
+    // open in same tab on web
+    await launchUrl(uri, webOnlyWindowName: '_self');
+    return;
   }
+
+  // native: open external browser
+  if (await canLaunchUrl(uri)) {
+    await launchUrl(uri, mode: LaunchMode.externalApplication);
+  } else {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Unable to open signup page.')),
+    );
+  }
+}
 
 class _HeroSection extends StatelessWidget {
   const _HeroSection();
@@ -362,11 +357,7 @@ class _HeroSection extends StatelessWidget {
           )
         : const Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _HeroText(),
-              SizedBox(height: 24),
-              _HeroImageCard(),
-            ],
+            children: [_HeroText(), SizedBox(height: 24), _HeroImageCard()],
           );
   }
 }
@@ -407,7 +398,7 @@ class _HeroText extends StatelessWidget {
           const SizedBox(height: 22),
           ElevatedButton(
             // onPressed: () {},
-             onPressed: () => handlePieNavTap(context, 'programs'),
+            onPressed: () => handlePieNavTap(context, 'programs'),
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFF16A34A),
               foregroundColor: Colors.white,
@@ -419,7 +410,10 @@ class _HeroText extends StatelessWidget {
             ),
             child: const Text(
               'Explore Our Courses',
-              style: TextStyle(fontFamily: 'Inter', fontWeight: FontWeight.w600),
+              style: TextStyle(
+                fontFamily: 'Inter',
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
         ],
@@ -443,7 +437,7 @@ class _HeroImageCard extends StatelessWidget {
       child: ClipRRect(
         borderRadius: border,
         child: Image.asset(
-          'lib/assets/images/foundation.jpeg',                  // <-- tum apni asset image yaha rakho
+          'lib/assets/images/foundation.jpeg', // <-- tum apni asset image yaha rakho
           fit: BoxFit.cover,
           errorBuilder: (_, __, ___) {
             return Container(
@@ -463,8 +457,11 @@ class _HeroImageCard extends StatelessWidget {
                 ],
               ),
               child: const Center(
-                child: Icon(Icons.hub_rounded,
-                    size: 110, color: Color(0xFF34D399)),
+                child: Icon(
+                  Icons.hub_rounded,
+                  size: 110,
+                  color: Color(0xFF34D399),
+                ),
               ),
             );
           },
@@ -473,7 +470,6 @@ class _HeroImageCard extends StatelessWidget {
     );
   }
 }
-
 
 /* ============================================================
  * 2. LEARN FROM BEST
@@ -493,11 +489,7 @@ class _LearnFromBestSection extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Icon(
-            Icons.school_rounded,
-            size: 32,
-            color: Color(0xFF16A34A),
-          ),
+          const Icon(Icons.school_rounded, size: 32, color: Color(0xFF16A34A)),
           const SizedBox(width: 18),
           Expanded(
             child: Column(
@@ -585,8 +577,9 @@ class _CompanyEthosSection extends StatelessWidget {
         LayoutBuilder(
           builder: (context, constraints) {
             final isWide = constraints.maxWidth >= 900;
-            final cardWidth =
-                isWide ? (constraints.maxWidth - 32) / 3 : constraints.maxWidth;
+            final cardWidth = isWide
+                ? (constraints.maxWidth - 32) / 3
+                : constraints.maxWidth;
 
             return Wrap(
               spacing: 16,
@@ -598,7 +591,9 @@ class _CompanyEthosSection extends StatelessWidget {
                     width: cardWidth,
                     child: Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 18),
+                        horizontal: 20,
+                        vertical: 18,
+                      ),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(12),
@@ -711,8 +706,9 @@ class _ExpertTrainersSection extends StatelessWidget {
         LayoutBuilder(
           builder: (context, constraints) {
             final isWide = constraints.maxWidth >= 900;
-            final cardWidth =
-                isWide ? (constraints.maxWidth - 36) / 4 : constraints.maxWidth;
+            final cardWidth = isWide
+                ? (constraints.maxWidth - 36) / 4
+                : constraints.maxWidth;
 
             return Wrap(
               spacing: 12,
@@ -830,8 +826,9 @@ class _StudentsSection extends StatelessWidget {
         LayoutBuilder(
           builder: (context, constraints) {
             final isWide = constraints.maxWidth >= 900;
-            final cardWidth =
-                isWide ? (constraints.maxWidth - 36) / 3 : constraints.maxWidth;
+            final cardWidth = isWide
+                ? (constraints.maxWidth - 36) / 3
+                : constraints.maxWidth;
 
             return Column(
               children: [
@@ -845,7 +842,9 @@ class _StudentsSection extends StatelessWidget {
                         width: cardWidth,
                         child: Container(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 18, vertical: 18),
+                            horizontal: 18,
+                            vertical: 18,
+                          ),
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(12),
@@ -966,15 +965,12 @@ class _BottomCtaSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 34),
-      decoration: const BoxDecoration(
-        color: Color(0xFFF1FBF5),
-      ),
+      decoration: const BoxDecoration(color: Color(0xFFF1FBF5)),
       child: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 860),
           child: Container(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 28, vertical: 24),
+            padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 24),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(16),
@@ -1019,7 +1015,7 @@ class _BottomCtaSection extends StatelessWidget {
                   children: [
                     ElevatedButton(
                       // onPressed: () {},
-                        onPressed: () => handlePieNavTap(context, 'programs'),
+                      onPressed: () => handlePieNavTap(context, 'programs'),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF16A34A),
                         foregroundColor: Colors.white,
@@ -1095,11 +1091,7 @@ class _AboutFooterSection extends StatelessWidget {
           final logoRow = Row(
             mainAxisSize: MainAxisSize.min,
             children: const [
-              Icon(
-                Icons.hexagon_rounded,
-                size: 18,
-                color: Color(0xFF16A34A),
-              ),
+              Icon(Icons.hexagon_rounded, size: 18, color: Color(0xFF16A34A)),
               SizedBox(width: 6),
               Text(
                 'StudyGrids',
@@ -1140,16 +1132,10 @@ class _AboutFooterSection extends StatelessWidget {
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    logoRow,
-                    linksRow,
-                  ],
+                  children: [logoRow, linksRow],
                 ),
                 const SizedBox(height: 10),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: copyright,
-                ),
+                Align(alignment: Alignment.centerLeft, child: copyright),
               ],
             );
           } else {

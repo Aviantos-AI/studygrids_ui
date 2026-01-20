@@ -9,6 +9,7 @@ import 'package:pie_study/widgets/app_colors.dart';
 import 'package:pie_study/main.dart'; // handlePieNavTap
 import 'package:pie_study/widgets/pie_footer.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:pie_study/widgets/global_floating_button.dart';
 
 const String mailchimpUrl = 'https://mailchi.mp/ad52932183fa/piestudy';
 
@@ -62,6 +63,12 @@ class ContactUsPage extends StatelessWidget {
           child: PieTopNav(
             onItemTap: (id) => handlePieNavTap(context, id),
             activeId: 'contact',
+            onEnrollTap: () {
+              showDialog(
+                context: context,
+                builder: (ctx) => const EnrollmentFormDialog(),
+              );
+            },
           ),
         ),
         actions: [
