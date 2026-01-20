@@ -39,6 +39,7 @@ dependencies:
   url_launcher: ^6.3.2
   webview_flutter: ^4.13.0
   weipl_checkout_flutter: ^1.3.0
+  go_router: ^17.0.1
 
 dev_dependencies:
   flutter_test:
