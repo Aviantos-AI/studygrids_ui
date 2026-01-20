@@ -1728,11 +1728,13 @@ import 'package:pie_study/widgets/global_floating_button.dart';
 //   }
 // }
 
+/****new Logic ---- */
+
+
 
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:shared_preferences/shared_preferences.dart'; // Added for storage
 import 'package:url_launcher/url_launcher.dart';
 import 'package:pie_study/main.dart';
 import 'package:pie_study/screens/Data_science_internship_page.dart';
@@ -1755,97 +1757,60 @@ class PieStudyHomePage extends StatefulWidget {
 
 class _PieStudyHomePageState extends State<PieStudyHomePage> {
   Timer? _popupTimer;
+  
+  // Controls if dialog is currently on screen
   bool _isDialogOpen = false;
   
-  // Key to save the timestamp in local storage
-  static const String _prefKeyNextShowTime = 'enrollment_popup_next_show_time';
+  // ✅ Session Guard: Ensures popup appears only once per session (until reload)
+  bool _hasShownInSession = false;
 
   @override
   void initState() {
     super.initState();
     
-    // Check immediately when page loads
-    _checkAndShowDialog();
+    // ✅ Web Fix: Delay ensures UI overlay is ready before showing dialog
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await Future.delayed(const Duration(seconds: 1));
+      _checkAndShowDialog();
+    });
 
-    // Check periodically every 60 seconds
+    // Check periodically (Safety check)
     _popupTimer = Timer.periodic(const Duration(seconds: 60), (_) {
       _checkAndShowDialog();
     });
   }
 
-  /// Logic to check if we allowed to show the dialog
-  Future<void> _checkAndShowDialog() async {
-    // If dialog is already open or widget is unmounted, do nothing
-    if (!mounted || _isDialogOpen) return;
+  /// Logic to trigger popup automatically
+  void _checkAndShowDialog() {
+    // If widget is gone, dialog is open, or ALREADY SHOWN in this session -> STOP
+    if (!mounted || _isDialogOpen || _hasShownInSession) return;
 
-    final prefs = await SharedPreferences.getInstance();
-    final String? nextShowTimeStr = prefs.getString(_prefKeyNextShowTime);
-    
-    final now = DateTime.now();
-    bool shouldShow = false;
-
-    if (nextShowTimeStr == null) {
-      // First time user, show immediately
-      shouldShow = true;
-    } else {
-      // Check if current time is AFTER the stored future time
-      final nextShowTime = DateTime.tryParse(nextShowTimeStr);
-      if (nextShowTime != null && now.isAfter(nextShowTime)) {
-        shouldShow = true;
-      }
-    }
-
-    if (shouldShow) {
-      _triggerDialogProcess(prefs);
-    }
+    _openDialogProcess();
   }
 
-  /// Handles showing the dialog and saving the next time based on user action
-  Future<void> _triggerDialogProcess(SharedPreferences? prefs) async {
-    if (_isDialogOpen) return; // double safety
+  /// Main function to handle dialog opening
+  Future<void> _openDialogProcess() async {
+    if (_isDialogOpen) return;
 
     setState(() {
       _isDialogOpen = true;
+      _hasShownInSession = true; // ✅ Mark as shown. Won't appear again until Reload.
     });
-
-    // Obtain prefs if not passed
-    final sharedPrefs = prefs ?? await SharedPreferences.getInstance();
 
     if (!mounted) return;
 
-    // Wait for the dialog to close and get the result
-    // result == true (Submitted)
-    // result == false (Cancelled/Cut)
-    // result == null (Dismissed by tapping outside)
-    final result = await showDialog<bool>(
+    await showDialog(
       context: context,
-      barrierDismissible: true, 
+      barrierDismissible: true, // ✅ Allows Force Block (Click outside)
       builder: (ctx) => const EnrollmentFormDialog(),
     );
 
-    final now = DateTime.now();
-
-    if (result == true) {
-      // CASE: User Submitted Form -> Hide for 4 Days
-      final nextTime = now.add(const Duration(days: 4));
-      await sharedPrefs.setString(_prefKeyNextShowTime, nextTime.toIso8601String());
-    } else {
-      // CASE: User Cut/Closed/Dismissed -> Hide for 30 Minutes
-      final nextTime = now.add(const Duration(minutes: 30));
-      await sharedPrefs.setString(_prefKeyNextShowTime, nextTime.toIso8601String());
-    }
-
+    // Dialog Closed (Submit, Cancel, or Force Block handled here)
     if (mounted) {
       setState(() {
         _isDialogOpen = false;
       });
     }
-  }
-
-  // Wrapper for manual trigger (e.g. clicking buttons)
-  // Manual clicks usually force open, but we still want to save the state when they close it
-  Future<void> _manualOpenDialog() async {
-     await _triggerDialogProcess(null);
   }
 
   @override
@@ -1875,7 +1840,8 @@ class _PieStudyHomePageState extends State<PieStudyHomePage> {
             onItemTap: (id) => handlePieNavTap(context, id),
             activeId: 'home',
             onEnrollTap: () {
-              _manualOpenDialog(); // Updated to use the smart logic
+              // Manual tap also uses the safe process
+              _openDialogProcess();
             },
           ),
         ),
@@ -1929,22 +1895,22 @@ class _PieStudyHomePageState extends State<PieStudyHomePage> {
                     child: Center(
                       child: ConstrainedBox(
                         constraints: BoxConstraints(maxWidth: maxWidth),
-                        child: Column(
+                        child: const Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            const _HeroSection(), // Passed as constant
-                            const SizedBox(height: 40),
-                            const _WhyTrustSection(),
-                            const SizedBox(height: 40),
-                            const _CareerImpactSection(),
-                            const SizedBox(height: 32),
-                            const _LearnersSection(),
-                            const SizedBox(height: 40),
-                            const _WhoWeServeSection(),
-                            const SizedBox(height: 32),
+                            _HeroSection(),
+                            SizedBox(height: 40),
+                            _WhyTrustSection(),
+                            SizedBox(height: 40),
+                            _CareerImpactSection(),
+                            SizedBox(height: 32),
+                            _LearnersSection(),
+                            SizedBox(height: 40),
+                            _WhoWeServeSection(),
+                            SizedBox(height: 32),
                             // CtaCardMinimal(),
-                            const CtaJourneySection(),
-                            const SizedBox(height: 40),
+                            CtaJourneySection(),
+                            SizedBox(height: 40),
                           ],
                         ),
                       ),
@@ -2179,17 +2145,11 @@ class _HeroLeft extends StatelessWidget {
 
             _PulsingEnrollButtonLeft(
               onTap: () {
-                 // Updated manual trigger
-                 final state = context.findAncestorStateOfType<_PieStudyHomePageState>();
-                 if(state != null) {
-                   state._manualOpenDialog();
-                 } else {
-                   // Fallback if ancestor not found (rare)
-                   showDialog(
-                     context: context,
-                     builder: (ctx) => const EnrollmentFormDialog(),
-                   );
-                 }
+                // Manual tap also triggers the safe dialog process
+                final state = context.findAncestorStateOfType<_PieStudyHomePageState>();
+                if(state != null) {
+                  state._openDialogProcess();
+                }
               },
             ),
           ],
@@ -2197,7 +2157,7 @@ class _HeroLeft extends StatelessWidget {
         const SizedBox(height: 32),
 
         // Features List (ticks green)
-         _FeatureChipsRow(),
+        const _FeatureChipsRow(),
       ],
     );
   }
@@ -3536,3 +3496,6 @@ class CtaJourneySection extends StatelessWidget {
     );
   }
 }
+
+
+
