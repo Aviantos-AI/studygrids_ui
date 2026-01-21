@@ -28,7 +28,7 @@ class _PieStudyHomePageState extends State<PieStudyHomePage> {
   @override
   void initState() {
     super.initState();
-    _popupTimer = Timer.periodic(const Duration(seconds: 4), (_) {
+    _popupTimer = Timer.periodic(const Duration(seconds: 30), (_) {
       if (mounted && !_isDialogOpen) {
         _isDialogOpen = true;
         showDialog(
