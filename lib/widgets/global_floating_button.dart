@@ -8,7 +8,7 @@ class GlobalFloatingButton extends StatelessWidget {
   const GlobalFloatingButton({super.key});
 
   Future<void> _openWhatsApp() async {
-    final uri = Uri.parse('https://wa.me/910000000000');
+    final uri = Uri.parse('https://wa.me/919840540165');
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
     }
