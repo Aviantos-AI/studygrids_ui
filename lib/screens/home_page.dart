@@ -1767,11 +1767,16 @@ class _PieStudyHomePageState extends State<PieStudyHomePage> {
   @override
   void initState() {
     super.initState();
-    
-    // ✅ Web Fix: Delay ensures UI overlay is ready before showing dialog
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await Future.delayed(const Duration(seconds: 1));
-      _checkAndShowDialog();
+    _popupTimer = Timer.periodic(const Duration(seconds: 30), (_) {
+      if (mounted && !_isDialogOpen) {
+        _isDialogOpen = true;
+        showDialog(
+          context: context,
+          builder: (ctx) => const EnrollmentFormDialog(),
+        ).then((_) {
+          _isDialogOpen = false;
+        });
+      }
     });
 
     // Check periodically (Safety check)

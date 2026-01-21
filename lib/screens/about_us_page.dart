@@ -91,14 +91,20 @@ class PieStudyAboutPage extends StatelessWidget {
                         children: [
                           _HeroSection(),
                           SizedBox(height: 40),
-                          _LearnFromBestSection(),
-                          SizedBox(height: 48),
-                          _CompanyEthosSection(),
-                          SizedBox(height: 56),
-                          _ExpertTrainersSection(),
-                          SizedBox(height: 56),
-                          _StudentsSection(),
-                          SizedBox(height: 56),
+                          _MissionSection(),
+                          SizedBox(height: 32),
+                          _VisionSection(),
+                          SizedBox(height: 32),
+                          _ValuesSection(),
+                          SizedBox(height: 32),
+                          _ApproachSection(),
+                          SizedBox(height: 32),
+                          _WhyChooseSection(),
+                          SizedBox(height: 40),
+                          _ShapingFutureSection(),
+                          SizedBox(height: 40),
+                          _TeamSection(),
+                          SizedBox(height: 40),
                           _BottomCtaSection(),
                           SizedBox(height: 24),
                         ],
@@ -474,6 +480,567 @@ class _HeroImageCard extends StatelessWidget {
 /* ============================================================
  * 2. LEARN FROM BEST
  * ==========================================================*/
+
+class _MissionSection extends StatelessWidget {
+  const _MissionSection();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Our Mission',
+          style: TextStyle(
+            fontFamily: 'Inter',
+            fontWeight: FontWeight.w800,
+            fontSize: 24,
+            color: Color(0xFF111827),
+          ),
+        ),
+        const SizedBox(height: 20),
+        _MissionCard(
+          icon: Icons.build_circle_outlined,
+          title: 'Build Practical AI Capability',
+          description:
+              'We focus on transforming AI knowledge into real-world capability. Our programs are designed to go beyond theory, enabling learners and organizations to confidently apply AI technologies to solve business, operational, and societal challenges.',
+        ),
+        const SizedBox(height: 16),
+        _MissionCard(
+          icon: Icons.groups_outlined,
+          title: 'Enable Workforce & Institutional Readiness',
+          description:
+              'We support enterprises, professionals, and public institutions in building future-ready skills. Our structured training pathways help organizations upskill teams, accelerate digital transformation, and create sustainable AI adoption models.',
+        ),
+        const SizedBox(height: 16),
+        _MissionCard(
+          icon: Icons.trending_up,
+          title: 'Deliver Measurable Impact',
+          description:
+              'Every program we deliver is outcome-oriented. We prioritize hands-on learning, real use cases, and applied projects to ensure measurable improvement in productivity, innovation, and decision-making.',
+        ),
+      ],
+    );
+  }
+}
+
+class _MissionCard extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String description;
+
+  const _MissionCard({
+    required this.icon,
+    required this.title,
+    required this.description,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: const Color(0xFFE5E7EB)),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, size: 28, color: AppColors.blue),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontFamily: 'Inter',
+                    fontWeight: FontWeight.w700,
+                    fontSize: 16,
+                    color: Color(0xFF111827),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  description,
+                  style: const TextStyle(
+                    fontFamily: 'Inter',
+                    fontSize: 14,
+                    height: 1.6,
+                    color: Color(0xFF4B5563),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _VisionSection extends StatelessWidget {
+  const _VisionSection();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Our Vision',
+          style: TextStyle(
+            fontFamily: 'Inter',
+            fontWeight: FontWeight.w800,
+            fontSize: 24,
+            color: Color(0xFF111827),
+          ),
+        ),
+        const SizedBox(height: 20),
+        _MissionCard(
+          icon: Icons.school_outlined,
+          title: 'Advance AI Literacy at Scale',
+          description:
+              'We envision a world where AI literacy is foundational across industries, roles, and governance systems. Our goal is to make AI understanding and application accessible, scalable, and relevant for diverse audiences.',
+        ),
+        const SizedBox(height: 16),
+        _MissionCard(
+          icon: Icons.handshake_outlined,
+          title: 'Be a Trusted AI Enablement Partner',
+          description:
+              'We aim to be a long-term partner for organizations and governments seeking to build AI-driven capabilities. Through continuous innovation and ecosystem alignment, we strive to remain at the forefront of AI education and enablement.',
+        ),
+        const SizedBox(height: 16),
+        _MissionCard(
+          icon: Icons.verified_user_outlined,
+          title: 'Shape Responsible AI Adoption',
+          description:
+              'Our vision includes fostering ethical, transparent, and responsible AI usage. We believe AI should enhance human potential, strengthen institutions, and support inclusive economic growth.',
+        ),
+      ],
+    );
+  }
+}
+
+class _ValuesSection extends StatelessWidget {
+  const _ValuesSection();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Our Values',
+          style: TextStyle(
+            fontFamily: 'Inter',
+            fontWeight: FontWeight.w800,
+            fontSize: 24,
+            color: Color(0xFF111827),
+          ),
+        ),
+        const SizedBox(height: 20),
+        _MissionCard(
+          icon: Icons.emoji_events_outlined,
+          title: 'Outcome-Driven Excellence',
+          description:
+              'We believe success is defined by real outcomes, not just certifications. Quality, relevance, and practical value guide how we design and deliver every training program.',
+        ),
+        const SizedBox(height: 16),
+        _MissionCard(
+          icon: Icons.security_outlined,
+          title: 'Integrity & Responsible Innovation',
+          description:
+              'We uphold strong ethical standards in AI education. Responsible AI practices, data awareness, and transparency are embedded into our learning approach and institutional partnerships.',
+        ),
+        const SizedBox(height: 16),
+        _MissionCard(
+          icon: Icons.people_outline,
+          title: 'Collaboration & Continuous Learning',
+          description:
+              'We value collaboration with learners, organizations, industry experts, and public stakeholders. Continuous learning, adaptability, and innovation ensure our programs evolve with the rapidly changing AI landscape.',
+        ),
+      ],
+    );
+  }
+}
+
+class _ApproachSection extends StatelessWidget {
+  const _ApproachSection();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Our Approach',
+          style: TextStyle(
+            fontFamily: 'Inter',
+            fontWeight: FontWeight.w800,
+            fontSize: 24,
+            color: Color(0xFF111827),
+          ),
+        ),
+        const SizedBox(height: 20),
+        _MissionCard(
+          icon: Icons.business_center_outlined,
+          title: 'Industry-Aligned & Use-Case Driven',
+          description:
+              'Our training programs are designed around real industry and governance use cases. We align learning outcomes with current AI applications, organizational needs, and policy considerations to ensure relevance across business and public sectors.',
+        ),
+        const SizedBox(height: 16),
+        _MissionCard(
+          icon: Icons.psychology_outlined,
+          title: 'Structured, Hands-On Learning',
+          description:
+              'We follow a structured learning framework that combines foundational concepts with hands-on labs, projects, and case studies. This ensures learners move from understanding AI to applying it confidently in real-world environments.',
+        ),
+        const SizedBox(height: 16),
+        _MissionCard(
+          icon: Icons.balance_outlined,
+          title: 'Responsible & Scalable AI Adoption',
+          description:
+              'We embed ethical AI principles, data governance, and responsible usage into every program. Our approach supports scalable AI adoption while ensuring compliance, transparency, and long-term sustainability.',
+        ),
+      ],
+    );
+  }
+}
+
+class _WhyChooseSection extends StatelessWidget {
+  const _WhyChooseSection();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Why Choose Us',
+          style: TextStyle(
+            fontFamily: 'Inter',
+            fontWeight: FontWeight.w800,
+            fontSize: 24,
+            color: Color(0xFF111827),
+          ),
+        ),
+        const SizedBox(height: 20),
+        _MissionCard(
+          icon: Icons.rocket_launch_outlined,
+          title: 'End-to-End AI Capability Building',
+          description:
+              'We support the entire AI learning journey—from awareness and foundational training to advanced applications and deployment readiness. This enables individuals, teams, and institutions to build complete, future-ready AI capabilities.',
+        ),
+        const SizedBox(height: 16),
+        _MissionCard(
+          icon: Icons.tune_outlined,
+          title: 'Flexible Delivery for Diverse Audiences',
+          description:
+              'Our programs are designed to serve individuals, enterprises, and government institutions alike. We offer flexible delivery models, customized curricula, and role-based learning paths to meet diverse learning and operational needs.',
+        ),
+        const SizedBox(height: 16),
+        _MissionCard(
+          icon: Icons.check_circle_outline,
+          title: 'Proven, Outcome-Oriented Methodology',
+          description:
+              'We focus on measurable outcomes, not just content delivery. Through applied projects, assessments, and real-world problem-solving, our learners gain skills that translate directly into performance, productivity, and impact.',
+        ),
+      ],
+    );
+  }
+}
+
+class _ShapingFutureSection extends StatelessWidget {
+  const _ShapingFutureSection();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(28),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [AppColors.blue, AppColors.blue.withOpacity(0.8)],
+        ),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Shaping the Future of AI Professionals',
+            style: TextStyle(
+              fontFamily: 'Inter',
+              fontWeight: FontWeight.w800,
+              fontSize: 24,
+              color: Colors.white,
+            ),
+          ),
+          const SizedBox(height: 24),
+          _ShapingCard(
+            icon: Icons.foundation_outlined,
+            title: 'Building Strong AI Foundations',
+            description:
+                'We equip learners with a deep understanding of core AI concepts, data fundamentals, and modern architectures. By grounding professionals in both theory and practical context, we ensure they can adapt to evolving technologies rather than chasing short-term trends.',
+          ),
+          const SizedBox(height: 16),
+          _ShapingCard(
+            icon: Icons.work_outline,
+            title: 'Developing Industry-Ready Skills',
+            description:
+                'Our programs focus on real-world application, problem-solving, and deployment readiness. Learners work on hands-on projects, case studies, and industry-aligned scenarios that reflect actual business and governance challenges—preparing them to contribute from day one.',
+          ),
+          const SizedBox(height: 16),
+          _ShapingCard(
+            icon: Icons.stars_outlined,
+            title: 'Preparing for Responsible Leadership in AI',
+            description:
+                'Beyond technical skills, we emphasize ethical AI, governance, and responsible decision-making. We prepare AI professionals not just to build systems, but to lead AI initiatives with accountability, transparency, and societal impact in mind.',
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ShapingCard extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String description;
+
+  const _ShapingCard({
+    required this.icon,
+    required this.title,
+    required this.description,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Icon(icon, size: 28, color: AppColors.orange),
+        const SizedBox(width: 16),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(
+                  fontFamily: 'Inter',
+                  fontWeight: FontWeight.w700,
+                  fontSize: 16,
+                  color: Colors.white,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                description,
+                style: TextStyle(
+                  fontFamily: 'Inter',
+                  fontSize: 14,
+                  height: 1.6,
+                  color: Colors.white.withOpacity(0.9),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _TeamSection extends StatelessWidget {
+  const _TeamSection();
+
+  @override
+  Widget build(BuildContext context) {
+    final team = [
+      ('Anand Fadte', 'Founder, CTO', 'Anand.jpg'),
+      ('Shivraj K', 'Co Founder and Marketing Director', 'Shivraj.jpg'),
+      ('Latha Ram', 'PMO Head', 'Latha.jpg'),
+      ('Bhargavi Kulkarni', 'Product Manager', 'bhar.jpg'),
+      ('Saurav Shinde', 'AI Researcher', 'Saurav.jpg'),
+    ];
+
+    final trainers = [
+      ('Anand Fadte', 'Lead Trainer', 'Anand.jpg'),
+      ('Shivraj K', 'Lead Trainer', 'Shivraj.jpg'),
+    ];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Meet Our Team',
+          style: TextStyle(
+            fontFamily: 'Inter',
+            fontWeight: FontWeight.w800,
+            fontSize: 24,
+            color: Color(0xFF111827),
+          ),
+        ),
+        const SizedBox(height: 24),
+        LayoutBuilder(
+          builder: (context, constraints) {
+            final isWide = constraints.maxWidth >= 900;
+            final cardWidth = isWide
+                ? (constraints.maxWidth - 32) / 3
+                : constraints.maxWidth;
+
+            return Wrap(
+              spacing: 16,
+              runSpacing: 16,
+              children: [
+                for (final member in team)
+                  SizedBox(
+                    width: cardWidth,
+                    child: Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: const Color(0xFFE5E7EB)),
+                      ),
+                      child: Column(
+                        children: [
+                          CircleAvatar(
+                            radius: 40,
+                            backgroundColor: AppColors.blue.withOpacity(0.1),
+                            backgroundImage: AssetImage(
+                              'lib/assets/staff/${member.$3}',
+                            ),
+                            onBackgroundImageError: (_, __) {},
+                            child: member.$3.isEmpty
+                                ? Icon(
+                                    Icons.person,
+                                    size: 40,
+                                    color: AppColors.blue,
+                                  )
+                                : null,
+                          ),
+                          const SizedBox(height: 12),
+                          Text(
+                            member.$1,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              fontFamily: 'Inter',
+                              fontWeight: FontWeight.w700,
+                              fontSize: 14,
+                              color: Color(0xFF111827),
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            member.$2,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontFamily: 'Inter',
+                              fontSize: 12,
+                              color: AppColors.orange,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+              ],
+            );
+          },
+        ),
+        const SizedBox(height: 32),
+        const Text(
+          'Training Team',
+          style: TextStyle(
+            fontFamily: 'Inter',
+            fontWeight: FontWeight.w700,
+            fontSize: 20,
+            color: Color(0xFF111827),
+          ),
+        ),
+        const SizedBox(height: 16),
+        LayoutBuilder(
+          builder: (context, constraints) {
+            final isWide = constraints.maxWidth >= 600;
+            final cardWidth = isWide
+                ? (constraints.maxWidth - 16) / 2
+                : constraints.maxWidth;
+
+            return Wrap(
+              spacing: 16,
+              runSpacing: 16,
+              children: [
+                for (final trainer in trainers)
+                  SizedBox(
+                    width: cardWidth,
+                    child: Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: AppColors.orange.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: AppColors.orange.withOpacity(0.3),
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          CircleAvatar(
+                            radius: 30,
+                            backgroundColor: AppColors.orange.withOpacity(0.2),
+                            backgroundImage: AssetImage(
+                              'lib/assets/staff/${trainer.$3}',
+                            ),
+                            onBackgroundImageError: (_, __) {},
+                            child: trainer.$3.isEmpty
+                                ? Icon(
+                                    Icons.person,
+                                    size: 30,
+                                    color: AppColors.orange,
+                                  )
+                                : null,
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  trainer.$1,
+                                  style: const TextStyle(
+                                    fontFamily: 'Inter',
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 14,
+                                    color: Color(0xFF111827),
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  trainer.$2,
+                                  style: TextStyle(
+                                    fontFamily: 'Inter',
+                                    fontSize: 12,
+                                    color: AppColors.orange,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+              ],
+            );
+          },
+        ),
+      ],
+    );
+  }
+}
 
 class _LearnFromBestSection extends StatelessWidget {
   const _LearnFromBestSection();

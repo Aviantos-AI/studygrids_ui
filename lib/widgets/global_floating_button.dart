@@ -57,7 +57,9 @@ class _EnrollmentFormDialogState extends State<EnrollmentFormDialog> {
     if (_formKey.currentState!.validate() && _consentGiven) {
       try {
         final response = await http.post(
-          Uri.parse('https://maiden-pubmed-stickers-administered.trycloudflare.com/leads/submit'),
+          Uri.parse(
+            'https://maiden-pubmed-stickers-administered.trycloudflare.com/leads/submit',
+          ),
           headers: {
             'accept': 'application/json',
             'Content-Type': 'application/json',
@@ -81,7 +83,9 @@ class _EnrollmentFormDialogState extends State<EnrollmentFormDialog> {
             );
           } else {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Submission failed. Please try again.')),
+              const SnackBar(
+                content: Text('Submission failed. Please try again.'),
+              ),
             );
           }
         }
@@ -89,7 +93,9 @@ class _EnrollmentFormDialogState extends State<EnrollmentFormDialog> {
         if (mounted) {
           Navigator.pop(context);
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Error submitting form. Please try again.')),
+            const SnackBar(
+              content: Text('Error submitting form. Please try again.'),
+            ),
           );
         }
       }
