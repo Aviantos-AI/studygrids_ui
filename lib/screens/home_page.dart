@@ -1730,8 +1730,6 @@ import 'package:pie_study/widgets/global_floating_button.dart';
 
 /****new Logic ---- */
 
-
-
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -1767,16 +1765,11 @@ class _PieStudyHomePageState extends State<PieStudyHomePage> {
   @override
   void initState() {
     super.initState();
-    _popupTimer = Timer.periodic(const Duration(seconds: 30), (_) {
-      if (mounted && !_isDialogOpen) {
-        _isDialogOpen = true;
-        showDialog(
-          context: context,
-          builder: (ctx) => const EnrollmentFormDialog(),
-        ).then((_) {
-          _isDialogOpen = false;
-        });
-      }
+    
+    // ✅ Web Fix: Delay ensures UI overlay is ready before showing dialog
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await Future.delayed(const Duration(seconds: 1));
+      _checkAndShowDialog();
     });
 
     // Check periodically (Safety check)
@@ -3501,6 +3494,5 @@ class CtaJourneySection extends StatelessWidget {
     );
   }
 }
-
 
 
