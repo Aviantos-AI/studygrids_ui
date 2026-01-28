@@ -1,77 +1,4 @@
-// import 'package:flutter/material.dart';
-// import 'package:pie_study/widgets/app_colors.dart';
-// import 'package:pie_study/widgets/brand_title.dart';
 
-// class DataScienceFoundationDetailPage extends StatelessWidget {
-//   const DataScienceFoundationDetailPage({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     const pageBg = Color(0xFFF5F7FB);
-
-//     return Scaffold(
-//       backgroundColor: pageBg,
-//       appBar: AppBar(
-//         backgroundColor: Colors.white,
-//         elevation: 0.4,
-//         shadowColor: Colors.black12,
-//         surfaceTintColor: Colors.transparent,
-//         titleSpacing: 0,
-//         title: const Padding(
-//           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 4),
-//           child: Align(
-//             alignment: Alignment.centerLeft,
-//             child: BrandTitle(),
-//           ),
-//         ),
-//       ),
-//       body: Center(
-//         child: LayoutBuilder(
-//           builder: (context, constraints) {
-//             final maxWidth =
-//                 constraints.maxWidth > 1180 ? 1180.0 : constraints.maxWidth;
-
-//             return SingleChildScrollView(
-//               padding:
-//                   const EdgeInsets.symmetric(horizontal: 20, vertical: 32),
-//               child: Center(
-//                 child: ConstrainedBox(
-//                   constraints: BoxConstraints(maxWidth: maxWidth),
-//                   child: Column(
-//                     crossAxisAlignment: CrossAxisAlignment.center,
-//                     children: const [
-//                       FadeInSlide(
-//                         delay: Duration(milliseconds: 0),
-//                         child: _HeroSection(),
-//                       ),
-//                       SizedBox(height: 48),
-//                       FadeInSlide(
-//                         delay: Duration(milliseconds: 120),
-//                         child: _AchieveSection(),
-//                       ),
-//                       SizedBox(height: 56),
-//                       FadeInSlide(
-//                         delay: Duration(milliseconds: 220),
-//                         child: _CurriculumSection(),
-//                       ),
-//                       SizedBox(height: 64),
-//                       FadeInSlide(
-//                         delay: Duration(milliseconds: 320),
-//                         child: _OutcomeSection(),
-//                       ),
-//                       SizedBox(height: 32),
-//                       _FooterStrip(),
-//                     ],
-//                   ),
-//                 ),
-//               ),
-//             );
-//           },
-//         ),
-//       ),
-//     );
-//   }
-// }
 
 
 import 'package:flutter/material.dart';
@@ -79,6 +6,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:pie_study/screens/Data_science_internship_page.dart';
 import 'package:pie_study/screens/agentic_ai_developer_page.dart';
 import 'package:pie_study/screens/agentic_ai_manager_program.dart';
+import 'package:pie_study/utils/enrollment_mixin.dart';
 import 'package:pie_study/widgets/app_colors.dart';
 import 'package:pie_study/widgets/brand_title.dart';
 import 'package:pie_study/main.dart'; // handlePieNavTap
@@ -86,13 +14,26 @@ import 'package:pie_study/screens/main_navigation.dart';
 import 'package:pie_study/widgets/global_floating_button.dart';
 import 'package:pie_study/widgets/pie_footer.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:pie_study/widgets/mobile_sticky_bottom.dart';
 
 
 
 
 
-class DataScienceFoundationDetailPage extends StatelessWidget {
+
+class DataScienceFoundationDetailPage extends StatefulWidget {
   const DataScienceFoundationDetailPage({super.key});
+
+  @override
+  State<DataScienceFoundationDetailPage> createState() =>
+      _DataScienceFoundationDetailPageState();
+}
+
+// ✅ Added Mixin
+class _DataScienceFoundationDetailPageState
+    extends State<DataScienceFoundationDetailPage> with EnrollmentPopupMixin {
+
+
 
 
 
@@ -165,121 +106,128 @@ class DataScienceFoundationDetailPage extends StatelessWidget {
       ),
 
       // Use SingleChildScrollView so footer scrolls with content on small screens
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // ---------- Centered, constrained main content ----------
-              Center(
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    // ensure we don't exceed available width
-                    final maxWidth = constraints.maxWidth > contentMaxWidth
-                        ? contentMaxWidth
-                        : constraints.maxWidth;
-
-                    return ConstrainedBox(
-                      constraints: BoxConstraints(maxWidth: maxWidth),
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: horizontalPadding, vertical: 24),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            // Hero (kept same, but vertical gap responsive)
-                            FadeInSlide(
-                              delay: const Duration(milliseconds: 0),
-                              child: const _HeroSection(),
-                            ),
-
-                            SizedBox(height: heroGap),
-
-                            FadeInSlide(
-                              delay: const Duration(milliseconds: 120),
-                              child: const _AchieveSection(),
-                            ),
-
-                            SizedBox(height: sectionGapSmall),
-
-                            FadeInSlide(
-                              delay: const Duration(milliseconds: 220),
-                              child: const _CurriculumSection(),
-                            ),
-
-                            SizedBox(height: sectionGapMedium),
-
-                            FadeInSlide(
-                              delay: const Duration(milliseconds: 320),
-                              child: const _OutcomeSection(),
-                            ),
-
-                            // Small bottom gap before the full-width footer
-                            SizedBox(height: isWide ? 28 : 20),
-                          ],
+      body: Stack(
+        children: [
+          SafeArea(
+            child: SingleChildScrollView(
+              controller: enrollmentScrollController,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                // ---------- Centered, constrained main content ----------
+                Center(
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      // ensure we don't exceed available width
+                      final maxWidth = constraints.maxWidth > contentMaxWidth
+                          ? contentMaxWidth
+                          : constraints.maxWidth;
+        
+                      return ConstrainedBox(
+                        constraints: BoxConstraints(maxWidth: maxWidth),
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: horizontalPadding, vertical: 24),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              // Hero (kept same, but vertical gap responsive)
+                              FadeInSlide(
+                                delay: const Duration(milliseconds: 0),
+                                child: const _HeroSection(),
+                              ),
+        
+                              SizedBox(height: heroGap),
+        
+                              FadeInSlide(
+                                delay: const Duration(milliseconds: 120),
+                                child: const _AchieveSection(),
+                              ),
+        
+                              SizedBox(height: sectionGapSmall),
+        
+                              FadeInSlide(
+                                delay: const Duration(milliseconds: 220),
+                                child: const _CurriculumSection(),
+                              ),
+        
+                              SizedBox(height: sectionGapMedium),
+        
+                              FadeInSlide(
+                                delay: const Duration(milliseconds: 320),
+                                child: const _OutcomeSection(),
+                              ),
+        
+                              // Small bottom gap before the full-width footer
+                              SizedBox(height: isWide ? 28 : 20),
+                            ],
+                          ),
                         ),
-                      ),
-                    );
+                      );
+                    },
+                  ),
+                ),
+        
+                // ---------- FULL-WIDTH FOOTER (outside ConstrainedBox) ----------
+                // This stays full width on all devices and is scrollable with content.
+                PieFooter(
+                  onProgramTap: (id) {
+                    switch (id) {
+                      case 'managers':
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => const AgenticManagersDetailPage(),
+                          ),
+                        );
+                        break;
+        
+                      case 'developers':
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => const AgenticDevelopersDetailPage(),
+                          ),
+                        );
+                        break;
+        
+                      case 'ds_intern':
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => DataScienceInternshipDetailPage(),
+                          ),
+                        );
+                        break;
+        
+                      case 'ds_foundation':
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => const DataScienceFoundationDetailPage(),
+                          ),
+                        );
+                        break;
+                    }
+                  },
+                  onAboutTap: () => handlePieNavTap(context, 'about'),
+                  onVerticalsTap: () => handlePieNavTap(context, 'verticals'),
+                  onBlogTap: () => handlePieNavTap(context, 'tnc'),
+                  onFaqTap: () => handlePieNavTap(context, 'faq'),
+                  onEmailTap: () {
+                    // TODO: implement mail launcher
+                  },
+                  onPhoneTap: () {
+                    // TODO: implement phone dialer
                   },
                 ),
-              ),
-
-              // ---------- FULL-WIDTH FOOTER (outside ConstrainedBox) ----------
-              // This stays full width on all devices and is scrollable with content.
-              PieFooter(
-                onProgramTap: (id) {
-                  switch (id) {
-                    case 'managers':
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => const AgenticManagersDetailPage(),
-                        ),
-                      );
-                      break;
-
-                    case 'developers':
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => const AgenticDevelopersDetailPage(),
-                        ),
-                      );
-                      break;
-
-                    case 'ds_intern':
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => DataScienceInternshipDetailPage(),
-                        ),
-                      );
-                      break;
-
-                    case 'ds_foundation':
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => const DataScienceFoundationDetailPage(),
-                        ),
-                      );
-                      break;
-                  }
-                },
-                onAboutTap: () => handlePieNavTap(context, 'about'),
-                onVerticalsTap: () => handlePieNavTap(context, 'verticals'),
-                onBlogTap: () => handlePieNavTap(context, 'tnc'),
-                onFaqTap: () => handlePieNavTap(context, 'faq'),
-                onEmailTap: () {
-                  // TODO: implement mail launcher
-                },
-                onPhoneTap: () {
-                  // TODO: implement phone dialer
-                },
-              ),
-
-              // breathing room for very small screens
-
-            ],
+                const SizedBox(height: 50),
+        
+                // breathing room for very small screens
+        
+              ],
+            ),
           ),
         ),
-      ),
+          // ---------- MOBILE STICKY BOTTOM BAR ----------
+           MobileStickyBottomBar(),
+    ],  ),
     );
   }
 }
@@ -781,7 +729,7 @@ class _OutcomeSection extends StatelessWidget {
               // onPressed: () {},
              onPressed: () => _openEnrollmentDialog(context),
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF071827),
+                backgroundColor: const Color(0xFFFF7E21),
                 foregroundColor: Colors.white,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 28, vertical: 13),

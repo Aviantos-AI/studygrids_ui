@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:pie_study/widgets/mobile_sticky_bottom.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:pie_study/main.dart';
 import 'package:pie_study/screens/Data_science_internship_page.dart';
@@ -18,8 +20,6 @@ import 'package:pie_study/widgets/global_floating_button.dart';
 
 /****new Logic ---- */
 
-
-
 const Color _pieBlue = Color(0xFF0B3558); // deep navy
 
 class PieStudyHomePage extends StatefulWidget {
@@ -30,56 +30,136 @@ class PieStudyHomePage extends StatefulWidget {
 }
 
 class _PieStudyHomePageState extends State<PieStudyHomePage> {
-  Timer? _popupTimer;
+  // Timer? _popupTimer;
   
-  // Controls if dialog is currently on screen
+  // // Controls if dialog is currently on screen
+  // bool _isDialogOpen = false;
+  
+  // // ✅ Session Guard: Ensures popup appears only once per session (until reload)
+  // bool _hasShownInSession = false;
+
+  // @override
+  // void initState() {
+  //   super.initState();
+    
+  //   // ✅ Web Fix: Delay ensures UI overlay is ready before showing dialog
+  //   WidgetsBinding.instance.addPostFrameCallback((_) async {
+  //     await Future.delayed(const Duration(seconds: 1));
+  //     _checkAndShowDialog();
+  //   });
+
+  //   // Check periodically (Safety check)
+  //   _popupTimer = Timer.periodic(const Duration(seconds: 60), (_) {
+  //     _checkAndShowDialog();
+  //   });
+  // }
+
+  // /// Logic to trigger popup automatically
+  // void _checkAndShowDialog() {
+  //   // If widget is gone, dialog is open, or ALREADY SHOWN in this session -> STOP
+  //   if (!mounted || _isDialogOpen || _hasShownInSession) return;
+
+  //   _openDialogProcess();
+  // }
+
+  // /// Main function to handle dialog opening
+  // Future<void> _openDialogProcess() async {
+  //   if (_isDialogOpen) return;
+
+  //   setState(() {
+  //     _isDialogOpen = true;
+  //     _hasShownInSession = true; // ✅ Mark as shown. Won't appear again until Reload.
+  //   });
+
+  //   if (!mounted) return;
+
+  //   await showDialog(
+  //     context: context,
+  //     barrierDismissible: true, // ✅ Allows Force Block (Click outside)
+  //     builder: (ctx) => const EnrollmentFormDialog(),
+  //   );
+
+  //   // Dialog Closed (Submit, Cancel, or Force Block handled here)
+  //   if (mounted) {
+  //     setState(() {
+  //       _isDialogOpen = false;
+  //     });
+  //   }
+  // }
+
+  // @override
+  // void dispose() {
+  //   _popupTimer?.cancel();
+  //   super.dispose();
+  // }
+
+
+
+  // ✅ 1. Scroll Controller (Scroll track karne ke liye)
+  final ScrollController _scrollController = ScrollController();
+  
+  Timer? _timer; 
   bool _isDialogOpen = false;
   
-  // ✅ Session Guard: Ensures popup appears only once per session (until reload)
+  // ✅ Session Guard: Ek baar true hua to refresh tak true rahega
   bool _hasShownInSession = false;
 
   @override
   void initState() {
     super.initState();
-    
-    // ✅ Web Fix: Delay ensures UI overlay is ready before showing dialog
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await Future.delayed(const Duration(seconds: 1));
+
+    // ✅ 2. Logic: 10 Seconds baad try karo
+    _timer = Timer(const Duration(seconds: 10), () {
       _checkAndShowDialog();
     });
 
-    // Check periodically (Safety check)
-    _popupTimer = Timer.periodic(const Duration(seconds: 60), (_) {
-      _checkAndShowDialog();
+    // ✅ 3. Logic: Scroll Listener (50% scroll hone par try karo)
+    _scrollController.addListener(() {
+      // Agar pehle dikh chuka hai to calculation bhi mat karo (Performance Optimization)
+      if (_hasShownInSession) return; 
+
+      if (_scrollController.hasClients) {
+        final maxScroll = _scrollController.position.maxScrollExtent;
+        final currentScroll = _scrollController.offset;
+
+        // Agar 50% se jyada scroll hua
+        if (maxScroll > 0 && (currentScroll / maxScroll) >= 0.5) {
+          _checkAndShowDialog();
+        }
+      }
     });
   }
 
-  /// Logic to trigger popup automatically
+  /// Check logic
   void _checkAndShowDialog() {
-    // If widget is gone, dialog is open, or ALREADY SHOWN in this session -> STOP
+    // ✅ Agar pehle dikh chuka hai (_hasShownInSession == true), to wapas laut jao
     if (!mounted || _isDialogOpen || _hasShownInSession) return;
 
     _openDialogProcess();
   }
 
-  /// Main function to handle dialog opening
+  /// Open Dialog
   Future<void> _openDialogProcess() async {
     if (_isDialogOpen) return;
 
+    // ✅ Timer cancel kar do (taaki agar scroll se khula ho, to timer baad me na chale)
+    _timer?.cancel();
+
     setState(() {
       _isDialogOpen = true;
-      _hasShownInSession = true; // ✅ Mark as shown. Won't appear again until Reload.
+      _hasShownInSession = true; // ✅ Yaha Lock lag gaya. Ab ye session me dobara false nahi hoga.
     });
 
     if (!mounted) return;
 
     await showDialog(
       context: context,
-      barrierDismissible: true, // ✅ Allows Force Block (Click outside)
+      barrierDismissible: true, // User bahar click karke cancel kar sakta hai
       builder: (ctx) => const EnrollmentFormDialog(),
     );
 
-    // Dialog Closed (Submit, Cancel, or Force Block handled here)
+    // Jab dialog band hoga (Cancel/Submit), tab sirf _isDialogOpen false hoga.
+    // _hasShownInSession TRUE hi rahega.
     if (mounted) {
       setState(() {
         _isDialogOpen = false;
@@ -89,12 +169,15 @@ class _PieStudyHomePageState extends State<PieStudyHomePage> {
 
   @override
   void dispose() {
-    _popupTimer?.cancel();
+    _timer?.cancel();
+    _scrollController.dispose(); // ✅ Controller dispose karna zaroori hai
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    // ✅ Responsive Check using 1.5.1 syntax
+    final isMobile = ResponsiveBreakpoints.of(context).isMobile;
     final isWide = MediaQuery.of(context).size.width >= 800;
 
     return Scaffold(
@@ -142,131 +225,142 @@ class _PieStudyHomePageState extends State<PieStudyHomePage> {
         ),
       ),
 
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Colors.white, Color(0xFFF3F7FB)],
-          ),
-        ),
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            final maxWidth = constraints.maxWidth > 1320
-                ? 1320.0
-                : constraints.maxWidth;
+      // ✅ Stack for Sticky Bottom Bar
+      body: Stack(
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [Colors.white, Color(0xFFF3F7FB)],
+              ),
+            ),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final maxWidth = constraints.maxWidth > 1320
+                    ? 1320.0
+                    : constraints.maxWidth;
 
-            // full-page scroll + content (centered) + footer (full width)
-            return SingleChildScrollView(
-              child: Column(
-                children: [
-                  // -------- Centered main content with maxWidth --------
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 24,
-                    ),
-                    child: Center(
-                      child: ConstrainedBox(
-                        constraints: BoxConstraints(maxWidth: maxWidth),
-                        child: const Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            _HeroSection(),
-                            SizedBox(height: 40),
-                            _WhyTrustSection(),
-                            SizedBox(height: 40),
-                            _CareerImpactSection(),
-                            SizedBox(height: 32),
-                            _LearnersSection(),
-                            SizedBox(height: 40),
-                            _WhoWeServeSection(),
-                            SizedBox(height: 32),
-                            // CtaCardMinimal(),
-                            CtaJourneySection(),
-                            SizedBox(height: 40),
-                          ],
+                // full-page scroll + content (centered) + footer (full width)
+                return SingleChildScrollView(
+                  controller: _scrollController,
+                  // ✅ Mobile Padding to avoid overlapping with bottom bar
+                  padding: isMobile ? const EdgeInsets.only(bottom: 100) : EdgeInsets.zero,
+                  child: Column(
+                    children: [
+                      // -------- Centered main content with maxWidth --------
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 24,
+                        ),
+                        child: Center(
+                          child: ConstrainedBox(
+                            constraints: BoxConstraints(maxWidth: maxWidth),
+                            child: const Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                _HeroSection(),
+                                SizedBox(height: 40),
+                                _WhyTrustSection(),
+                                SizedBox(height: 40),
+                                _CareerImpactSection(),
+                                SizedBox(height: 32),
+                                _LearnersSection(),
+                                SizedBox(height: 40),
+                                _WhoWeServeSection(),
+                                SizedBox(height: 32),
+                                // CtaCardMinimal(),
+                                CtaJourneySection(),
+                                SizedBox(height: 40),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
-                    ),
+
+                      // -------- FULL-WIDTH FOOTER (no ConstrainedBox) --------
+                      PieFooter(
+                        // ✅ 4 Programs → specific detail pages
+                        onProgramTap: (id) {
+                          switch (id) {
+                            case 'managers':
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => const AgenticManagersDetailPage(),
+                                ),
+                              );
+                              break;
+
+                            case 'developers':
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) =>
+                                      const AgenticDevelopersDetailPage(),
+                                ),
+                              );
+                              break;
+
+                            case 'ds_intern':
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => DataScienceInternshipDetailPage(),
+                                ),
+                              );
+                              break;
+
+                            case 'ds_foundation':
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) =>
+                                      const DataScienceFoundationDetailPage(),
+                                ),
+                              );
+                              break;
+                          }
+                        },
+
+                        // ✅ About Us link
+                        onAboutTap: () {
+                          handlePieNavTap(context, 'about');
+                        },
+
+                        // ✅ Our Verticals → B2G (vertical mapping main.dart me hai)
+                        onVerticalsTap: () {
+                          handlePieNavTap(context, 'verticals');
+                        },
+
+                        // ✅ Terms & Conditions
+                        onBlogTap: () {
+                          handlePieNavTap(context, 'tnc');
+                        },
+
+                        // ✅ FAQ
+                        onFaqTap: () {
+                          handlePieNavTap(context, 'faq');
+                        },
+
+                        // ✅ optional: email/phone future ke liye
+                        onEmailTap: () {
+                          // TODO: email launcher
+                        },
+                        onPhoneTap: () {
+                          // TODO: phone dialer
+                        },
+                      ),
+
+                      // const SizedBox(height: 20),
+                    ],
                   ),
+                );
+              },
+            ),
+          ),
 
-                  // -------- FULL-WIDTH FOOTER (no ConstrainedBox) --------
-                  PieFooter(
-                    // ✅ 4 Programs → specific detail pages
-                    onProgramTap: (id) {
-                      switch (id) {
-                        case 'managers':
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) => const AgenticManagersDetailPage(),
-                            ),
-                          );
-                          break;
-
-                        case 'developers':
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) =>
-                                  const AgenticDevelopersDetailPage(),
-                            ),
-                          );
-                          break;
-
-                        case 'ds_intern':
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) => DataScienceInternshipDetailPage(),
-                            ),
-                          );
-                          break;
-
-                        case 'ds_foundation':
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) =>
-                                  const DataScienceFoundationDetailPage(),
-                            ),
-                          );
-                          break;
-                      }
-                    },
-
-                    // ✅ About Us link
-                    onAboutTap: () {
-                      handlePieNavTap(context, 'about');
-                    },
-
-                    // ✅ Our Verticals → B2G (vertical mapping main.dart me hai)
-                    onVerticalsTap: () {
-                      handlePieNavTap(context, 'verticals');
-                    },
-
-                    // ✅ Terms & Conditions
-                    onBlogTap: () {
-                      handlePieNavTap(context, 'tnc');
-                    },
-
-                    // ✅ FAQ
-                    onFaqTap: () {
-                      handlePieNavTap(context, 'faq');
-                    },
-
-                    // ✅ optional: email/phone future ke liye
-                    onEmailTap: () {
-                      // TODO: email launcher
-                    },
-                    onPhoneTap: () {
-                      // TODO: phone dialer
-                    },
-                  ),
-
-                  // const SizedBox(height: 20),
-                ],
-              ),
-            );
-          },
-        ),
+          // ✅ Attach Sticky Bottom Bar
+           MobileStickyBottomBar(),
+        ],
       ),
     );
   }
@@ -292,133 +386,7 @@ Future<void> _openMailchimp(BuildContext context) async {
   }
 }
 
-// class _HeroSection extends StatelessWidget {
-//   const _HeroSection();
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return LayoutBuilder(
-//       builder: (context, constraints) {
-//         final isWide = constraints.maxWidth >= 900;
-
-//         const leftSection = _HeroLeft();
-//         const rightSection = _RightHeroCardAnimated();
-
-//         if (isWide) {
-//           return Row(
-//             crossAxisAlignment: CrossAxisAlignment.center,
-//             children: [
-//               const Expanded(flex: 5, child: leftSection),
-//               const SizedBox(width: 48),
-//               const Expanded(flex: 4, child: rightSection),
-//             ],
-//           );
-//         } else {
-//           return Column(
-//             crossAxisAlignment: CrossAxisAlignment.start,
-//             children: const [leftSection, SizedBox(height: 40), rightSection],
-//           );
-//         }
-//       },
-//     );
-//   }
-// }
-
-
-/****version 2----------- */
-
-// class _HeroSection extends StatefulWidget {
-//   const _HeroSection();
-
-//   @override
-//   State<_HeroSection> createState() => _HeroSectionState();
-// }
-
-// class _HeroSectionState extends State<_HeroSection> {
-//   final PageController _pageController = PageController();
-//   int _currentPage = 0;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return LayoutBuilder(
-//       builder: (context, constraints) {
-//         final isWide = constraints.maxWidth >= 900;
-
-//         const leftSection = _HeroLeft();
-        
-//         // ✅ SLIDER SECTION (Orange Card + Data Science Card)
-//         final rightSlider = SizedBox(
-//           height: 540, // Height adjust ki gayi hai taaki content na kate
-//           child: Column(
-//             children: [
-//               Expanded(
-//                 child: PageView(
-//                   controller: _pageController,
-//                   onPageChanged: (idx) {
-//                     setState(() => _currentPage = idx);
-//                   },
-//                   children: const [
-//                     // Card 1: Agentic AI (Orange)
-//                     Padding(
-//                       padding: EdgeInsets.symmetric(horizontal: 8),
-//                       child: Center(child: _RightHeroCardAnimated()),
-//                     ),
-//                     // Card 2: Data Science (Blue - NEW)
-//                     Padding(
-//                       padding: EdgeInsets.symmetric(horizontal: 8),
-//                       child: Center(child: _DataScienceHeroCard()),
-//                     ),
-//                   ],
-//                 ),
-//               ),
-//               const SizedBox(height: 16),
-//               // Dots Indicator
-//               Row(
-//                 mainAxisAlignment: MainAxisAlignment.center,
-//                 children: List.generate(2, (index) {
-//                   return AnimatedContainer(
-//                     duration: const Duration(milliseconds: 300),
-//                     margin: const EdgeInsets.symmetric(horizontal: 4),
-//                     width: _currentPage == index ? 24 : 8,
-//                     height: 8,
-//                     decoration: BoxDecoration(
-//                       color: _currentPage == index 
-//                           ? (_currentPage == 0 ? AppColors.orange : const Color(0xFF1E40AF)) 
-//                           : Colors.grey.shade300,
-//                       borderRadius: BorderRadius.circular(99),
-//                     ),
-//                   );
-//                 }),
-//               ),
-//             ],
-//           ),
-//         );
-
-//         if (isWide) {
-//           return Row(
-//             crossAxisAlignment: CrossAxisAlignment.center,
-//             children: [
-//               const Expanded(flex: 5, child: leftSection),
-//               const SizedBox(width: 48),
-//               Expanded(flex: 4, child: rightSlider),
-//             ],
-//           );
-//         } else {
-//           return Column(
-//             crossAxisAlignment: CrossAxisAlignment.start,
-//             children: [
-//               leftSection, 
-//               const SizedBox(height: 40), 
-//               rightSlider
-//             ],
-//           );
-//         }
-//       },
-//     );
-//   }
-// }
-
-
+// ... (Previous _HeroSection classes commented out) ...
 class _HeroSection extends StatefulWidget {
   const _HeroSection();
 
@@ -434,12 +402,10 @@ class _HeroSectionState extends State<_HeroSection> {
   @override
   void initState() {
     super.initState();
-    // ✅ Auto-Play Logic: Har 4 second mein card change hoga
     _sliderTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
       if (_pageController.hasClients) {
         int nextPage = _currentPage + 1;
-        if (nextPage > 1) nextPage = 0; // Wapas first card par
-        
+        if (nextPage > 1) nextPage = 0;
         _pageController.animateToPage(
           nextPage,
           duration: const Duration(milliseconds: 600),
@@ -458,15 +424,16 @@ class _HeroSectionState extends State<_HeroSection> {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = ResponsiveBreakpoints.of(context).isMobile;
+
     return LayoutBuilder(
       builder: (context, constraints) {
         final isWide = constraints.maxWidth >= 900;
+        const leftSection = _HeroLeft();
 
-        const leftSection = _HeroLeft(); 
-        
-        // ✅ RIGHT SLIDER
+        // ✅ FIXED HEIGHT: Mobile = 410 (Fits content + Date without overflow)
         final rightSlider = SizedBox(
-          height: 540, 
+          height: isMobile ? 410 : 540, 
           child: Column(
             children: [
               Expanded(
@@ -476,15 +443,12 @@ class _HeroSectionState extends State<_HeroSection> {
                     setState(() => _currentPage = idx);
                   },
                   children: const [
-                    //  ORDER CHANGED HERE 
-                    
-                    // 1. Data Science (Deep Navy Blue) - AB PEHLE DIKHEGA
+                    // Card 1
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 12),
                       child: Center(child: _DataScienceHeroCard()),
                     ),
-
-                    // 2. Agentic AI (Orange) - AB DOOSRE NUMBER PAR
+                    // Card 2
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 12),
                       child: Center(child: _RightHeroCardAnimated()),
@@ -492,8 +456,8 @@ class _HeroSectionState extends State<_HeroSection> {
                   ],
                 ),
               ),
-              const SizedBox(height: 16),
-              // Dots Indicator
+              const SizedBox(height: 12),
+              // Dots
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: List.generate(2, (index) {
@@ -503,10 +467,8 @@ class _HeroSectionState extends State<_HeroSection> {
                     width: _currentPage == index ? 32 : 8,
                     height: 8,
                     decoration: BoxDecoration(
-                      // Active Color changes based on card
-                      // 0 = Blue (Data Science), 1 = Orange (Agentic AI)
-                      color: _currentPage == index 
-                          ? (_currentPage == 0 ? const Color(0xFF1E3A8A) : AppColors.orange) 
+                      color: _currentPage == index
+                          ? (_currentPage == 0 ? const Color(0xFF1E3A8A) : AppColors.orange)
                           : Colors.grey.shade300,
                       borderRadius: BorderRadius.circular(99),
                     ),
@@ -530,9 +492,9 @@ class _HeroSectionState extends State<_HeroSection> {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              leftSection, 
-              const SizedBox(height: 40), 
-              rightSlider
+              rightSlider,
+              const SizedBox(height: 24),
+              leftSection,
             ],
           );
         }
@@ -541,19 +503,24 @@ class _HeroSectionState extends State<_HeroSection> {
   }
 }
 
+
+
 class _HeroLeft extends StatelessWidget {
   const _HeroLeft();
 
   @override
   Widget build(BuildContext context) {
+    // ✅ Check for mobile view using ResponsiveBreakpoints
+    final isMobile = ResponsiveBreakpoints.of(context).isMobile;
     final width = MediaQuery.of(context).size.width;
     final isWide = width >= 900;
 
     // Responsive heading sizes (desktop bolder / larger)
+    // ✅ Reduced font size for mobile
     final headingStyle = TextStyle(
       fontFamily: 'Inter',
       fontWeight: FontWeight.w900,
-      fontSize: isWide ? 48 : 42, // desktop larger
+      fontSize: isWide ? 48 : (isMobile ? 28 : 42), // Smaller size for mobile
       height: 1.12,
       letterSpacing: -1.0,
       color: const Color(0xFF0F172A),
@@ -655,6 +622,11 @@ class _HeroLeft extends StatelessWidget {
     );
   }
 }
+
+
+
+
+
 
 class _PulsingEnrollButtonLeft extends StatefulWidget {
   final VoidCallback onTap;
@@ -804,9 +776,202 @@ class _FeatureChip extends StatelessWidget {
   }
 }
 
+// class _RightHeroCardAnimated extends StatelessWidget {
+//   const _RightHeroCardAnimated();
+
+
+//   void _openEnrollmentDialog(BuildContext context) {
+//     showDialog(
+//       context: context,
+//       builder: (ctx) => const EnrollmentFormDialog(),
+//     );
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Material(
+//       color: Colors.transparent,
+//       child: InkWell(
+//         // onTap: () => _openMailchimp(context),
+//         onTap: () => _openEnrollmentDialog(context),
+//         borderRadius: BorderRadius.circular(32),
+//         child: Container(
+//           decoration: BoxDecoration(
+//             color: Colors.white,
+//             borderRadius: BorderRadius.circular(32),
+//             boxShadow: [
+//               BoxShadow(
+//                 color: const Color(0xFFCA8A04).withOpacity(0.15),
+//                 blurRadius: 50,
+//                 offset: const Offset(0, 22),
+//                 spreadRadius: -6,
+//               ),
+//             ],
+//             border: Border.all(color: Colors.white, width: 3),
+//           ),
+//           child: ClipRRect(
+//             borderRadius: BorderRadius.circular(32),
+//             child: Column(
+//               mainAxisSize: MainAxisSize.min,
+//               children: [
+//                 Stack(
+//                   children: [
+//                     Container(
+//                       padding: const EdgeInsets.fromLTRB(24, 20, 24, 20),
+//                       width: double.infinity,
+//                       decoration: const BoxDecoration(
+//                         gradient: LinearGradient(
+//                           begin: Alignment.topLeft,
+//                           end: Alignment.bottomRight,
+//                           colors: [AppColors.orange, Color(0xFFFF8C42)],
+//                         ),
+//                       ),
+//                       child: Column(
+//                         crossAxisAlignment: CrossAxisAlignment.start,
+//                         children: [
+//                           Row(
+//                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                             children: const [
+//                               _StatusBadge(
+//                                 text: 'Live Cohort',
+//                                 icon: Icons.sensors_rounded,
+//                               ),
+//                               _PulsingBadge(text: 'Limited Seats Left 🔥'),
+//                             ],
+//                           ),
+//                           const SizedBox(height: 14),
+//                           const Text(
+//                             'Agentic AI Course',
+//                             style: TextStyle(
+//                               fontFamily: 'Inter',
+//                               fontWeight: FontWeight.w900,
+//                               fontSize: 24,
+//                               height: 1.05,
+//                               letterSpacing: -0.5,
+//                               color: Color(0xFF1E1B4B),
+//                             ),
+//                           ),
+//                           const SizedBox(height: 6),
+//                           RichText(
+//                             text: TextSpan(
+//                               children: [
+//                                 const TextSpan(
+//                                   text: 'Weekend-friendly batch  ',
+//                                   style: TextStyle(
+//                                     fontFamily: 'Inter',
+//                                     fontWeight: FontWeight.w700,
+//                                     fontSize: 14,
+//                                     color: Color(0xFF78350F),
+//                                   ),
+//                                 ),
+//                                 TextSpan(
+//                                   text: '· Starts From 7th Feb',
+//                                   style: const TextStyle(
+//                                     fontFamily: 'Inter',
+//                                     fontWeight: FontWeight.w900,
+//                                     fontSize: 16,
+//                                     color: Color(0xFF78350F),
+//                                   ),
+//                                 ),
+//                               ],
+//                             ),
+//                           ),
+//                           const SizedBox(height: 14),
+//                           const CountdownTimerWidget(),
+//                           const SizedBox(height: 14),
+//                           Wrap(
+//                             spacing: 8,
+//                             runSpacing: 8,
+//                             children: const [
+//                               _BannerChip(label: 'RAG + N8N Projects'),
+//                               _BannerChip(label: 'Hands on Agent Workflow'),
+//                               _BannerChip(label: 'Internship pathway'),
+//                             ],
+//                           ),
+//                         ],
+//                       ),
+//                     ),
+//                     Positioned(
+//                       top: -36,
+//                       right: -36,
+//                       child: Container(
+//                         width: 110,
+//                         height: 110,
+//                         decoration: BoxDecoration(
+//                           shape: BoxShape.circle,
+//                           color: Colors.white.withOpacity(0.1),
+//                         ),
+//                       ),
+//                     ),
+//                   ],
+//                 ),
+//                 Container(
+//                   padding: const EdgeInsets.all(18),
+//                   color: const Color(0xFFFFFBEB),
+//                   child: Column(
+//                     children: [
+//                       const Text(
+//                         'Master the future of AI Automation',
+//                         textAlign: TextAlign.center,
+//                         style: TextStyle(
+//                           fontFamily: 'Inter',
+//                           fontWeight: FontWeight.w800,
+//                           fontSize: 15,
+//                           color: Color(0xFF0F172A),
+//                         ),
+//                       ),
+//                       const SizedBox(height: 12),
+//                       SizedBox(
+//                         width: double.infinity,
+//                         child: ElevatedButton(
+//                           // onPressed: () => _openMailchimp(context),
+//                           onPressed: () => _openEnrollmentDialog(context),
+//                           style: ElevatedButton.styleFrom(
+//                             backgroundColor: const Color(0xFFB45309),
+//                             foregroundColor: Colors.white,
+//                             padding: const EdgeInsets.symmetric(vertical: 14),
+//                             shape: RoundedRectangleBorder(
+//                               borderRadius: BorderRadius.circular(16),
+//                             ),
+//                             elevation: 4,
+//                             shadowColor: const Color(
+//                               0xFFB45309,
+//                             ).withOpacity(0.4),
+//                           ),
+//                           child: const Text(
+//                             'Secure Your Spot For Free Webinar',
+//                             style: TextStyle(
+//                               fontFamily: 'Inter',
+//                               fontWeight: FontWeight.w800,
+//                               fontSize: 15,
+//                             ),
+//                           ),
+//                         ),
+//                       ),
+//                       const SizedBox(height: 10),
+//                       const Text(
+//                         'Batch Starts From 7th Feb',
+//                         style: TextStyle(
+//                           fontFamily: 'Inter',
+//                           fontSize: 12,
+//                           fontWeight: FontWeight.w600,
+//                           color: Color(0xFF92400E),
+//                         ),
+//                       ),
+//                     ],
+//                   ),
+//                 ),
+//               ],
+//             ),
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
+
 class _RightHeroCardAnimated extends StatelessWidget {
   const _RightHeroCardAnimated();
-
 
   void _openEnrollmentDialog(BuildContext context) {
     showDialog(
@@ -817,25 +982,35 @@ class _RightHeroCardAnimated extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ✅ Check Mobile for sizing
+    final isMobile = ResponsiveBreakpoints.of(context).isMobile;
+
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        // onTap: () => _openMailchimp(context),
         onTap: () => _openEnrollmentDialog(context),
         borderRadius: BorderRadius.circular(32),
         child: Container(
           decoration: BoxDecoration(
-            color: Colors.white,
+            // ✅ IMPROVED: More Attractive "Tech Orange" Gradient
+            gradient: const LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color(0xFFFF7E21), // Vibrant Bright Orange
+                Color(0xFFC2410C), // Deep Rich Orange-Red
+              ],
+            ),
             borderRadius: BorderRadius.circular(32),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFFCA8A04).withOpacity(0.15),
+                color: const Color(0xFFC2410C).withOpacity(0.3),
                 blurRadius: 50,
                 offset: const Offset(0, 22),
                 spreadRadius: -6,
               ),
             ],
-            border: Border.all(color: Colors.white, width: 3),
+            border: Border.all(color: Colors.white.withOpacity(0.2), width: 1),
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(32),
@@ -845,80 +1020,101 @@ class _RightHeroCardAnimated extends StatelessWidget {
                 Stack(
                   children: [
                     Container(
-                      padding: const EdgeInsets.fromLTRB(24, 20, 24, 20),
-                      width: double.infinity,
-                      decoration: const BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [AppColors.orange, Color(0xFFFF8C42)],
-                        ),
+                      // ✅ Compact Padding for Mobile
+                      padding: EdgeInsets.fromLTRB(
+                          isMobile ? 16 : 24, 
+                          isMobile ? 16 : 20, 
+                          isMobile ? 16 : 24, 
+                          isMobile ? 16 : 20
                       ),
+                      width: double.infinity,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: const [
+                            children: [
                               _StatusBadge(
                                 text: 'Live Cohort',
                                 icon: Icons.sensors_rounded,
+                                bgColor: Colors.white.withOpacity(0.2),
+                                textColor: Colors.white,
+                                iconColor: Colors.white,
                               ),
-                              _PulsingBadge(text: 'Limited Seats Left 🔥'),
+                              const _PulsingBadge(text: 'Limited Seats 🔥'),
                             ],
                           ),
-                          const SizedBox(height: 14),
-                          const Text(
+                          SizedBox(height: isMobile ? 10 : 14),
+                          
+                          // ✅ Smaller Title for Mobile
+                          Text(
                             'Agentic AI Course',
                             style: TextStyle(
                               fontFamily: 'Inter',
                               fontWeight: FontWeight.w900,
-                              fontSize: 24,
+                              fontSize: isMobile ? 20 : 24, 
                               height: 1.05,
                               letterSpacing: -0.5,
-                              color: Color(0xFF1E1B4B),
+                              color: Colors.white, // Text White on dark orange looks better
                             ),
                           ),
                           const SizedBox(height: 6),
+                          
+                          // Subtitle with White text for contrast
                           RichText(
                             text: TextSpan(
                               children: [
-                                const TextSpan(
+                                TextSpan(
                                   text: 'Weekend-friendly batch  ',
                                   style: TextStyle(
                                     fontFamily: 'Inter',
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 14,
-                                    color: Color(0xFF78350F),
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: isMobile ? 12 : 14,
+                                    color: Colors.white.withOpacity(0.9),
                                   ),
                                 ),
                                 TextSpan(
-                                  text: '· Starts From 7th Feb',
-                                  style: const TextStyle(
+                                  text: '· Starts 7th Feb',
+                                  style: TextStyle(
                                     fontFamily: 'Inter',
-                                    fontWeight: FontWeight.w900,
-                                    fontSize: 16,
-                                    color: Color(0xFF78350F),
+                                    fontWeight: FontWeight.w800,
+                                    fontSize: isMobile ? 13 : 16,
+                                    color: Colors.white,
                                   ),
                                 ),
                               ],
                             ),
                           ),
-                          const SizedBox(height: 14),
-                          const CountdownTimerWidget(),
-                          const SizedBox(height: 14),
+                          SizedBox(height: isMobile ? 12 : 14),
+                          
+                          // Timer (Assuming CountdownTimerWidget handles its own text styling)
+                          // You might need to update CountdownTimerWidget to accept 'color' if it's hardcoded brown.
+                          // For now, wrapping in a white container to match the Data Science card style
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.15),
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: Colors.white.withOpacity(0.25)),
+                            ),
+                            child: const CountdownTimerWidget(), 
+                          ),
+
+                          SizedBox(height: isMobile ? 12 : 14),
                           Wrap(
-                            spacing: 8,
-                            runSpacing: 8,
+                            spacing: 6,
+                            runSpacing: 6,
                             children: const [
-                              _BannerChip(label: 'RAG + N8N Projects'),
-                              _BannerChip(label: 'Hands on Agent Workflow'),
-                              _BannerChip(label: 'Internship pathway'),
+                              _BannerChipLight(label: 'RAG + N8N Projects'), // Use Light chip for dark bg
+                              _BannerChipLight(label: 'Agent Workflows'),
+                              _BannerChipLight(label: 'Internship Ready'),
                             ],
                           ),
                         ],
                       ),
                     ),
+                    
+                    // Decorative Circle
                     Positioned(
                       top: -36,
                       right: -36,
@@ -933,59 +1129,62 @@ class _RightHeroCardAnimated extends StatelessWidget {
                     ),
                   ],
                 ),
+                
+                // Footer
                 Container(
-                  padding: const EdgeInsets.all(18),
-                  color: const Color(0xFFFFFBEB),
+                  padding: EdgeInsets.all(isMobile ? 14 : 18),
+                  color: const Color(0xFFFFF7ED), // Very Light Orange-White
                   child: Column(
                     children: [
-                      const Text(
+                      Text(
                         'Master the future of AI Automation',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontFamily: 'Inter',
                           fontWeight: FontWeight.w800,
-                          fontSize: 15,
-                          color: Color(0xFF0F172A),
+                          fontSize: isMobile ? 13 : 15,
+                          color: const Color(0xFF9A3412), // Dark Orange Text
                         ),
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 10),
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                          // onPressed: () => _openMailchimp(context),
                           onPressed: () => _openEnrollmentDialog(context),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFFB45309),
+                            backgroundColor: const Color(0xFFEA580C), // Deep Orange Button
                             foregroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            padding: const EdgeInsets.symmetric(vertical: 12),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16),
                             ),
                             elevation: 4,
-                            shadowColor: const Color(
-                              0xFFB45309,
-                            ).withOpacity(0.4),
+                            shadowColor: const Color(0xFFEA580C).withOpacity(0.4),
                           ),
-                          child: const Text(
-                            'Secure Your Spot For Free Webinar',
+                          child: Text(
+                            'Secure Your Free Webinar Spot',
                             style: TextStyle(
                               fontFamily: 'Inter',
                               fontWeight: FontWeight.w800,
-                              fontSize: 15,
+                              fontSize: isMobile ? 13 : 15,
                             ),
                           ),
                         ),
                       ),
-                      const SizedBox(height: 10),
-                      const Text(
-                        'Batch Starts From 7th Feb',
-                        style: TextStyle(
-                          fontFamily: 'Inter',
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          color: Color(0xFF92400E),
+                      
+                      // ✅ HIDDEN ON MOBILE: Batch Date Row
+                      if (!isMobile) ...[
+                        const SizedBox(height: 8),
+                        const Text(
+                          'Batch Starts From 7th Feb',
+                          style: TextStyle(
+                            fontFamily: 'Inter',
+                            fontSize: 11,
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xFF9A3412),
+                          ),
                         ),
-                      ),
+                      ],
                     ],
                   ),
                 ),
@@ -997,6 +1196,7 @@ class _RightHeroCardAnimated extends StatelessWidget {
     );
   }
 }
+
 
 class _PulsingBadge extends StatefulWidget {
   final String text;
@@ -1279,39 +1479,6 @@ class _StatusBadge extends StatelessWidget {
     );
   }
 }
-// class _StatusBadge extends StatelessWidget {
-//   final String text;
-//   final IconData icon;
-
-//   const _StatusBadge({required this.text, required this.icon});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-//       decoration: BoxDecoration(
-//         color: Colors.white.withOpacity(0.9),
-//         borderRadius: BorderRadius.circular(100),
-//       ),
-//       child: Row(
-//         mainAxisSize: MainAxisSize.min,
-//         children: [
-//           Icon(icon, size: 14, color: const Color(0xFFD97706)),
-//           const SizedBox(width: 4),
-//           Text(
-//             text,
-//             style: const TextStyle(
-//               fontFamily: 'Inter',
-//               fontWeight: FontWeight.w800,
-//               fontSize: 11.5,
-//               color: Color(0xFF92400E),
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
 
 class _BannerChip extends StatelessWidget {
   final String label;
@@ -2054,6 +2221,9 @@ class _DataScienceHeroCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ✅ Check Mobile for sizing
+    final isMobile = ResponsiveBreakpoints.of(context).isMobile;
+
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -2061,13 +2231,12 @@ class _DataScienceHeroCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(32),
         child: Container(
           decoration: BoxDecoration(
-            // 🔥 Deep Navy Gradient Background
             gradient: const LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                Color(0xFF0F172A), // Darkest Navy
-                Color(0xFF1E3A8A), // Rich Blue
+                Color(0xFF0F172A),
+                Color(0xFF1E3A8A),
               ],
             ),
             borderRadius: BorderRadius.circular(32),
@@ -2089,7 +2258,13 @@ class _DataScienceHeroCard extends StatelessWidget {
                 Stack(
                   children: [
                     Container(
-                      padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
+                      // ✅ Compact Padding for Mobile
+                      padding: EdgeInsets.fromLTRB(
+                          isMobile ? 16 : 24, 
+                          isMobile ? 16 : 24, 
+                          isMobile ? 16 : 24, 
+                          isMobile ? 16 : 24
+                      ),
                       width: double.infinity,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -2098,42 +2273,43 @@ class _DataScienceHeroCard extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               _StatusBadge(
-                                text: 'Live Projects Included',
+                                text: 'Live Projects',
                                 icon: Icons.workspace_premium_rounded,
                                 bgColor: Colors.white.withOpacity(0.15),
                                 textColor: Colors.white,
-                                iconColor: const Color(0xFFFACC15), // Gold Icon
+                                iconColor: const Color(0xFFFACC15),
                               ),
-                              // 🔥 Pulse Badge
                               const _PulsingBadge(text: 'Live classes 🔥'),
                             ],
                           ),
-                          const SizedBox(height: 18),
-                          const Text(
+                          SizedBox(height: isMobile ? 10 : 18),
+                          
+                          // ✅ Smaller Title for Mobile
+                          Text(
                             'Data Science & AI',
                             style: TextStyle(
                               fontFamily: 'Inter',
                               fontWeight: FontWeight.w900,
-                              fontSize: 26,
+                              fontSize: isMobile ? 20 : 26, 
                               height: 1.1,
                               color: Colors.white,
                             ),
                           ),
-                          const SizedBox(height: 8),
+                          const SizedBox(height: 6),
                           Text(
                             'Master Python, ML, NLP & Generative AI with Live Projects.',
                             style: TextStyle(
                               fontFamily: 'Inter',
                               fontWeight: FontWeight.w500,
-                              fontSize: 15,
+                              fontSize: isMobile ? 13 : 15,
                               color: Colors.white.withOpacity(0.85),
                             ),
                           ),
-                          const SizedBox(height: 18),
+                          SizedBox(height: isMobile ? 12 : 18),
                           
                           // Custom Timer / Info Box
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                             decoration: BoxDecoration(
                               color: Colors.white.withOpacity(0.1),
                               borderRadius: BorderRadius.circular(12),
@@ -2141,25 +2317,25 @@ class _DataScienceHeroCard extends StatelessWidget {
                             ),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
-                              children: const [
-                                Icon(Icons.timer_outlined, color: Colors.white, size: 18),
-                                SizedBox(width: 8),
+                              children: [
+                                Icon(Icons.timer_outlined, color: Colors.white, size: isMobile ? 16 : 18),
+                                const SizedBox(width: 8),
                                 Text(
                                   "New Batch Starting Soon",
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 13,
+                                    fontSize: isMobile ? 11 : 13,
                                   ),
                                 ),
                               ],
                             ),
                           ),
 
-                          const SizedBox(height: 18),
+                          SizedBox(height: isMobile ? 12 : 18),
                           Wrap(
-                            spacing: 8,
-                            runSpacing: 8,
+                            spacing: 6,
+                            runSpacing: 6,
                             children: [
                               _BannerChipLight(label: 'Python + SQL'),
                               _BannerChipLight(label: 'PowerBI & Tableau'),
@@ -2170,7 +2346,7 @@ class _DataScienceHeroCard extends StatelessWidget {
                       ),
                     ),
                     
-                    // Background Circle Decoration
+                    // Background Circle
                     Positioned(
                       top: -50,
                       right: -50,
@@ -2191,43 +2367,43 @@ class _DataScienceHeroCard extends StatelessWidget {
                   ],
                 ),
                 
-                // Footer
+                // Footer Section
                 Container(
-                  padding: const EdgeInsets.all(18),
-                  color: const Color(0xFFEFF6FF), // Light footer for contrast
+                  padding: EdgeInsets.all(isMobile ? 14 : 18),
+                  color: const Color(0xFFEFF6FF), 
                   child: Column(
                     children: [
-                      const Text(
-                        '',
+                      Text(
+                        'Fast-track your career in Data Science',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontFamily: 'Inter',
                           fontWeight: FontWeight.w800,
-                          fontSize: 15,
-                          color: Color(0xFF0F172A),
+                          fontSize: isMobile ? 13 : 15,
+                          color: const Color(0xFF0F172A),
                         ),
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 10),
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: () => _openEnrollmentDialog(context),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF1E3A8A), // Navy Button
+                            backgroundColor: const Color(0xFF1E3A8A), 
                             foregroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            padding: const EdgeInsets.symmetric(vertical: 12),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16),
                             ),
                             elevation: 4,
                             shadowColor: const Color(0xFF1E3A8A).withOpacity(0.4),
                           ),
-                          child: const Text(
-                            'sceure your free webinar spot',
+                          child: Text(
+                            'Secure Your Free Webinar Spot',
                             style: TextStyle(
                               fontFamily: 'Inter',
                               fontWeight: FontWeight.w800,
-                              fontSize: 15,
+                              fontSize: isMobile ? 13 : 15,
                             ),
                           ),
                         ),

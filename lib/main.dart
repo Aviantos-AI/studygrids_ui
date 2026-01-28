@@ -25,134 +25,18 @@ import 'package:pie_study/screens/agentic_ai_manager_program.dart';
 import 'package:pie_study/screens/agentic_ai_developer_page.dart';
 import 'package:pie_study/screens/Data_science_internship_page.dart';
 import 'package:pie_study/screens/data_science_course_page.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 
-// void main() {
-//   runApp(const PieStudyApp());
-// }
 
-// class PieStudyApp extends StatelessWidget {
-//   const PieStudyApp({super.key});
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       title: 'StudyGrids',
-//       debugShowCheckedModeBanner: false,
-//       theme: ThemeData(
-//         useMaterial3: false,
-//         scaffoldBackgroundColor: AppColors.bg,
-//       ),
-//       initialRoute: '/',
-//       routes: {
-//         '/': (_) => const _PageWithFloatingButton(child: PieStudyHomePage()),
-//         '/programs': (_) => const _PageWithFloatingButton(child: ProgramsPage()),
 
-//         // ✅ NEW: B2G -> B2C
-//         '/b2c': (_) => const _PageWithFloatingButton(child: B2CPage()),
-//         '/b2b': (_) => const _PageWithFloatingButton(child: B2BPage()),
-
-//         // ✅ NEW: Updated Program URLs
-//         '/program/managers': (_) => const _PageWithFloatingButton(child: AgenticManagersDetailPage()),
-//         '/program/agentic-ai-training': (_) => const _PageWithFloatingButton(child: AgenticDevelopersDetailPage()), // Developer -> Agentic AI Training
-//         '/program/datascience-training': (_) => const _PageWithFloatingButton(child: DataScienceInternshipDetailPage()), // DS Intern -> DS Training
-//         '/program/datascience-foundation': (_) => const _PageWithFloatingButton(child: DataScienceFoundationDetailPage()), // DS Foundation -> DS Foundation
-
-//         // ✅ NEW: About -> About Us
-//         '/about-us': (_) => const _PageWithFloatingButton(child: PieStudyAboutPage()),
-
-//         '/tnc': (_) => const _PageWithFloatingButton(child: TermsAndConditionsPage()),
-//         '/contact': (_) => const _PageWithFloatingButton(child: ContactUsPage()),
-//         '/faq': (_) => const _PageWithFloatingButton(child: FaqPage()),
-//       },
-//     );
-//   }
-// }
-
-// class _PageWithFloatingButton extends StatelessWidget {
-//   final Widget child;
-//   const _PageWithFloatingButton({required this.child});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Stack(
-//       children: [
-//         child,
-//         const GlobalFloatingButton(),
-//       ],
-//     );
-//   }
-// }
-
-// // ✅ Updated Navigation Handler
-// void handlePieNavTap(BuildContext context, String id) {
-//   String route = '/';
-
-//   switch (id) {
-//     case 'home':
-//       route = '/';
-//       break;
-
-//     case 'programs':
-//       route = '/programs';
-//       break;
-
-//     case 'b2b':
-//       route = '/b2b';
-//       break;
-
-//     // ✅ B2G/B2C Updated
-//     case 'b2g': // Agar purana id kahi use ho raha ho
-//     case 'b2c':
-//     case 'verticals':
-//       route = '/b2c'; // Redirect to new B2C route
-//       break;
-
-//     case 'about':
-//       route = '/about-us'; // ✅ Updated Route
-//       break;
-
-//     case 'tnc':
-//       route = '/tnc';
-//       break;
-
-//     case 'contact':
-//       route = '/contact';
-//       break;
-
-//     case 'faq':
-//       route = '/faq';
-//       break;
-
-//     // ✅ Footer/Program Links Updated
-//     case 'managers':
-//       route = '/program/managers';
-//       break;
-
-//     case 'developers':
-//       route = '/program/agentic-ai-training'; // ✅ Updated Route
-//       break;
-
-//     case 'ds_intern':
-//       route = '/program/datascience-training'; // ✅ Updated Route
-//       break;
-
-//     case 'ds_foundation':
-//       route = '/program/datascience-foundation'; // ✅ Updated Route
-//       break;
-
-//     default:
-//       route = '/';
-//   }
-
-//   // Prevent pushing same route again
-//   if (ModalRoute.of(context)?.settings.name == route) return;
-
-//   Navigator.of(context).pushNamed(route);
-// }
-
+import 'package:url_strategy/url_strategy.dart'; // ✅ 1. Naya Package Import karein
 
 void main() {
+  // ✅ 2. Activate Path Url Strategy (Removes # from URL)
+  setPathUrlStrategy();
+  
   runApp(const PieStudyApp());
 }
 
@@ -168,6 +52,27 @@ class PieStudyApp extends StatelessWidget {
         useMaterial3: false,
         scaffoldBackgroundColor: AppColors.bg,
       ),
+      
+      // ✅ RESPONSIVE FRAMEWORK SETUP START
+      // Yeh builder poori app ko wrap karta hai aur screen size detect karta hai.
+      builder: (context, child) => ResponsiveBreakpoints.builder(
+        child: child!,
+        breakpoints: [
+          // 0 se 450 px tak MOBILE mana jayega
+          const Breakpoint(start: 0, end: 450, name: MOBILE),
+          
+          // 451 se 800 px tak TABLET
+          const Breakpoint(start: 451, end: 800, name: TABLET),
+          
+          // 801 se 1920 px tak DESKTOP
+          const Breakpoint(start: 801, end: 1920, name: DESKTOP),
+          
+          // 1921 se upar 4K Screens
+          const Breakpoint(start: 1921, end: double.infinity, name: '4K'),
+        ],
+      ),
+      // ✅ RESPONSIVE FRAMEWORK SETUP END
+
       initialRoute: '/',
       routes: {
         '/': (_) => const _PageWithFloatingButton(child: PieStudyHomePage()),

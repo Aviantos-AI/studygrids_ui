@@ -1,22 +1,31 @@
 
-
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:pie_study/screens/agentic_ai_developer_page.dart';
 import 'package:pie_study/screens/agentic_ai_manager_program.dart';
 import 'package:pie_study/screens/data_science_course_page.dart';
+import 'package:pie_study/utils/enrollment_mixin.dart' show EnrollmentPopupMixin;
 import 'package:pie_study/widgets/app_colors.dart';
 import 'package:pie_study/widgets/brand_title.dart';
 import 'package:pie_study/main.dart';           // handlePieNavTap
 import 'package:pie_study/screens/main_navigation.dart';
 import 'package:pie_study/widgets/global_floating_button.dart';
+import 'package:pie_study/widgets/mobile_sticky_bottom.dart';
 import 'package:pie_study/widgets/pie_footer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class DataScienceInternshipDetailPage extends StatelessWidget {
+class DataScienceInternshipDetailPage extends StatefulWidget {
   const DataScienceInternshipDetailPage({super.key});
+
+  @override
+  State<DataScienceInternshipDetailPage> createState() =>
+      _DataScienceInternshipDetailPageState();
+}
+
+// ✅ FIX 1: Add 'with EnrollmentPopupMixin'
+class _DataScienceInternshipDetailPageState
+    extends State<DataScienceInternshipDetailPage> with EnrollmentPopupMixin {
+
 
   @override
   Widget build(BuildContext context) {
@@ -79,118 +88,123 @@ class DataScienceInternshipDetailPage extends StatelessWidget {
         ],
       ),
 
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-
-              // -------- Main Centered Content --------
-              Center(
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    final maxWidth = constraints.maxWidth > maxContentWidth
-                        ? maxContentWidth
-                        : constraints.maxWidth;
-
-                    return ConstrainedBox(
-                      constraints: BoxConstraints(maxWidth: maxWidth),
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: horizontalPadding,
-                          vertical: 24,
+      body: Stack(
+        children: [
+          SafeArea(
+            child: SingleChildScrollView(
+               controller: enrollmentScrollController,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+        
+                // -------- Main Centered Content --------
+                Center(
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      final maxWidth = constraints.maxWidth > maxContentWidth
+                          ? maxContentWidth
+                          : constraints.maxWidth;
+        
+                      return ConstrainedBox(
+                        constraints: BoxConstraints(maxWidth: maxWidth),
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: horizontalPadding,
+                            vertical: 24,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: const [
+                              FadeInSlide(
+                                delay: Duration(milliseconds: 0),
+                                child: _HeroSection(),
+                              ),
+                              SizedBox(height: 48),
+        
+                              FadeInSlide(
+                                delay: Duration(milliseconds: 120),
+                                child: _WhySection(),
+                              ),
+                              SizedBox(height: 56),
+        
+                              FadeInSlide(
+                                delay: Duration(milliseconds: 220),
+                                child: _WhoSection(),
+                              ),
+                              SizedBox(height: 56),
+        
+                              FadeInSlide(
+                                delay: Duration(milliseconds: 320),
+                                child: _StructureSection(),
+                              ),
+                              SizedBox(height: 56),
+        
+                              FadeInSlide(
+                                delay: Duration(milliseconds: 420),
+                                child: _BenefitsSection(),
+                              ),
+        
+                            ],
+                          ),
                         ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: const [
-                            FadeInSlide(
-                              delay: Duration(milliseconds: 0),
-                              child: _HeroSection(),
-                            ),
-                            SizedBox(height: 48),
-
-                            FadeInSlide(
-                              delay: Duration(milliseconds: 120),
-                              child: _WhySection(),
-                            ),
-                            SizedBox(height: 56),
-
-                            FadeInSlide(
-                              delay: Duration(milliseconds: 220),
-                              child: _WhoSection(),
-                            ),
-                            SizedBox(height: 56),
-
-                            FadeInSlide(
-                              delay: Duration(milliseconds: 320),
-                              child: _StructureSection(),
-                            ),
-                            SizedBox(height: 56),
-
-                            FadeInSlide(
-                              delay: Duration(milliseconds: 420),
-                              child: _BenefitsSection(),
-                            ),
-
-                          ],
-                        ),
-                      ),
-                    );
-                  },
+                      );
+                    },
+                  ),
                 ),
-              ),
-
-              // -------- FULL WIDTH FOOTER --------
-              PieFooter(
-                onProgramTap: (id) {
-                  switch (id) {
-                    case 'managers':
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => const AgenticManagersDetailPage(),
-                        ),
-                      );
-                      break;
-
-                    case 'developers':
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => const AgenticDevelopersDetailPage(),
-                        ),
-                      );
-                      break;
-
-                    case 'ds_intern':
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => DataScienceInternshipDetailPage(),
-                        ),
-                      );
-                      break;
-
-                    case 'ds_foundation':
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => const DataScienceFoundationDetailPage(),
-                        ),
-                      );
-                      break;
-                  }
-                },
-
-                onAboutTap: () => handlePieNavTap(context, 'about'),
-                onVerticalsTap: () => handlePieNavTap(context, 'verticals'),
-                onBlogTap: () => handlePieNavTap(context, 'tnc'),
-                onFaqTap: () => handlePieNavTap(context, 'faq'),
-
-                onEmailTap: () {},
-                onPhoneTap: () {},
-              ),
-
-            ],
+        
+                // -------- FULL WIDTH FOOTER --------
+                PieFooter(
+                  onProgramTap: (id) {
+                    switch (id) {
+                      case 'managers':
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => const AgenticManagersDetailPage(),
+                          ),
+                        );
+                        break;
+        
+                      case 'developers':
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => const AgenticDevelopersDetailPage(),
+                          ),
+                        );
+                        break;
+        
+                      case 'ds_intern':
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => DataScienceInternshipDetailPage(),
+                          ),
+                        );
+                        break;
+        
+                      case 'ds_foundation':
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => const DataScienceFoundationDetailPage(),
+                          ),
+                        );
+                        break;
+                    }
+                  },
+        
+                  onAboutTap: () => handlePieNavTap(context, 'about'),
+                  onVerticalsTap: () => handlePieNavTap(context, 'verticals'),
+                  onBlogTap: () => handlePieNavTap(context, 'tnc'),
+                  onFaqTap: () => handlePieNavTap(context, 'faq'),
+        
+                  onEmailTap: () {},
+                  onPhoneTap: () {},
+                ),
+              const SizedBox(height: 45),
+              ],
+            ),
           ),
         ),
-      ),
+        MobileStickyBottomBar()
+     ], ),
     );
   }
 }
@@ -314,7 +328,7 @@ class _HeroSection extends StatelessWidget {
                     // onPressed: () {},
                  onPressed: () => _openEnrollmentDialog(context),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF071827),
+                      backgroundColor: const Color(0xFFFF7E21),
                       foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(
                           horizontal: 24, vertical: 12),
