@@ -83,6 +83,7 @@ import 'package:pie_study/widgets/app_colors.dart';
 import 'package:pie_study/widgets/brand_title.dart';
 import 'package:pie_study/main.dart'; // handlePieNavTap
 import 'package:pie_study/screens/main_navigation.dart';
+import 'package:pie_study/widgets/global_floating_button.dart';
 import 'package:pie_study/widgets/pie_footer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -310,6 +311,14 @@ const String mailchimpUrl = 'https://mailchi.mp/ad52932183fa/piestudy';
       );
     }
   }
+
+
+      void _openEnrollmentDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (ctx) => const EnrollmentFormDialog(),
+    );
+  }
 /* ================= HERO SECTION ================= */
 
 class _HeroSection extends StatelessWidget {
@@ -368,7 +377,8 @@ class _HeroSection extends StatelessWidget {
         const SizedBox(height: 26),
         ElevatedButton(
           // onPressed: () {},
-        onPressed: () => _openMailchimp(context),
+          onPressed: () => _openEnrollmentDialog(context),
+
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xFF071827),
             foregroundColor: Colors.white,
@@ -769,7 +779,7 @@ class _OutcomeSection extends StatelessWidget {
             const SizedBox(height: 20),
             ElevatedButton(
               // onPressed: () {},
-              onPressed: () => _openMailchimp(context),
+             onPressed: () => _openEnrollmentDialog(context),
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF071827),
                 foregroundColor: Colors.white,

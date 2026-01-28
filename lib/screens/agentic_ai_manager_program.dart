@@ -7,6 +7,7 @@ import 'package:pie_study/screens/main_navigation.dart';
 import 'package:pie_study/widgets/app_colors.dart';
 import 'package:pie_study/widgets/brand_title.dart';
 import 'package:pie_study/main.dart';
+import 'package:pie_study/widgets/global_floating_button.dart';
 import 'package:pie_study/widgets/pie_footer.dart';
 import 'package:url_launcher/url_launcher.dart'; // handlePieNavTap
 
@@ -198,6 +199,15 @@ class _HeroSection extends StatelessWidget {
     }
   }
 
+
+
+    void _openEnrollmentDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (ctx) => const EnrollmentFormDialog(),
+    );
+  }
+
 class _HeroText extends StatelessWidget {
   const _HeroText();
 
@@ -241,7 +251,8 @@ class _HeroText extends StatelessWidget {
           children: [
             ElevatedButton(
               // onPressed: () {},
-                onPressed: () => _openMailchimp(context),
+                
+                onPressed: () => _openEnrollmentDialog(context),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.navy,
                 foregroundColor: Colors.white,
@@ -797,7 +808,7 @@ class _OutcomeButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       // onPressed: () {}
-      onPressed: () => _openMailchimp(context),
+    onPressed: () => _openEnrollmentDialog(context),
       style: ElevatedButton.styleFrom(
         backgroundColor: const Color(0xFFFF8B3D),
         foregroundColor: Colors.white,

@@ -7,6 +7,7 @@ import 'package:pie_study/widgets/brand_title.dart';
 
 import 'package:pie_study/main.dart'; // handlePieNavTap
 import 'package:pie_study/screens/main_navigation.dart';
+import 'package:pie_study/widgets/global_floating_button.dart';
 import 'package:pie_study/widgets/pie_footer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -197,6 +198,14 @@ const String mailchimpUrl = 'https://mailchi.mp/ad52932183fa/piestudy';
     }
   }
 
+
+    void _openEnrollmentDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (ctx) => const EnrollmentFormDialog(),
+    );
+  }
+
 /* ================= HERO SECTION ================= */
 
 class _HeroSection extends StatelessWidget {
@@ -273,7 +282,8 @@ class _HeroSection extends StatelessWidget {
                 runSpacing: 10,
                 children: [
                   ElevatedButton(
-                     onPressed: () => _launchMailchimpUrl(context), 
+                    
+                     onPressed: () => _openEnrollmentDialog(context),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: devGreen,
                       foregroundColor: Colors.white,
@@ -295,7 +305,7 @@ class _HeroSection extends StatelessWidget {
                   ),
                   OutlinedButton(
                     // onPressed: () {},
-                     onPressed: () => _launchMailchimpUrl(context), 
+                     onPressed: () => _openEnrollmentDialog(context),
                     style: OutlinedButton.styleFrom(
                       foregroundColor: const Color(0xFF111827),
                       side: const BorderSide(color: Color(0xFF00C08A)),
@@ -872,7 +882,8 @@ class _OutcomeSection extends StatelessWidget {
             const SizedBox(height: 18),
             ElevatedButton(
               // onPressed: () {},
-             onPressed: () => _launchMailchimpUrl(context),
+            //  onPressed: () => _launchMailchimpUrl(context),
+              onPressed: () => _openEnrollmentDialog(context),
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF00C08A),
                 foregroundColor: const Color(0xFF02201A),

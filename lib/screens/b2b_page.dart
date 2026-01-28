@@ -214,6 +214,14 @@ const String mailchimpUrl = 'https://mailchi.mp/ad52932183fa/piestudy';
 
 
 
+    void _openEnrollmentDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (ctx) => const EnrollmentFormDialog(),
+    );
+  }
+
+
 /// ---------------- HERO (FULL WIDTH) ----------------
 
 class _B2BHeroSection extends StatelessWidget {
@@ -309,7 +317,8 @@ class _B2BHeroSection extends StatelessWidget {
                       : WrapAlignment.center,
                   children: [
                     ElevatedButton(
-                      onPressed: () {},
+                      // onPressed: () {},
+                      onPressed: () => _openEnrollmentDialog(context),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.orange,
                         foregroundColor: Colors.white,

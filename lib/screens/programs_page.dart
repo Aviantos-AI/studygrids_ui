@@ -1,25 +1,18 @@
-// import 'package:flutter/material.dart';
-// import 'package:pie_study/main.dart';
-
-// import 'package:pie_study/screens/Data_science_internship_page.dart';
-// import 'package:pie_study/screens/agentic_ai_developer_page.dart';
-// import 'package:pie_study/screens/agentic_ai_manager_program.dart';
-// import 'package:pie_study/screens/data_science_course_page.dart';
-// import 'package:pie_study/screens/main_navigation.dart';
-// import 'package:pie_study/widgets/app_colors.dart';
 
 
 
 
 
+import 'package:flutter/material.dart';
+import 'package:pie_study/main.dart';
 
-
-
-// import 'package:pie_study/widgets/pie_footer.dart';           // handlePieNavTap
-
-// // NOTE: Jo bhi tumhare detail pages hain unke imports upar hi honge
-// // (AgenticManagersDetailPage, AgenticDevelopersDetailPage, etc.)
-// // yaha sirf nav related changes kiye gaye hain.
+import 'package:pie_study/screens/Data_science_internship_page.dart';
+import 'package:pie_study/screens/agentic_ai_developer_page.dart';
+import 'package:pie_study/screens/agentic_ai_manager_program.dart';
+import 'package:pie_study/screens/data_science_course_page.dart';
+import 'package:pie_study/screens/main_navigation.dart';
+import 'package:pie_study/widgets/app_colors.dart';
+import 'package:pie_study/widgets/pie_footer.dart'; // footer
 
 // class ProgramsPage extends StatelessWidget {
 //   const ProgramsPage({super.key});
@@ -37,14 +30,13 @@
 //         child: PieNavDrawer(
 //           activeId: 'programs',
 //           onItemTap: (id) {
-//             Navigator.pop(context);      // drawer close
+//             Navigator.pop(context); // drawer close
 //             handlePieNavTap(context, id); // global nav
 //           },
 //         ),
 //       ),
 
 //       appBar: AppBar(
-//         // leading: const BackButton(color: Colors.black87),
 //         backgroundColor: Colors.white.withOpacity(0.96),
 //         elevation: 0.5,
 //         surfaceTintColor: Colors.transparent,
@@ -55,8 +47,7 @@
 //           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
 //           child: PieTopNav(
 //             onItemTap: (id) => handlePieNavTap(context, id),
-//             activeId: 'programs',           // ✅ "Programs" tab highlight
-//             // ctaLabel: 'Contact Us',
+//             activeId: 'programs', // ✅ "Programs" tab highlight
 //             onCtaTap: () => handlePieNavTap(context, 'contact'),
 //           ),
 //         ),
@@ -75,149 +66,153 @@
 //         ],
 //       ),
 
-//       body: Center(
-//         child: LayoutBuilder(
-//           builder: (context, constraints) {
-//             final maxWidth =
-//                 constraints.maxWidth > 1180 ? 1180.0 : constraints.maxWidth;
+//       body: LayoutBuilder(
+//         builder: (context, constraints) {
+//           // 🔹 maxWidth thoda bada kiya, taaki desktop par left-right empty space kam ho
+//           final maxWidth =
+//               constraints.maxWidth > 1320 ? 1320.0 : constraints.maxWidth;
+//           final bool isMobile = constraints.maxWidth < 720;
 
-//             return SingleChildScrollView(
-//               padding:
-//                   const EdgeInsets.symmetric(horizontal: 20, vertical: 32),
-//               child: Center(
-//                 child: ConstrainedBox(
-//                   constraints: BoxConstraints(maxWidth: maxWidth),
-//                   child: Column(
-//                     crossAxisAlignment: CrossAxisAlignment.center,
-//                     children: [
-//                       // TITLE
-//                       RichText(
-//                         textAlign: TextAlign.center,
-//                         text: const TextSpan(
-//                           style: TextStyle(
-//                             fontFamily: 'Inter',
-//                             fontWeight: FontWeight.w900,
-//                             fontSize: 36,
-//                             height: 1.15,
-//                             letterSpacing: -0.8,
-//                             color: Color(0xFF111827),
+//           return SingleChildScrollView(
+//             child: Column(
+//               children: [
+//                 // -------- CENTERED CONTENT (with maxWidth) --------
+//                 Padding(
+//                   // 🔹 left-right padding kam kiya, taaki content thoda aur spread ho
+//                   padding: const EdgeInsets.symmetric(
+//                       horizontal: 12, vertical: 32),
+//                   child: Center(
+//                     child: ConstrainedBox(
+//                       constraints: BoxConstraints(maxWidth: maxWidth),
+//                       child: Column(
+//                         crossAxisAlignment: CrossAxisAlignment.center,
+//                         children: [
+//                           // TITLE
+//                           RichText(
+//                             textAlign: TextAlign.center,
+//                             text: const TextSpan(
+//                               style: TextStyle(
+//                                 fontFamily: 'Inter',
+//                                 fontWeight: FontWeight.w900,
+//                                 fontSize: 36,
+//                                 height: 1.15,
+//                                 letterSpacing: -0.8,
+//                                 color: Color(0xFF111827),
+//                               ),
+//                               children: [
+//                                 TextSpan(text: 'Choose Your '),
+//                                 TextSpan(
+//                                   text: 'Learning',
+//                                   style: TextStyle(color: AppColors.gold),
+//                                 ),
+//                                 TextSpan(text: ' Path'),
+//                               ],
+//                             ),
 //                           ),
-//                           children: [
-//                             TextSpan(text: 'Choose Your '),
-//                             TextSpan(
-//                               text: 'Learning',
-//                               style: TextStyle(color: AppColors.gold),
+//                           const SizedBox(height: 10),
+//                           SizedBox(
+//                             width: maxWidth < 640 ? maxWidth : 640,
+//                             child: const Text(
+//                               'Find the perfect program to advance your skills and accelerate your career in artificial intelligence.',
+//                               textAlign: TextAlign.center,
+//                               style: TextStyle(
+//                                 fontFamily: 'Inter',
+//                                 fontSize: 15,
+//                                 fontWeight: FontWeight.w400,
+//                                 height: 1.55,
+//                                 color: Color(0xFF6B7280),
+//                               ),
 //                             ),
-//                             TextSpan(text: ' Path'),
-//                           ],
-//                         ),
-//                       ),
-//                       const SizedBox(height: 10),
-//                       const SizedBox(
-//                         width: 640,
-//                         child: Text(
-//                           'Find the perfect program to advance your skills and accelerate your career in artificial intelligence.',
-//                           textAlign: TextAlign.center,
-//                           style: TextStyle(
-//                             fontFamily: 'Inter',
-//                             fontSize: 15,
-//                             fontWeight: FontWeight.w400,
-//                             height: 1.55,
-//                             color: Color(0xFF6B7280),
 //                           ),
-//                         ),
+//                           const SizedBox(height: 24),
+//                           Container(
+//                             width: 120,
+//                             height: 6,
+//                             decoration: BoxDecoration(
+//                               color: AppColors.gold.withOpacity(0.9),
+//                               borderRadius: BorderRadius.circular(999),
+//                             ),
+//                           ),
+//                           const SizedBox(height: 32),
+
+//                           // 🔹 Responsive Programs Grid
+//                           _ProgramsGrid(
+//                             maxWidth: maxWidth,
+//                             isMobile: isMobile,
+//                           ),
+
+//                           const SizedBox(height: 40),
+//                         ],
 //                       ),
-//                       const SizedBox(height: 24),
-//                       Container(
-//                         width: 120,
-//                         height: 6,
-//                         decoration: BoxDecoration(
-//                           color: AppColors.gold.withOpacity(0.9),
-//                           borderRadius: BorderRadius.circular(999),
-//                         ),
-//                       ),
-//                       const SizedBox(height: 32),
-
-//                       _ProgramsGrid(maxWidth: maxWidth),
-//                       const SizedBox(height: 40),
-//                       // const _ProgramsFooter(),
-//                                      PieFooter(
-//                     // ✅ 4 Programs → specific detail pages
-//                     onProgramTap: (id) {
-//                       switch (id) {
-//                         case 'managers':
-//                           Navigator.of(context).push(
-//                             MaterialPageRoute(
-//                               builder: (_) =>
-//                                   const AgenticManagersDetailPage(),
-//                             ),
-//                           );
-//                           break;
-
-//                         case 'developers':
-//                           Navigator.of(context).push(
-//                             MaterialPageRoute(
-//                               builder: (_) =>
-//                                   const AgenticDevelopersDetailPage(),
-//                             ),
-//                           );
-//                           break;
-
-//                         case 'ds_intern':
-//                           Navigator.of(context).push(
-//                             MaterialPageRoute(
-//                               builder: (_) =>
-//                                   DataScienceInternshipDetailPage(),
-//                             ),
-//                           );
-//                           break;
-
-//                         case 'ds_foundation':
-//                           Navigator.of(context).push(
-//                             MaterialPageRoute(
-//                               builder: (_) =>
-//                                   const DataScienceFoundationDetailPage(),
-//                             ),
-//                           );
-//                           break;
-//                       }
-//                     },
-
-//                     // ✅ About Us link
-//                     onAboutTap: () {
-//                       handlePieNavTap(context, 'about');
-//                     },
-
-//                     // ✅ Our Verticals → B2G (vertical mapping main.dart me hai)
-//                     onVerticalsTap: () {
-//                       handlePieNavTap(context, 'verticals');
-//                     },
-
-//                     // ✅ Terms & Conditions
-//                     onBlogTap: () {
-//                       handlePieNavTap(context, 'tnc');
-//                     },
-
-//                     // ✅ FAQ
-//                     onFaqTap: () {
-//                       handlePieNavTap(context, 'faq');
-//                     },
-
-//                     // ✅ optional: email/phone future ke liye
-//                     onEmailTap: () {
-//                       // TODO: email launcher
-//                     },
-//                     onPhoneTap: () {
-//                       // TODO: phone dialer
-//                     },
-//                   ),
-//                     ],
+//                     ),
 //                   ),
 //                 ),
-//               ),
-//             );
-//           },
-//         ),
+
+//                 // -------- FULL-WIDTH FOOTER (OUTSIDE maxWidth) --------
+//                 PieFooter(
+//                   // ✅ 4 Programs → specific detail pages
+//                   onProgramTap: (id) {
+//                     switch (id) {
+//                       case 'managers':
+//                         Navigator.of(context).push(
+//                           MaterialPageRoute(
+//                             builder: (_) => const AgenticManagersDetailPage(),
+//                           ),
+//                         );
+//                         break;
+
+//                       case 'developers':
+//                         Navigator.of(context).push(
+//                           MaterialPageRoute(
+//                             builder: (_) => const AgenticDevelopersDetailPage(),
+//                           ),
+//                         );
+//                         break;
+
+//                       case 'ds_intern':
+//                         Navigator.of(context).push(
+//                           MaterialPageRoute(
+//                             builder: (_) =>
+//                                 const DataScienceInternshipDetailPage(),
+//                           ),
+//                         );
+//                         break;
+
+//                       case 'ds_foundation':
+//                         Navigator.of(context).push(
+//                           MaterialPageRoute(
+//                             builder: (_) =>
+//                                 const DataScienceFoundationDetailPage(),
+//                           ),
+//                         );
+//                         break;
+//                     }
+//                   },
+
+//                   // ✅ About Us link
+//                   onAboutTap: () => handlePieNavTap(context, 'about'),
+
+//                   // ✅ Our Verticals → B2G (vertical mapping main.dart me hai)
+//                   onVerticalsTap: () => handlePieNavTap(context, 'verticals'),
+
+//                   // ✅ Terms & Conditions
+//                   onBlogTap: () => handlePieNavTap(context, 'tnc'),
+
+//                   // ✅ FAQ
+//                   onFaqTap: () => handlePieNavTap(context, 'faq'),
+
+//                   //  optional: email/phone future ke liye
+//                   onEmailTap: () {
+//                     // TODO: email launcher
+//                   },
+//                   onPhoneTap: () {
+//                     // TODO: phone dialer
+//                   },
+//                 ),
+//               ],
+//             ),
+//           );
+//         },
 //       ),
 //     );
 //   }
@@ -227,12 +222,27 @@
 
 // class _ProgramsGrid extends StatelessWidget {
 //   final double maxWidth;
-//   const _ProgramsGrid({required this.maxWidth});
+//   final bool isMobile;
+
+//   const _ProgramsGrid({
+//     required this.maxWidth,
+//     required this.isMobile,
+//   });
 
 //   @override
 //   Widget build(BuildContext context) {
-//     const double spacing = 24;
-//     final double cardWidth = (maxWidth - spacing) / 2;
+//     // 🔹 gap between cards
+//     const double spacing = 40;
+
+//     // 🔹 Mobile = 1 card per row (full width)
+//     // 🔹 Desktop = 2 cards per row with bigger gap
+//     final double cardWidth;
+//     if (isMobile || maxWidth < 600) {
+//       cardWidth = maxWidth; // single column on mobile
+//     } else {
+//       const double gap = 40; // horizontal gap between two cards
+//       cardWidth = (maxWidth - gap) / 2;
+//     }
 
 //     return Wrap(
 //       spacing: spacing,
@@ -268,7 +278,7 @@
 //             description:
 //                 'Build and deploy advanced AI agents and applications. Focus on coding, LLMs, and practical development.',
 //             audienceLabel: 'For Developers',
-//             audienceColorBg:  Color(0xFFE5F7EA),
+//             audienceColorBg: const Color(0xFFE5F7EA),
 //             audienceColorText: const Color(0xFF15803D),
 //             bullets: const [
 //               'Hands-on coding projects',
@@ -508,73 +518,6 @@
 //   }
 // }
 
-// /* ---------- FOOTER ------------ */
-
-// class _ProgramsFooter extends StatelessWidget {
-//   const _ProgramsFooter();
-
-//   @override
-//   Widget build(BuildContext context) {
-//     const linkStyle = TextStyle(
-//       fontFamily: 'Inter',
-//       fontSize: 13,
-//       color: Color(0xFF6B7280),
-//     );
-
-//     return Column(
-//       children: const [
-//         SizedBox(height: 8),
-//         Wrap(
-//           alignment: WrapAlignment.center,
-//           spacing: 24,
-//           runSpacing: 8,
-//           children: [
-//             Text('About Us', style: linkStyle),
-//             Text('Success Stories', style: linkStyle),
-//             Text('Contact', style: linkStyle),
-//             Text('Privacy Policy', style: linkStyle),
-//             Text('Terms of Service', style: linkStyle),
-//           ],
-//         ),
-//         SizedBox(height: 20),
-//         Wrap(
-//           alignment: WrapAlignment.center,
-//           spacing: 16,
-//           children: [
-//             Icon(Icons.facebook_rounded, size: 20, color: Color(0xFF6B7280)),
-//             Icon(Icons.alternate_email_rounded,
-//                 size: 20, color: Color(0xFF6B7280)),
-//             Icon(Icons.work_outline_rounded,
-//                 size: 20, color: Color(0xFF6B7280)),
-//           ],
-//         ),
-//         SizedBox(height: 14),
-//         Text(
-//           '© 2024 Piestudy. All rights reserved.',
-//           style: TextStyle(
-//             fontFamily: 'Inter',
-//             fontSize: 12,
-//             color: Color(0xFF9CA3AF),
-//           ),
-//         ),
-//       ],
-//     );
-//   }
-// }
-
-
-
-
-import 'package:flutter/material.dart';
-import 'package:pie_study/main.dart';
-
-import 'package:pie_study/screens/Data_science_internship_page.dart';
-import 'package:pie_study/screens/agentic_ai_developer_page.dart';
-import 'package:pie_study/screens/agentic_ai_manager_program.dart';
-import 'package:pie_study/screens/data_science_course_page.dart';
-import 'package:pie_study/screens/main_navigation.dart';
-import 'package:pie_study/widgets/app_colors.dart';
-import 'package:pie_study/widgets/pie_footer.dart'; // footer
 
 class ProgramsPage extends StatelessWidget {
   const ProgramsPage({super.key});
@@ -630,7 +573,7 @@ class ProgramsPage extends StatelessWidget {
 
       body: LayoutBuilder(
         builder: (context, constraints) {
-          // 🔹 maxWidth thoda bada kiya, taaki desktop par left-right empty space kam ho
+          // 🔹 maxWidth logic
           final maxWidth =
               constraints.maxWidth > 1320 ? 1320.0 : constraints.maxWidth;
           final bool isMobile = constraints.maxWidth < 720;
@@ -640,7 +583,6 @@ class ProgramsPage extends StatelessWidget {
               children: [
                 // -------- CENTERED CONTENT (with maxWidth) --------
                 Padding(
-                  // 🔹 left-right padding kam kiya, taaki content thoda aur spread ho
                   padding: const EdgeInsets.symmetric(
                       horizontal: 12, vertical: 32),
                   child: Center(
@@ -710,66 +652,38 @@ class ProgramsPage extends StatelessWidget {
                   ),
                 ),
 
-                // -------- FULL-WIDTH FOOTER (OUTSIDE maxWidth) --------
+                // -------- FULL-WIDTH FOOTER --------
                 PieFooter(
-                  // ✅ 4 Programs → specific detail pages
+                  // ✅ Fixed: Using Named Routes for Footer Links too
                   onProgramTap: (id) {
                     switch (id) {
                       case 'managers':
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => const AgenticManagersDetailPage(),
-                          ),
-                        );
+                        Navigator.of(context).pushNamed('/program/managers');
                         break;
 
                       case 'developers':
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => const AgenticDevelopersDetailPage(),
-                          ),
-                        );
+                        Navigator.of(context).pushNamed('/program/agentic-ai-training');
                         break;
 
                       case 'ds_intern':
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) =>
-                                const DataScienceInternshipDetailPage(),
-                          ),
-                        );
+                        Navigator.of(context).pushNamed('/program/datascience-training');
                         break;
 
                       case 'ds_foundation':
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) =>
-                                const DataScienceFoundationDetailPage(),
-                          ),
-                        );
+                        Navigator.of(context).pushNamed('/program/datascience-foundation');
                         break;
                     }
                   },
 
-                  // ✅ About Us link
+                  // ✅ Global Nav Links
                   onAboutTap: () => handlePieNavTap(context, 'about'),
-
-                  // ✅ Our Verticals → B2G (vertical mapping main.dart me hai)
                   onVerticalsTap: () => handlePieNavTap(context, 'verticals'),
-
-                  // ✅ Terms & Conditions
                   onBlogTap: () => handlePieNavTap(context, 'tnc'),
-
-                  // ✅ FAQ
                   onFaqTap: () => handlePieNavTap(context, 'faq'),
 
-                  //  optional: email/phone future ke liye
-                  onEmailTap: () {
-                    // TODO: email launcher
-                  },
-                  onPhoneTap: () {
-                    // TODO: phone dialer
-                  },
+                  // Placeholders
+                  onEmailTap: () {},
+                  onPhoneTap: () {},
                 ),
               ],
             ),
@@ -793,16 +707,13 @@ class _ProgramsGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // 🔹 gap between cards
     const double spacing = 40;
 
-    // 🔹 Mobile = 1 card per row (full width)
-    // 🔹 Desktop = 2 cards per row with bigger gap
     final double cardWidth;
     if (isMobile || maxWidth < 600) {
-      cardWidth = maxWidth; // single column on mobile
+      cardWidth = maxWidth; 
     } else {
-      const double gap = 40; // horizontal gap between two cards
+      const double gap = 40; 
       cardWidth = (maxWidth - gap) / 2;
     }
 
@@ -810,6 +721,7 @@ class _ProgramsGrid extends StatelessWidget {
       spacing: spacing,
       runSpacing: spacing,
       children: [
+        // 1. MANAGER PROGRAM
         SizedBox(
           width: cardWidth,
           child: _ProgramCard(
@@ -825,14 +737,13 @@ class _ProgramsGrid extends StatelessWidget {
               'Live online classes',
             ],
             onLearnMore: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => const AgenticManagersDetailPage(),
-                ),
-              );
+              // ✅ FIX: URL update hoga
+              Navigator.of(context).pushNamed('/program/managers');
             },
           ),
         ),
+
+        // 2. DEVELOPER PROGRAM
         SizedBox(
           width: cardWidth,
           child: _ProgramCard(
@@ -848,14 +759,13 @@ class _ProgramsGrid extends StatelessWidget {
               'Practical application development',
             ],
             onLearnMore: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => const AgenticDevelopersDetailPage(),
-                ),
-              );
+              // ✅ FIX: URL update hoga
+              Navigator.of(context).pushNamed('/program/agentic-ai-training');
             },
           ),
         ),
+
+        // 3. DS INTERNSHIP
         SizedBox(
           width: cardWidth,
           child: _ProgramCard(
@@ -871,14 +781,13 @@ class _ProgramsGrid extends StatelessWidget {
               'Job placement assistance',
             ],
             onLearnMore: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => const DataScienceInternshipDetailPage(),
-                ),
-              );
+              // ✅ FIX: URL update hoga
+              Navigator.of(context).pushNamed('/program/datascience-training');
             },
           ),
         ),
+
+        // 4. DS FOUNDATION
         SizedBox(
           width: cardWidth,
           child: _ProgramCard(
@@ -894,11 +803,8 @@ class _ProgramsGrid extends StatelessWidget {
               'Perfect for getting started',
             ],
             onLearnMore: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => const DataScienceFoundationDetailPage(),
-                ),
-              );
+              // ✅ FIX: URL update hoga
+              Navigator.of(context).pushNamed('/program/datascience-foundation');
             },
           ),
         ),
