@@ -69,9 +69,9 @@ class BrandTitle extends StatelessWidget {
         // ✅ Better responsive sizes
         double autoHeight;
         if (screenWidth < 450) {
-          autoHeight = 28; // small mobile
+          autoHeight = 22; // small mobile
         } else if (screenWidth < 900) {
-          autoHeight = 40; // tablet
+          autoHeight = 35; // tablet
         } else if (screenWidth < 1400) {
           autoHeight = 55; // desktop
         } else {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pie_study/widgets/app_colors.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:convert';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 
 class GlobalFloatingButton extends StatelessWidget {
@@ -18,11 +19,18 @@ class GlobalFloatingButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Positioned(
       right: 20,
-      bottom: 20,
+      bottom: 50,
       child: FloatingActionButton(
         onPressed: _openWhatsApp,
         backgroundColor: const Color(0xFF25D366),
-        child: const Icon(Icons.chat, color: Colors.white),
+        child:  FaIcon(
+          FontAwesomeIcons.whatsapp, 
+          color: Colors.white, 
+          size: 32, 
+        ),
+        
+        
+       
       ),
     );
   }

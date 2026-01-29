@@ -8,16 +8,37 @@ import 'package:pie_study/screens/data_science_course_page.dart';
 import 'package:pie_study/screens/main_navigation.dart';
 import 'package:pie_study/widgets/app_colors.dart';
 import 'package:pie_study/main.dart';
+import 'package:pie_study/widgets/mobile_sticky_bottom.dart';
 import 'package:pie_study/widgets/pie_footer.dart';
 import 'package:url_launcher/url_launcher.dart'; // handlePieNavTap
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:pie_study/widgets/global_floating_button.dart';
 
 
-/// =======================  B2B PAGE  =======================
 
-class B2BPage extends StatelessWidget {
+
+
+// ✅ 1. Import Mixin & Sticky Bar
+import 'package:pie_study/utils/enrollment_mixin.dart';
+
+
+class B2BPage extends StatefulWidget {
   const B2BPage({super.key});
+
+  @override
+  State<B2BPage> createState() => _B2BPageState();
+}
+
+// ✅ 3. Add Mixin
+class _B2BPageState extends State<B2BPage> with EnrollmentPopupMixin {
+  
+  // Helper to open dialog manually (for buttons)
+  void _openEnrollmentDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (ctx) => const EnrollmentFormDialog(),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,12 +71,7 @@ class B2BPage extends StatelessWidget {
           child: PieTopNav(
             onItemTap: (id) => handlePieNavTap(context, id),
             activeId: 'b2b',
-            onEnrollTap: () {
-              showDialog(
-                context: context,
-                builder: (ctx) => const EnrollmentFormDialog(),
-              );
-            },
+            onEnrollTap: () => _openEnrollmentDialog(context),
           ),
         ),
         actions: [
@@ -69,158 +85,118 @@ class B2BPage extends StatelessWidget {
         ],
       ),
 
-      body: SafeArea(
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            final bool isMobile = constraints.maxWidth < 700;
-            final double maxWidth = isMobile ? constraints.maxWidth : 1180;
+      // ✅ 4. Wrap Body in Stack
+      body: Stack(
+        children: [
+          SafeArea(
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final bool isMobile = constraints.maxWidth < 700;
+                final double maxWidth = isMobile ? constraints.maxWidth : 1180;
 
-            return SingleChildScrollView(
-              child: Column(
-                children: [
-                  // FULL-WIDTH HERO
-                  _B2BHeroSection(
-                    isMobile: isMobile,
-                    maxWidth: maxWidth,
-                  ),
-                  const SizedBox(height: 40),
+                return SingleChildScrollView(
+                  // ✅ 5. Connect Scroll Controller
+                  controller: enrollmentScrollController,
+                  
+                  child: Column(
+                    children: [
+                      // FULL-WIDTH HERO
+                      _B2BHeroSection(
+                        isMobile: isMobile,
+                        maxWidth: maxWidth,
+                      ),
+                      const SizedBox(height: 40),
 
-                  // CENTERED CONTENT (maxWidth)
-                  Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
-                    child: Center(
-                      child: ConstrainedBox(
-                        constraints: BoxConstraints(maxWidth: maxWidth),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            _B2BWhyChooseSection(isMobile: isMobile),
-                            const SizedBox(height: 40),
-                            _B2BOfferingsSection(isMobile: isMobile),
-                            const SizedBox(height: 40),
-                            _B2BIndustriesSection(isMobile: isMobile),
-                            const SizedBox(height: 40),
-                            _B2BProcessSection(isMobile: isMobile),
-                            const SizedBox(height: 60),
-                          ],
+                      // CENTERED CONTENT (maxWidth)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 0),
+                        child: Center(
+                          child: ConstrainedBox(
+                            constraints: BoxConstraints(maxWidth: maxWidth),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                _B2BWhyChooseSection(isMobile: isMobile),
+                                const SizedBox(height: 40),
+                                _B2BOfferingsSection(isMobile: isMobile),
+                                const SizedBox(height: 40),
+                                _B2BIndustriesSection(isMobile: isMobile),
+                                const SizedBox(height: 40),
+                                _B2BProcessSection(isMobile: isMobile),
+                                const SizedBox(height: 60),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
-                    ),
+
+                      // 🔹 FULL-WIDTH FOOTER
+                      PieFooter(
+                        onProgramTap: (id) {
+                          switch (id) {
+                            case 'managers':
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) =>
+                                      const AgenticManagersDetailPage(),
+                                ),
+                              );
+                              break;
+
+                            case 'developers':
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) =>
+                                      const AgenticDevelopersDetailPage(),
+                                ),
+                              );
+                              break;
+
+                            case 'ds_intern':
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) =>
+                                      const DataScienceInternshipDetailPage(),
+                                ),
+                              );
+                              break;
+
+                            case 'ds_foundation':
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) =>
+                                      const DataScienceFoundationDetailPage(),
+                                ),
+                              );
+                              break;
+                          }
+                        },
+                        onAboutTap: () => handlePieNavTap(context, 'about'),
+                        onVerticalsTap: () =>
+                            handlePieNavTap(context, 'verticals'),
+                        onBlogTap: () => handlePieNavTap(context, 'tnc'),
+                        onFaqTap: () => handlePieNavTap(context, 'faq'),
+                        onEmailTap: () {},
+                        onPhoneTap: () {},
+                      ),
+
+                      // ✅ 6. Add Bottom Padding for Sticky Bar
+                      // const SizedBox(height: 80),
+                    ],
                   ),
+                );
+              },
+            ),
+          ),
 
-                  // 🔹 FULL-WIDTH FOOTER (ConstrainedBox ke bahar)
-                  PieFooter(
-                    // ✅ 4 Programs → specific detail pages
-                    onProgramTap: (id) {
-                      switch (id) {
-                        case 'managers':
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) =>
-                                  const AgenticManagersDetailPage(),
-                            ),
-                          );
-                          break;
-
-                        case 'developers':
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) =>
-                                  const AgenticDevelopersDetailPage(),
-                            ),
-                          );
-                          break;
-
-                        case 'ds_intern':
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) =>
-                                  const DataScienceInternshipDetailPage(),
-                            ),
-                          );
-                          break;
-
-                        case 'ds_foundation':
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) =>
-                                  const DataScienceFoundationDetailPage(),
-                            ),
-                          );
-                          break;
-                      }
-                    },
-
-                    // ✅ About Us link
-                    onAboutTap: () {
-                      handlePieNavTap(context, 'about');
-                    },
-
-                    // ✅ Our Verticals → B2G (vertical mapping main.dart me hai)
-                    onVerticalsTap: () {
-                      handlePieNavTap(context, 'verticals');
-                    },
-
-                    // ✅ Terms & Conditions
-                    onBlogTap: () {
-                      handlePieNavTap(context, 'tnc');
-                    },
-
-                    // ✅ FAQ
-                    onFaqTap: () {
-                      handlePieNavTap(context, 'faq');
-                    },
-
-                    // ✅ optional: email/phone future ke liye
-                    onEmailTap: () {
-                      // TODO: email launcher
-                    },
-                    onPhoneTap: () {
-                      // TODO: phone dialer
-                    },
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
+          // ✅ 7. Add Sticky Bottom Bar Widget
+          const MobileStickyBottomBar(),
+        ],
       ),
     );
   }
 }
-
-const String mailchimpUrl = 'https://mailchi.mp/ad52932183fa/piestudy';
-
-
-/**--------------MAILCHIMP FUNCTION---------------*/
-  Future<void> _openMailchimp(BuildContext context) async {
-    final uri = Uri.parse(mailchimpUrl);
-    if (kIsWeb) {
-      // open in same tab on web
-      await launchUrl(uri, webOnlyWindowName: '_self');
-      return;
-    }
-
-    // native: open external browser
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Unable to open signup page.')),
-      );
-    }
-  }
-
-
-
-    void _openEnrollmentDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (ctx) => const EnrollmentFormDialog(),
-    );
-  }
-
 
 /// ---------------- HERO (FULL WIDTH) ----------------
 
@@ -233,10 +209,18 @@ class _B2BHeroSection extends StatelessWidget {
     required this.maxWidth,
   });
 
+  // Helper for manual opening from Hero button
+  void _openEnrollmentDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (ctx) => const EnrollmentFormDialog(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity, // 👈 full width background
+      width: double.infinity,
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
@@ -258,9 +242,8 @@ class _B2BHeroSection extends StatelessWidget {
               horizontal: isMobile ? 16 : 24,
             ),
             child: Column(
-              crossAxisAlignment: isMobile
-                  ? CrossAxisAlignment.start
-                  : CrossAxisAlignment.center,
+              crossAxisAlignment:
+                  isMobile ? CrossAxisAlignment.start : CrossAxisAlignment.center,
               children: [
                 Row(
                   mainAxisAlignment: isMobile
@@ -284,8 +267,7 @@ class _B2BHeroSection extends StatelessWidget {
                 const SizedBox(height: 16),
                 Text(
                   'Empowering Companies to Adopt AI at Scale',
-                  textAlign:
-                      isMobile ? TextAlign.left : TextAlign.center,
+                  textAlign: isMobile ? TextAlign.left : TextAlign.center,
                   softWrap: true,
                   style: const TextStyle(
                     fontFamily: 'Inter',
@@ -298,8 +280,7 @@ class _B2BHeroSection extends StatelessWidget {
                 const SizedBox(height: 10),
                 Text(
                   'Transform your organisation with enterprise AI training, hands-on workshops and strategic consulting designed for real business impact.',
-                  textAlign:
-                      isMobile ? TextAlign.left : TextAlign.center,
+                  textAlign: isMobile ? TextAlign.left : TextAlign.center,
                   softWrap: true,
                   style: const TextStyle(
                     fontFamily: 'Inter',
@@ -312,12 +293,10 @@ class _B2BHeroSection extends StatelessWidget {
                 Wrap(
                   spacing: 12,
                   runSpacing: 12,
-                  alignment: isMobile
-                      ? WrapAlignment.start
-                      : WrapAlignment.center,
+                  alignment:
+                      isMobile ? WrapAlignment.start : WrapAlignment.center,
                   children: [
                     ElevatedButton(
-                      // onPressed: () {},
                       onPressed: () => _openEnrollmentDialog(context),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.orange,
@@ -344,8 +323,7 @@ class _B2BHeroSection extends StatelessWidget {
                       onPressed: () {},
                       style: OutlinedButton.styleFrom(
                         side: BorderSide(
-                            color:
-                                AppColors.navy.withOpacity(0.35)),
+                            color: AppColors.navy.withOpacity(0.35)),
                         padding: EdgeInsets.symmetric(
                           horizontal: isMobile ? 18 : 24,
                           vertical: 13,
@@ -425,8 +403,7 @@ class _B2BWhyChooseSection extends StatelessWidget {
         Wrap(
           spacing: 24,
           runSpacing: 24,
-          alignment:
-              isMobile ? WrapAlignment.start : WrapAlignment.center,
+          alignment: isMobile ? WrapAlignment.start : WrapAlignment.center,
           children: items
               .map(
                 (e) => SizedBox(
@@ -514,8 +491,7 @@ class _B2BIndustriesSection extends StatelessWidget {
     return _SectionBlock(
       isMobile: isMobile,
       title: 'Industries We Serve',
-      subtitle:
-          'Trusted by leading organisations across multiple sectors.',
+      subtitle: 'Trusted by leading organisations across multiple sectors.',
       child: _IndustryChips(
         isMobile: isMobile,
         labels: industries,
@@ -548,22 +524,19 @@ class _B2BProcessSection extends StatelessWidget {
       _ProcessStep(
         number: 3,
         title: 'Custom Program Design',
-        description:
-            'Create a tailored curriculum aligned with your objectives.',
+        description: 'Create a tailored curriculum aligned with your objectives.',
       ),
-       _ProcessStep(
+      _ProcessStep(
         number: 4,
         title: 'Training Delivery',
         description:
-            
-'Hands-on, practical training sessions led by industry experts.',
+            'Hands-on, practical training sessions led by industry experts.',
       ),
-       _ProcessStep(
+      _ProcessStep(
         number: 5,
-        title: 'Ongoing Support'
-,        description:
-            
-'Continuous support and follow-up to ensure successful implementation.',
+        title: 'Ongoing Support',
+        description:
+            'Continuous support and follow-up to ensure successful implementation.',
       ),
     ];
 
@@ -737,8 +710,7 @@ class _OfferingsGridSlim extends StatelessWidget {
       itemBuilder: (context, index) {
         final offering = offerings[index];
         return Container(
-          padding:
-              const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(14),
@@ -803,13 +775,11 @@ class _IndustryChips extends StatelessWidget {
     return Wrap(
       spacing: 16,
       runSpacing: 16,
-      alignment:
-          isMobile ? WrapAlignment.start : WrapAlignment.center,
+      alignment: isMobile ? WrapAlignment.start : WrapAlignment.center,
       children: labels
           .map(
             (label) => Container(
-              padding: const EdgeInsets.symmetric(
-                  horizontal: 22, vertical: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 12),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(14),
@@ -863,8 +833,7 @@ class _ProcessStepCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding:
-          const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),

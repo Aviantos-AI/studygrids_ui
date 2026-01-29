@@ -328,7 +328,7 @@ class _HeroSection extends StatelessWidget {
           onPressed: () => _openEnrollmentDialog(context),
 
           style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFF071827),
+            backgroundColor: const Color(0xFF0B3558),
             foregroundColor: Colors.white,
             padding:
                 const EdgeInsets.symmetric(horizontal: 28, vertical: 13),

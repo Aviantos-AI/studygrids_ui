@@ -95,25 +95,25 @@ class _PieStudyHomePageState extends State<PieStudyHomePage> {
 
 
 
-  // ✅ 1. Scroll Controller (Scroll track karne ke liye)
+  //  1. Scroll Controller (Scroll track karne ke liye)
   final ScrollController _scrollController = ScrollController();
   
   Timer? _timer; 
   bool _isDialogOpen = false;
   
-  // ✅ Session Guard: Ek baar true hua to refresh tak true rahega
+  //  Session Guard: Ek baar true hua to refresh tak true rahega
   bool _hasShownInSession = false;
 
   @override
   void initState() {
     super.initState();
 
-    // ✅ 2. Logic: 10 Seconds baad try karo
-    _timer = Timer(const Duration(seconds: 10), () {
+    //  2. Logic: 15 Seconds baad try karo
+    _timer = Timer(const Duration(seconds: 15), () {
       _checkAndShowDialog();
     });
 
-    // ✅ 3. Logic: Scroll Listener (50% scroll hone par try karo)
+    //  3. Logic: Scroll Listener (50% scroll hone par try karo)
     _scrollController.addListener(() {
       // Agar pehle dikh chuka hai to calculation bhi mat karo (Performance Optimization)
       if (_hasShownInSession) return; 
@@ -132,7 +132,7 @@ class _PieStudyHomePageState extends State<PieStudyHomePage> {
 
   /// Check logic
   void _checkAndShowDialog() {
-    // ✅ Agar pehle dikh chuka hai (_hasShownInSession == true), to wapas laut jao
+    //  Agar pehle dikh chuka hai (_hasShownInSession == true), to wapas laut jao
     if (!mounted || _isDialogOpen || _hasShownInSession) return;
 
     _openDialogProcess();
@@ -142,12 +142,12 @@ class _PieStudyHomePageState extends State<PieStudyHomePage> {
   Future<void> _openDialogProcess() async {
     if (_isDialogOpen) return;
 
-    // ✅ Timer cancel kar do (taaki agar scroll se khula ho, to timer baad me na chale)
+    //  Timer cancel kar do (taaki agar scroll se khula ho, to timer baad me na chale)
     _timer?.cancel();
 
     setState(() {
       _isDialogOpen = true;
-      _hasShownInSession = true; // ✅ Yaha Lock lag gaya. Ab ye session me dobara false nahi hoga.
+      _hasShownInSession = true; //  Yaha Lock lag gaya. Ab ye session me dobara false nahi hoga.
     });
 
     if (!mounted) return;
@@ -170,13 +170,13 @@ class _PieStudyHomePageState extends State<PieStudyHomePage> {
   @override
   void dispose() {
     _timer?.cancel();
-    _scrollController.dispose(); // ✅ Controller dispose karna zaroori hai
+    _scrollController.dispose(); //  Controller dispose karna zaroori hai
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    // ✅ Responsive Check using 1.5.1 syntax
+    //  Responsive Check using 1.5.1 syntax
     final isMobile = ResponsiveBreakpoints.of(context).isMobile;
     final isWide = MediaQuery.of(context).size.width >= 800;
 
@@ -214,7 +214,7 @@ class _PieStudyHomePageState extends State<PieStudyHomePage> {
         ],
       ),
 
-      // 👇 mobile + tablet ke liye drawer navigation
+      //  mobile + tablet ke liye drawer navigation
       endDrawer: Drawer(
         child: PieNavDrawer(
           activeId: 'home',
@@ -225,7 +225,7 @@ class _PieStudyHomePageState extends State<PieStudyHomePage> {
         ),
       ),
 
-      // ✅ Stack for Sticky Bottom Bar
+      //  Stack for Sticky Bottom Bar
       body: Stack(
         children: [
           Container(
@@ -592,7 +592,7 @@ class _HeroLeft extends StatelessWidget {
                 elevation: 0,
               ),
               child: const Text(
-                'Explore Programs',
+                'Courses',
                 style: TextStyle(
                   fontFamily: 'Inter',
                   fontWeight: FontWeight.w700,
@@ -707,7 +707,7 @@ class _PulsingEnrollButtonLeftState extends State<_PulsingEnrollButtonLeft>
                   shadowColor: Colors.black.withOpacity(0.35),
                 ),
                 child: const Text(
-                  'Get in Touch 🔥',
+                  'Register Now 🔥',
                   style: TextStyle(
                     fontFamily: 'Inter',
                     fontWeight: FontWeight.w700,

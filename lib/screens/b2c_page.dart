@@ -9,9 +9,14 @@ import 'package:pie_study/screens/main_navigation.dart';
 import 'package:pie_study/widgets/app_colors.dart';
 import 'package:pie_study/main.dart';
 import 'package:pie_study/widgets/global_floating_button.dart';
+import 'package:pie_study/widgets/mobile_sticky_bottom.dart';
 import 'package:pie_study/widgets/pie_footer.dart'; // handlePieNavTap
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:url_launcher/url_launcher.dart';
+
+
+
+
 
 // const String mailchimpUrl = 'https://mailchi.mp/ad52932183fa/piestudy';
 
@@ -33,7 +38,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 //       endDrawer: Drawer(
 //         child: PieNavDrawer(
-//           activeId: 'b2c',
+//           activeId: 'b2c', // ✅ FIX: 'b2g' -> 'b2c'
 //           onItemTap: (id) {
 //             Navigator.pop(context);
 //             handlePieNavTap(context, id);
@@ -53,7 +58,7 @@ import 'package:url_launcher/url_launcher.dart';
 //           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
 //           child: PieTopNav(
 //             onItemTap: (id) => handlePieNavTap(context, id),
-//             activeId: 'b2g',
+//             activeId: 'b2c', // ✅ FIX: 'b2g' -> 'b2c' (Highlight Correct Tab)
 //           ),
 //         ),
 //         actions: [
@@ -104,43 +109,26 @@ import 'package:url_launcher/url_launcher.dart';
 //                       ),
 //                     ),
 //                   ),
+                  
+//                   // FOOTER
 //                   PieFooter(
-//                     // ✅ 4 Programs → specific detail pages
+//                     // ✅ 4 Programs → specific detail pages via Named Routes
 //                     onProgramTap: (id) {
 //                       switch (id) {
 //                         case 'managers':
-//                           Navigator.of(context).push(
-//                             MaterialPageRoute(
-//                               builder: (_) => const AgenticManagersDetailPage(),
-//                             ),
-//                           );
+//                           Navigator.of(context).pushNamed('/program/managers');
 //                           break;
 
 //                         case 'developers':
-//                           Navigator.of(context).push(
-//                             MaterialPageRoute(
-//                               builder: (_) =>
-//                                   const AgenticDevelopersDetailPage(),
-//                             ),
-//                           );
+//                           Navigator.of(context).pushNamed('/program/agentic-ai-training');
 //                           break;
 
 //                         case 'ds_intern':
-//                           Navigator.of(context).push(
-//                             MaterialPageRoute(
-//                               builder: (_) =>
-//                                   const DataScienceInternshipDetailPage(),
-//                             ),
-//                           );
+//                           Navigator.of(context).pushNamed('/program/datascience-training');
 //                           break;
 
 //                         case 'ds_foundation':
-//                           Navigator.of(context).push(
-//                             MaterialPageRoute(
-//                               builder: (_) =>
-//                                   const DataScienceFoundationDetailPage(),
-//                             ),
-//                           );
+//                           Navigator.of(context).pushNamed('/program/datascience-foundation');
 //                           break;
 //                       }
 //                     },
@@ -150,7 +138,7 @@ import 'package:url_launcher/url_launcher.dart';
 //                       handlePieNavTap(context, 'about');
 //                     },
 
-//                     // ✅ Our Verticals → B2G (vertical mapping main.dart me hai)
+//                     // ✅ Our Verticals → B2C
 //                     onVerticalsTap: () {
 //                       handlePieNavTap(context, 'verticals');
 //                     },
@@ -165,13 +153,9 @@ import 'package:url_launcher/url_launcher.dart';
 //                       handlePieNavTap(context, 'faq');
 //                     },
 
-//                     // ✅ optional: email/phone future ke liye
-//                     onEmailTap: () {
-//                       // TODO: email launcher
-//                     },
-//                     onPhoneTap: () {
-//                       // TODO: phone dialer
-//                     },
+//                     //  optional: email/phone
+//                     onEmailTap: () {},
+//                     onPhoneTap: () {},
 //                   ),
 //                 ],
 //               ),
@@ -288,7 +272,6 @@ import 'package:url_launcher/url_launcher.dart';
 //                   children: [
 //                     // gold button with white text
 //                     ElevatedButton(
-//                       // onPressed: () {},
 //                       onPressed: () => handlePieNavTap(context, 'programs'),
 //                       style: ElevatedButton.styleFrom(
 //                         backgroundColor: AppColors.orange,
@@ -325,7 +308,7 @@ import 'package:url_launcher/url_launcher.dart';
 //                         backgroundColor: Colors.transparent,
 //                       ),
 //                       child: const Text(
-//                         'Download Brochure',
+//                         'Get in Touch',
 //                         style: TextStyle(
 //                           fontFamily: 'Inter',
 //                           fontWeight: FontWeight.w600,
@@ -547,17 +530,14 @@ import 'package:url_launcher/url_launcher.dart';
 //   }
 // }
 
-// /**---------------MAIL CHIMP FUNCTION--------- */
+// /**---------------MAIL CHIMP FUNCTION & DIALOG--------- */
 
 // Future<void> _openMailchimp(BuildContext context) async {
 //   final uri = Uri.parse(mailchimpUrl);
 //   if (kIsWeb) {
-//     // open in same tab on web
 //     await launchUrl(uri, webOnlyWindowName: '_self');
 //     return;
 //   }
-
-//   // native: open external browser
 //   if (await canLaunchUrl(uri)) {
 //     await launchUrl(uri, mode: LaunchMode.externalApplication);
 //   } else {
@@ -567,12 +547,12 @@ import 'package:url_launcher/url_launcher.dart';
 //   }
 // }
 
-//     void _openEnrollmentDialog(BuildContext context) {
-//     showDialog(
-//       context: context,
-//       builder: (ctx) => const EnrollmentFormDialog(),
-//     );
-//   }
+// void _openEnrollmentDialog(BuildContext context) {
+//   showDialog(
+//     context: context,
+//     builder: (ctx) => const EnrollmentFormDialog(),
+//   );
+// }
 
 // /// ---------------- HIGHLIGHT CTA (NAVY + GOLD) ----------------
 
@@ -635,8 +615,7 @@ import 'package:url_launcher/url_launcher.dart';
 //                     runSpacing: 10,
 //                     children: [
 //                       ElevatedButton(
-//                         // onPressed: () {},
-//                      onPressed: () => _openEnrollmentDialog( context),
+//                         onPressed: () => _openEnrollmentDialog(context),
 //                         style: ElevatedButton.styleFrom(
 //                           backgroundColor: _pieGold,
 //                           foregroundColor: Colors.white,
@@ -659,7 +638,6 @@ import 'package:url_launcher/url_launcher.dart';
 //                         ),
 //                       ),
 //                       OutlinedButton(
-//                         // onPressed: () {},
 //                         onPressed: () => handlePieNavTap(context, 'contact'),
 //                         style: OutlinedButton.styleFrom(
 //                           side: const BorderSide(color: Colors.white70),
@@ -719,8 +697,7 @@ import 'package:url_launcher/url_launcher.dart';
 //                     runSpacing: 8,
 //                     children: [
 //                       ElevatedButton(
-//                         // onPressed: () {},
-//                       onPressed: () => _openEnrollmentDialog( context),
+//                         onPressed: () => _openEnrollmentDialog(context),
 //                         style: ElevatedButton.styleFrom(
 //                           backgroundColor: AppColors.orange,
 //                           foregroundColor: Colors.white,
@@ -743,7 +720,6 @@ import 'package:url_launcher/url_launcher.dart';
 //                         ),
 //                       ),
 //                       OutlinedButton(
-//                         // onPressed: () {},
 //                         onPressed: () => handlePieNavTap(context, 'contact'),
 //                         style: OutlinedButton.styleFrom(
 //                           side: const BorderSide(color: Colors.white70),
@@ -1106,16 +1082,40 @@ import 'package:url_launcher/url_launcher.dart';
 
 
 
+
+// ✅ 1. Custom Imports (Mixin & Sticky Bar)
+import 'package:pie_study/utils/enrollment_mixin.dart';
+
+// ✅ Assumed Imports (Replace with your actual paths)
+
+// import 'package:pie_study/utils/navigation_utils.dart'; // handlePieNavTap
+
 const String mailchimpUrl = 'https://mailchi.mp/ad52932183fa/piestudy';
 
 // Logo colors
 const Color _pieBlue = Color(0xFF0B3558); // deep navy
-const Color _pieGold = Color(0xFFFDB515); // warm golden
+const Color _pieGold = Color(0xFFFF7E21); // warm golden
+// Footer matching color for bottom spacing
+const Color _footerColor = Color(0xFF0B3558); 
 
-/// =======================  B2C PAGE  =======================
-
-class B2CPage extends StatelessWidget {
+// ✅ 2. Converted to StatefulWidget
+class B2CPage extends StatefulWidget {
   const B2CPage({super.key});
+
+  @override
+  State<B2CPage> createState() => _B2CPageState();
+}
+
+// ✅ 3. Added Mixin
+class _B2CPageState extends State<B2CPage> with EnrollmentPopupMixin {
+  
+  // Helper to open dialog manually
+  void _openEnrollmentDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (ctx) => const EnrollmentFormDialog(),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -1126,7 +1126,7 @@ class B2CPage extends StatelessWidget {
 
       endDrawer: Drawer(
         child: PieNavDrawer(
-          activeId: 'b2c', // ✅ FIX: 'b2g' -> 'b2c'
+          activeId: 'b2c',
           onItemTap: (id) {
             Navigator.pop(context);
             handlePieNavTap(context, id);
@@ -1146,7 +1146,8 @@ class B2CPage extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
           child: PieTopNav(
             onItemTap: (id) => handlePieNavTap(context, id),
-            activeId: 'b2c', // ✅ FIX: 'b2g' -> 'b2c' (Highlight Correct Tab)
+            activeId: 'b2c',
+            onEnrollTap: () => _openEnrollmentDialog(context),
           ),
         ),
         actions: [
@@ -1160,96 +1161,114 @@ class B2CPage extends StatelessWidget {
         ],
       ),
 
-      body: SafeArea(
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            final bool isMobile = constraints.maxWidth < 700;
-            final double maxWidth = isMobile ? constraints.maxWidth : 1180;
+      // ✅ 4. Stack for Sticky Bottom Bar
+      body: Stack(
+        children: [
+          SafeArea(
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final bool isMobile = constraints.maxWidth < 700;
+                final double maxWidth = isMobile ? constraints.maxWidth : 1180;
 
-            return SingleChildScrollView(
-              child: Column(
-                children: [
-                  _B2CHeroSection(isMobile: isMobile, maxWidth: maxWidth),
-                  const SizedBox(height: 40),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 0,
-                    ),
-                    child: Center(
-                      child: ConstrainedBox(
-                        constraints: BoxConstraints(maxWidth: maxWidth),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            _B2CWhyChooseSection(isMobile: isMobile),
-                            const SizedBox(height: 40),
-                            _B2CProgramsSection(isMobile: isMobile),
-                            const SizedBox(height: 40),
-                            _B2CLearnersSection(isMobile: isMobile),
-                            const SizedBox(height: 40),
-                            _B2CLearningJourneySection(isMobile: isMobile),
-                            const SizedBox(height: 32),
-                            _B2CHighlightCTASection(isMobile: isMobile),
-                            const SizedBox(height: 60),
-                          ],
+                return SingleChildScrollView(
+                  // ✅ 5. Connected Scroll Controller from Mixin
+                  controller: enrollmentScrollController,
+                  
+                  child: Column(
+                    children: [
+                      // HERO SECTION
+                      _B2CHeroSection(isMobile: isMobile, maxWidth: maxWidth),
+                      
+                      const SizedBox(height: 40),
+
+                      // MAIN CONTENT
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 0,
+                        ),
+                        child: Center(
+                          child: ConstrainedBox(
+                            constraints: BoxConstraints(maxWidth: maxWidth),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                _B2CWhyChooseSection(isMobile: isMobile),
+                                const SizedBox(height: 40),
+                                _B2CProgramsSection(isMobile: isMobile),
+                                const SizedBox(height: 40),
+                                _B2CLearnersSection(isMobile: isMobile),
+                                const SizedBox(height: 40),
+                                _B2CLearningJourneySection(isMobile: isMobile),
+                                const SizedBox(height: 32),
+                                _B2CHighlightCTASection(isMobile: isMobile),
+                                const SizedBox(height: 60),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
-                    ),
+                      
+                      // FOOTER
+                      PieFooter(
+                        onProgramTap: (id) {
+                          switch (id) {
+                            case 'managers':
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => const AgenticManagersDetailPage(),
+                                ),
+                              );
+                              break;
+
+                            case 'developers':
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => const AgenticDevelopersDetailPage(),
+                                ),
+                              );
+                              break;
+
+                            case 'ds_intern':
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => DataScienceInternshipDetailPage(),
+                                ),
+                              );
+                              break;
+
+                            case 'ds_foundation':
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => const DataScienceFoundationDetailPage(),
+                                ),
+                              );
+                              break;
+                          }
+                        },
+                        onAboutTap: () => handlePieNavTap(context, 'about'),
+                        onVerticalsTap: () => handlePieNavTap(context, 'verticals'),
+                        onBlogTap: () => handlePieNavTap(context, 'tnc'),
+                        onFaqTap: () => handlePieNavTap(context, 'faq'),
+                        onEmailTap: () {},
+                        onPhoneTap: () {},
+                      ),
+
+                      // ✅ 6. Bottom Spacer with Footer Color (Seamless look)
+                      Container(
+                        height: 42, // Space for Sticky Bar
+                        color: _footerColor, // Matches Footer Background
+                      ),
+                    ],
                   ),
-                  
-                  // FOOTER
-                  PieFooter(
-                    // ✅ 4 Programs → specific detail pages via Named Routes
-                    onProgramTap: (id) {
-                      switch (id) {
-                        case 'managers':
-                          Navigator.of(context).pushNamed('/program/managers');
-                          break;
+                );
+              },
+            ),
+          ),
 
-                        case 'developers':
-                          Navigator.of(context).pushNamed('/program/agentic-ai-training');
-                          break;
-
-                        case 'ds_intern':
-                          Navigator.of(context).pushNamed('/program/datascience-training');
-                          break;
-
-                        case 'ds_foundation':
-                          Navigator.of(context).pushNamed('/program/datascience-foundation');
-                          break;
-                      }
-                    },
-
-                    // ✅ About Us link
-                    onAboutTap: () {
-                      handlePieNavTap(context, 'about');
-                    },
-
-                    // ✅ Our Verticals → B2C
-                    onVerticalsTap: () {
-                      handlePieNavTap(context, 'verticals');
-                    },
-
-                    // ✅ Terms & Conditions
-                    onBlogTap: () {
-                      handlePieNavTap(context, 'tnc');
-                    },
-
-                    // ✅ FAQ
-                    onFaqTap: () {
-                      handlePieNavTap(context, 'faq');
-                    },
-
-                    //  optional: email/phone
-                    onEmailTap: () {},
-                    onPhoneTap: () {},
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
+          // ✅ 7. Sticky Bottom Bar
+          const MobileStickyBottomBar(),
+        ],
       ),
     );
   }
@@ -1263,6 +1282,13 @@ class _B2CHeroSection extends StatelessWidget {
 
   const _B2CHeroSection({required this.isMobile, required this.maxWidth});
 
+  void _openEnrollmentDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (ctx) => const EnrollmentFormDialog(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -1271,7 +1297,7 @@ class _B2CHeroSection extends StatelessWidget {
         gradient: LinearGradient(
           colors: [
             _pieBlue,
-            Color(0xFF072339), // thoda dark bottom
+            Color(0xFF072339),
           ],
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
@@ -1383,7 +1409,7 @@ class _B2CHeroSection extends StatelessWidget {
                       ),
                     ),
                     OutlinedButton(
-                      onPressed: () {},
+                      onPressed: () => _openEnrollmentDialog(context),
                       style: OutlinedButton.styleFrom(
                         side: const BorderSide(color: Colors.white70),
                         padding: EdgeInsets.symmetric(
@@ -1396,7 +1422,7 @@ class _B2CHeroSection extends StatelessWidget {
                         backgroundColor: Colors.transparent,
                       ),
                       child: const Text(
-                        'Download Brochure',
+                        'Get in Touch',
                         style: TextStyle(
                           fontFamily: 'Inter',
                           fontWeight: FontWeight.w600,
@@ -1618,35 +1644,18 @@ class _B2CLearningJourneySection extends StatelessWidget {
   }
 }
 
-/**---------------MAIL CHIMP FUNCTION & DIALOG--------- */
-
-Future<void> _openMailchimp(BuildContext context) async {
-  final uri = Uri.parse(mailchimpUrl);
-  if (kIsWeb) {
-    await launchUrl(uri, webOnlyWindowName: '_self');
-    return;
-  }
-  if (await canLaunchUrl(uri)) {
-    await launchUrl(uri, mode: LaunchMode.externalApplication);
-  } else {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Unable to open signup page.')),
-    );
-  }
-}
-
-void _openEnrollmentDialog(BuildContext context) {
-  showDialog(
-    context: context,
-    builder: (ctx) => const EnrollmentFormDialog(),
-  );
-}
-
 /// ---------------- HIGHLIGHT CTA (NAVY + GOLD) ----------------
 
 class _B2CHighlightCTASection extends StatelessWidget {
   final bool isMobile;
   const _B2CHighlightCTASection({required this.isMobile});
+
+  void _openEnrollmentDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (ctx) => const EnrollmentFormDialog(),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {

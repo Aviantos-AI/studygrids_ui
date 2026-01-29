@@ -406,7 +406,8 @@ class _HeroText extends StatelessWidget {
             // onPressed: () {},
             onPressed: () => handlePieNavTap(context, 'programs'),
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF16A34A),
+              // backgroundColor: const Color(0xFF16A34A),
+              backgroundColor: const Color(0xFFFF7E21),
               foregroundColor: Colors.white,
               padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 12),
               shape: RoundedRectangleBorder(
@@ -1584,7 +1585,7 @@ class _BottomCtaSection extends StatelessWidget {
                       // onPressed: () {},
                       onPressed: () => handlePieNavTap(context, 'programs'),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF16A34A),
+                        backgroundColor: const Color(0xFFFF7E21),
                         foregroundColor: Colors.white,
                         padding: const EdgeInsets.symmetric(
                           horizontal: 22,
@@ -1608,7 +1609,7 @@ class _BottomCtaSection extends StatelessWidget {
                       // onPressed: () {},
                       onPressed: () => _openMailchimp(context),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFF97316),
+                        backgroundColor: const Color(0xFF0B3558),
                         foregroundColor: Colors.white,
                         padding: const EdgeInsets.symmetric(
                           horizontal: 22,

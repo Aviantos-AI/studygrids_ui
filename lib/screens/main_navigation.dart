@@ -78,7 +78,7 @@ class PieTopNav extends StatelessWidget {
                     elevation: 0,
                   ),
                   child: const Text(
-                    'Enroll Now',
+                    'Enquire Now',
                     style: TextStyle(
                       fontFamily: 'Inter',
                       fontWeight: FontWeight.w700,
