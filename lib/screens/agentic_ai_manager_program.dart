@@ -1108,7 +1108,7 @@ class _HeroText extends StatelessWidget {
                 elevation: 2,
               ),
               child: const Text(
-                'Enquire Now',
+                'Enroll Now',
                 style: TextStyle(
                   fontFamily: 'Inter',
                   fontWeight: FontWeight.w700,

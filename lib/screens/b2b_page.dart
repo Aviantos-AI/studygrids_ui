@@ -71,7 +71,15 @@ class _B2BPageState extends State<B2BPage> with EnrollmentPopupMixin {
           child: PieTopNav(
             onItemTap: (id) => handlePieNavTap(context, id),
             activeId: 'b2b',
-            onEnrollTap: () => _openEnrollmentDialog(context),
+            onEnrollTap: () {
+            showDialog(
+                context: context,
+                builder: (ctx) => const CustomEnrollmentDialog(
+                  title: "Enquire Now",
+                  subtitle: " ",
+                ),
+              );},
+            // _openEnrollmentDialog(context),
           ),
         ),
         actions: [
@@ -297,7 +305,17 @@ class _B2BHeroSection extends StatelessWidget {
                       isMobile ? WrapAlignment.start : WrapAlignment.center,
                   children: [
                     ElevatedButton(
-                      onPressed: () => _openEnrollmentDialog(context),
+                      // onPressed: () => _openEnrollmentDialog(context),
+
+                      onPressed: () {
+ showDialog(
+      context: context,
+      builder: (context) => const CustomEnrollmentDialog(
+        title: "Get Your Proposal",
+        subtitle: "Fill in the form to receive a customized solution.",
+      ),
+    );
+  },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.orange,
                         foregroundColor: Colors.white,

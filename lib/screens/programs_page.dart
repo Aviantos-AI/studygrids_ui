@@ -9,6 +9,7 @@ import 'package:pie_study/main.dart';
 
 import 'package:pie_study/screens/main_navigation.dart';
 import 'package:pie_study/widgets/app_colors.dart';
+import 'package:pie_study/widgets/global_floating_button.dart';
 import 'package:pie_study/widgets/pie_footer.dart'; // footer
 
 
@@ -47,6 +48,15 @@ class ProgramsPage extends StatelessWidget {
           child: PieTopNav(
             onItemTap: (id) => handlePieNavTap(context, id),
             activeId: 'programs', // ✅ "Programs" tab highlight
+            onEnrollTap: () {
+              showDialog(
+                context: context,
+                builder: (ctx) => const CustomEnrollmentDialog(
+                  title: "Enquire Now",
+                  subtitle: " ",
+                ),
+              );
+            },
             onCtaTap: () => handlePieNavTap(context, 'contact'),
           ),
         ),

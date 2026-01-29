@@ -48,8 +48,15 @@ class PieStudyAboutPage extends StatelessWidget {
             onEnrollTap: () {
               showDialog(
                 context: context,
-                builder: (ctx) => const EnrollmentFormDialog(),
+                builder: (ctx) => const CustomEnrollmentDialog(
+                  title: "Enquire Now",
+                  subtitle: " ",
+                ),
               );
+              // showDialog(
+              //   context: context,
+              //   builder: (ctx) => const EnrollmentFormDialog(),
+              // );
             },
             ctaLabel: 'FAQ',
             onCtaTap: () => handlePieNavTap(context, 'faq'),

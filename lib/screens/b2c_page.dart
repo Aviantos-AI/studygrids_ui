@@ -1147,7 +1147,16 @@ class _B2CPageState extends State<B2CPage> with EnrollmentPopupMixin {
           child: PieTopNav(
             onItemTap: (id) => handlePieNavTap(context, id),
             activeId: 'b2c',
-            onEnrollTap: () => _openEnrollmentDialog(context),
+            onEnrollTap: () {
+              showDialog(
+                context: context,
+                builder: (ctx) => const CustomEnrollmentDialog(
+                  title: "Enquire Now",
+                  subtitle: " ",
+                ),
+              );
+            },
+            // onEnrollTap: () => _openEnrollmentDialog(context),
           ),
         ),
         actions: [

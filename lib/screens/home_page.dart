@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:pie_study/utils/enrollment_mixin.dart';
 import 'package:pie_study/widgets/mobile_sticky_bottom.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -29,150 +30,9 @@ class PieStudyHomePage extends StatefulWidget {
   State<PieStudyHomePage> createState() => _PieStudyHomePageState();
 }
 
-class _PieStudyHomePageState extends State<PieStudyHomePage> {
-  // Timer? _popupTimer;
+class _PieStudyHomePageState extends State<PieStudyHomePage> with EnrollmentPopupMixin {
+
   
-  // // Controls if dialog is currently on screen
-  // bool _isDialogOpen = false;
-  
-  // // ✅ Session Guard: Ensures popup appears only once per session (until reload)
-  // bool _hasShownInSession = false;
-
-  // @override
-  // void initState() {
-  //   super.initState();
-    
-  //   // ✅ Web Fix: Delay ensures UI overlay is ready before showing dialog
-  //   WidgetsBinding.instance.addPostFrameCallback((_) async {
-  //     await Future.delayed(const Duration(seconds: 1));
-  //     _checkAndShowDialog();
-  //   });
-
-  //   // Check periodically (Safety check)
-  //   _popupTimer = Timer.periodic(const Duration(seconds: 60), (_) {
-  //     _checkAndShowDialog();
-  //   });
-  // }
-
-  // /// Logic to trigger popup automatically
-  // void _checkAndShowDialog() {
-  //   // If widget is gone, dialog is open, or ALREADY SHOWN in this session -> STOP
-  //   if (!mounted || _isDialogOpen || _hasShownInSession) return;
-
-  //   _openDialogProcess();
-  // }
-
-  // /// Main function to handle dialog opening
-  // Future<void> _openDialogProcess() async {
-  //   if (_isDialogOpen) return;
-
-  //   setState(() {
-  //     _isDialogOpen = true;
-  //     _hasShownInSession = true; // ✅ Mark as shown. Won't appear again until Reload.
-  //   });
-
-  //   if (!mounted) return;
-
-  //   await showDialog(
-  //     context: context,
-  //     barrierDismissible: true, // ✅ Allows Force Block (Click outside)
-  //     builder: (ctx) => const EnrollmentFormDialog(),
-  //   );
-
-  //   // Dialog Closed (Submit, Cancel, or Force Block handled here)
-  //   if (mounted) {
-  //     setState(() {
-  //       _isDialogOpen = false;
-  //     });
-  //   }
-  // }
-
-  // @override
-  // void dispose() {
-  //   _popupTimer?.cancel();
-  //   super.dispose();
-  // }
-
-
-
-  //  1. Scroll Controller (Scroll track karne ke liye)
-  final ScrollController _scrollController = ScrollController();
-  
-  Timer? _timer; 
-  bool _isDialogOpen = false;
-  
-  //  Session Guard: Ek baar true hua to refresh tak true rahega
-  bool _hasShownInSession = false;
-
-  @override
-  void initState() {
-    super.initState();
-
-    //  2. Logic: 15 Seconds baad try karo
-    _timer = Timer(const Duration(seconds: 15), () {
-      _checkAndShowDialog();
-    });
-
-    //  3. Logic: Scroll Listener (50% scroll hone par try karo)
-    _scrollController.addListener(() {
-      // Agar pehle dikh chuka hai to calculation bhi mat karo (Performance Optimization)
-      if (_hasShownInSession) return; 
-
-      if (_scrollController.hasClients) {
-        final maxScroll = _scrollController.position.maxScrollExtent;
-        final currentScroll = _scrollController.offset;
-
-        // Agar 50% se jyada scroll hua
-        if (maxScroll > 0 && (currentScroll / maxScroll) >= 0.5) {
-          _checkAndShowDialog();
-        }
-      }
-    });
-  }
-
-  /// Check logic
-  void _checkAndShowDialog() {
-    //  Agar pehle dikh chuka hai (_hasShownInSession == true), to wapas laut jao
-    if (!mounted || _isDialogOpen || _hasShownInSession) return;
-
-    _openDialogProcess();
-  }
-
-  /// Open Dialog
-  Future<void> _openDialogProcess() async {
-    if (_isDialogOpen) return;
-
-    //  Timer cancel kar do (taaki agar scroll se khula ho, to timer baad me na chale)
-    _timer?.cancel();
-
-    setState(() {
-      _isDialogOpen = true;
-      _hasShownInSession = true; //  Yaha Lock lag gaya. Ab ye session me dobara false nahi hoga.
-    });
-
-    if (!mounted) return;
-
-    await showDialog(
-      context: context,
-      barrierDismissible: true, // User bahar click karke cancel kar sakta hai
-      builder: (ctx) => const EnrollmentFormDialog(),
-    );
-
-    // Jab dialog band hoga (Cancel/Submit), tab sirf _isDialogOpen false hoga.
-    // _hasShownInSession TRUE hi rahega.
-    if (mounted) {
-      setState(() {
-        _isDialogOpen = false;
-      });
-    }
-  }
-
-  @override
-  void dispose() {
-    _timer?.cancel();
-    _scrollController.dispose(); //  Controller dispose karna zaroori hai
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -197,8 +57,14 @@ class _PieStudyHomePageState extends State<PieStudyHomePage> {
             onItemTap: (id) => handlePieNavTap(context, id),
             activeId: 'home',
             onEnrollTap: () {
-              // Manual tap also uses the safe process
-              _openDialogProcess();
+            showDialog(
+                context: context,
+                builder: (ctx) => const CustomEnrollmentDialog(
+                  title: "Enquire Now",
+                  subtitle: " ",
+                ),
+              );
+              // _openDialogProcess();
             },
           ),
         ),
@@ -244,7 +110,7 @@ class _PieStudyHomePageState extends State<PieStudyHomePage> {
 
                 // full-page scroll + content (centered) + footer (full width)
                 return SingleChildScrollView(
-                  controller: _scrollController,
+                  controller: enrollmentScrollController,
                   // ✅ Mobile Padding to avoid overlapping with bottom bar
                   padding: isMobile ? const EdgeInsets.only(bottom: 100) : EdgeInsets.zero,
                   child: Column(
@@ -507,6 +373,7 @@ class _HeroSectionState extends State<_HeroSection> {
 
 class _HeroLeft extends StatelessWidget {
   const _HeroLeft();
+  
 
   @override
   Widget build(BuildContext context) {
@@ -604,10 +471,7 @@ class _HeroLeft extends StatelessWidget {
             _PulsingEnrollButtonLeft(
               onTap: () {
                 // Manual tap also triggers the safe dialog process
-                final state = context.findAncestorStateOfType<_PieStudyHomePageState>();
-                if(state != null) {
-                  state._openDialogProcess();
-                }
+               _openEnrollmentDialog(context );
               },
             ),
           ],
@@ -776,202 +640,7 @@ class _FeatureChip extends StatelessWidget {
   }
 }
 
-// class _RightHeroCardAnimated extends StatelessWidget {
-//   const _RightHeroCardAnimated();
 
-
-//   void _openEnrollmentDialog(BuildContext context) {
-//     showDialog(
-//       context: context,
-//       builder: (ctx) => const EnrollmentFormDialog(),
-//     );
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Material(
-//       color: Colors.transparent,
-//       child: InkWell(
-//         // onTap: () => _openMailchimp(context),
-//         onTap: () => _openEnrollmentDialog(context),
-//         borderRadius: BorderRadius.circular(32),
-//         child: Container(
-//           decoration: BoxDecoration(
-//             color: Colors.white,
-//             borderRadius: BorderRadius.circular(32),
-//             boxShadow: [
-//               BoxShadow(
-//                 color: const Color(0xFFCA8A04).withOpacity(0.15),
-//                 blurRadius: 50,
-//                 offset: const Offset(0, 22),
-//                 spreadRadius: -6,
-//               ),
-//             ],
-//             border: Border.all(color: Colors.white, width: 3),
-//           ),
-//           child: ClipRRect(
-//             borderRadius: BorderRadius.circular(32),
-//             child: Column(
-//               mainAxisSize: MainAxisSize.min,
-//               children: [
-//                 Stack(
-//                   children: [
-//                     Container(
-//                       padding: const EdgeInsets.fromLTRB(24, 20, 24, 20),
-//                       width: double.infinity,
-//                       decoration: const BoxDecoration(
-//                         gradient: LinearGradient(
-//                           begin: Alignment.topLeft,
-//                           end: Alignment.bottomRight,
-//                           colors: [AppColors.orange, Color(0xFFFF8C42)],
-//                         ),
-//                       ),
-//                       child: Column(
-//                         crossAxisAlignment: CrossAxisAlignment.start,
-//                         children: [
-//                           Row(
-//                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                             children: const [
-//                               _StatusBadge(
-//                                 text: 'Live Cohort',
-//                                 icon: Icons.sensors_rounded,
-//                               ),
-//                               _PulsingBadge(text: 'Limited Seats Left 🔥'),
-//                             ],
-//                           ),
-//                           const SizedBox(height: 14),
-//                           const Text(
-//                             'Agentic AI Course',
-//                             style: TextStyle(
-//                               fontFamily: 'Inter',
-//                               fontWeight: FontWeight.w900,
-//                               fontSize: 24,
-//                               height: 1.05,
-//                               letterSpacing: -0.5,
-//                               color: Color(0xFF1E1B4B),
-//                             ),
-//                           ),
-//                           const SizedBox(height: 6),
-//                           RichText(
-//                             text: TextSpan(
-//                               children: [
-//                                 const TextSpan(
-//                                   text: 'Weekend-friendly batch  ',
-//                                   style: TextStyle(
-//                                     fontFamily: 'Inter',
-//                                     fontWeight: FontWeight.w700,
-//                                     fontSize: 14,
-//                                     color: Color(0xFF78350F),
-//                                   ),
-//                                 ),
-//                                 TextSpan(
-//                                   text: '· Starts From 7th Feb',
-//                                   style: const TextStyle(
-//                                     fontFamily: 'Inter',
-//                                     fontWeight: FontWeight.w900,
-//                                     fontSize: 16,
-//                                     color: Color(0xFF78350F),
-//                                   ),
-//                                 ),
-//                               ],
-//                             ),
-//                           ),
-//                           const SizedBox(height: 14),
-//                           const CountdownTimerWidget(),
-//                           const SizedBox(height: 14),
-//                           Wrap(
-//                             spacing: 8,
-//                             runSpacing: 8,
-//                             children: const [
-//                               _BannerChip(label: 'RAG + N8N Projects'),
-//                               _BannerChip(label: 'Hands on Agent Workflow'),
-//                               _BannerChip(label: 'Internship pathway'),
-//                             ],
-//                           ),
-//                         ],
-//                       ),
-//                     ),
-//                     Positioned(
-//                       top: -36,
-//                       right: -36,
-//                       child: Container(
-//                         width: 110,
-//                         height: 110,
-//                         decoration: BoxDecoration(
-//                           shape: BoxShape.circle,
-//                           color: Colors.white.withOpacity(0.1),
-//                         ),
-//                       ),
-//                     ),
-//                   ],
-//                 ),
-//                 Container(
-//                   padding: const EdgeInsets.all(18),
-//                   color: const Color(0xFFFFFBEB),
-//                   child: Column(
-//                     children: [
-//                       const Text(
-//                         'Master the future of AI Automation',
-//                         textAlign: TextAlign.center,
-//                         style: TextStyle(
-//                           fontFamily: 'Inter',
-//                           fontWeight: FontWeight.w800,
-//                           fontSize: 15,
-//                           color: Color(0xFF0F172A),
-//                         ),
-//                       ),
-//                       const SizedBox(height: 12),
-//                       SizedBox(
-//                         width: double.infinity,
-//                         child: ElevatedButton(
-//                           // onPressed: () => _openMailchimp(context),
-//                           onPressed: () => _openEnrollmentDialog(context),
-//                           style: ElevatedButton.styleFrom(
-//                             backgroundColor: const Color(0xFFB45309),
-//                             foregroundColor: Colors.white,
-//                             padding: const EdgeInsets.symmetric(vertical: 14),
-//                             shape: RoundedRectangleBorder(
-//                               borderRadius: BorderRadius.circular(16),
-//                             ),
-//                             elevation: 4,
-//                             shadowColor: const Color(
-//                               0xFFB45309,
-//                             ).withOpacity(0.4),
-//                           ),
-//                           child: const Text(
-//                             'Secure Your Spot For Free Webinar',
-//                             style: TextStyle(
-//                               fontFamily: 'Inter',
-//                               fontWeight: FontWeight.w800,
-//                               fontSize: 15,
-//                             ),
-//                           ),
-//                         ),
-//                       ),
-//                       const SizedBox(height: 10),
-//                       const Text(
-//                         'Batch Starts From 7th Feb',
-//                         style: TextStyle(
-//                           fontFamily: 'Inter',
-//                           fontSize: 12,
-//                           fontWeight: FontWeight.w600,
-//                           color: Color(0xFF92400E),
-//                         ),
-//                       ),
-//                     ],
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-class _RightHeroCardAnimated extends StatelessWidget {
-  const _RightHeroCardAnimated();
 
   void _openEnrollmentDialog(BuildContext context) {
     showDialog(
@@ -979,6 +648,13 @@ class _RightHeroCardAnimated extends StatelessWidget {
       builder: (ctx) => const EnrollmentFormDialog(),
     );
   }
+
+
+
+class _RightHeroCardAnimated extends StatelessWidget {
+  const _RightHeroCardAnimated();
+
+
 
   @override
   Widget build(BuildContext context) {
