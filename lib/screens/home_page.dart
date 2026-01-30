@@ -14,6 +14,7 @@ import 'package:pie_study/screens/main_navigation.dart';
 import 'package:pie_study/widgets/app_colors.dart';
 import 'package:pie_study/widgets/pie_footer.dart';
 import 'package:pie_study/widgets/global_floating_button.dart';
+import 'package:pie_study/widgets/register_now.dart';
 
 
 
@@ -31,6 +32,22 @@ class PieStudyHomePage extends StatefulWidget {
 }
 
 class _PieStudyHomePageState extends State<PieStudyHomePage> with EnrollmentPopupMixin {
+
+  // ✅ Key to find the RegisterNow form
+  final GlobalKey _registerFormKey = GlobalKey();
+
+  // ✅ Scroll Logic Function
+  void _scrollToRegisterForm() {
+    final context = _registerFormKey.currentContext;
+    if (context != null) {
+      Scrollable.ensureVisible(
+        context,
+        duration: const Duration(milliseconds: 1000),
+        curve: Curves.easeInOutCubic,
+        alignment: 0.1, // Aligns slightly below top for better visibility
+      );
+    }
+  }
 
   
 
@@ -124,10 +141,11 @@ class _PieStudyHomePageState extends State<PieStudyHomePage> with EnrollmentPopu
                         child: Center(
                           child: ConstrainedBox(
                             constraints: BoxConstraints(maxWidth: maxWidth),
-                            child: const Column(
+                            child:  Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
-                                _HeroSection(),
+                                _HeroSection(onRegisterTap: _scrollToRegisterForm),
+                                // _HeroSection(),
                                 SizedBox(height: 40),
                                 _WhyTrustSection(),
                                 SizedBox(height: 40),
@@ -139,7 +157,11 @@ class _PieStudyHomePageState extends State<PieStudyHomePage> with EnrollmentPopu
                                 SizedBox(height: 32),
                                 // CtaCardMinimal(),
                                 CtaJourneySection(),
-                                SizedBox(height: 40),
+                                SizedBox(height: 20),
+                                Container(
+                                  key: _registerFormKey,
+                                  child:  RegisterNow(),
+                                ),
                               ],
                             ),
                           ),
@@ -254,7 +276,9 @@ Future<void> _openMailchimp(BuildContext context) async {
 
 // ... (Previous _HeroSection classes commented out) ...
 class _HeroSection extends StatefulWidget {
-  const _HeroSection();
+  // const _HeroSection();
+  final VoidCallback onRegisterTap;
+  const _HeroSection({required this.onRegisterTap});
 
   @override
   State<_HeroSection> createState() => _HeroSectionState();
@@ -295,7 +319,8 @@ class _HeroSectionState extends State<_HeroSection> {
     return LayoutBuilder(
       builder: (context, constraints) {
         final isWide = constraints.maxWidth >= 900;
-        const leftSection = _HeroLeft();
+        // const leftSection = _HeroLeft();
+        final leftSection = _HeroLeft(onRegisterTap: widget.onRegisterTap);
 
         // ✅ FIXED HEIGHT: Mobile = 410 (Fits content + Date without overflow)
         final rightSlider = SizedBox(
@@ -349,7 +374,7 @@ class _HeroSectionState extends State<_HeroSection> {
           return Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Expanded(flex: 5, child: leftSection),
+               Expanded(flex: 5, child: leftSection),
               const SizedBox(width: 48),
               Expanded(flex: 4, child: rightSlider),
             ],
@@ -372,8 +397,9 @@ class _HeroSectionState extends State<_HeroSection> {
 
 
 class _HeroLeft extends StatelessWidget {
-  const _HeroLeft();
-  
+  // const _HeroLeft();
+  final VoidCallback onRegisterTap;
+  const _HeroLeft({required this.onRegisterTap});
 
   @override
   Widget build(BuildContext context) {
@@ -469,10 +495,11 @@ class _HeroLeft extends StatelessWidget {
             ),
 
             _PulsingEnrollButtonLeft(
-              onTap: () {
+              // onTap: () {
                 // Manual tap also triggers the safe dialog process
-               _openEnrollmentDialog(context );
-              },
+              //  _openEnrollmentDialog(context );
+              onTap: onRegisterTap,
+              // },
             ),
           ],
         ),
