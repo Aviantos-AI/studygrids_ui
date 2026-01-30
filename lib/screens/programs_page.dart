@@ -10,7 +10,9 @@ import 'package:pie_study/main.dart';
 import 'package:pie_study/screens/main_navigation.dart';
 import 'package:pie_study/widgets/app_colors.dart';
 import 'package:pie_study/widgets/global_floating_button.dart';
-import 'package:pie_study/widgets/pie_footer.dart'; // footer
+import 'package:pie_study/widgets/mobile_sticky_bottom.dart';
+import 'package:pie_study/widgets/pie_footer.dart';
+import 'package:pie_study/widgets/register_now.dart'; // footer
 
 
 
@@ -82,115 +84,121 @@ class ProgramsPage extends StatelessWidget {
               constraints.maxWidth > 1320 ? 1320.0 : constraints.maxWidth;
           final bool isMobile = constraints.maxWidth < 720;
 
-          return SingleChildScrollView(
-            child: Column(
-              children: [
-                // -------- CENTERED CONTENT (with maxWidth) --------
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 12, vertical: 32),
-                  child: Center(
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(maxWidth: maxWidth),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          // TITLE
-                          RichText(
-                            textAlign: TextAlign.center,
-                            text: const TextSpan(
-                              style: TextStyle(
-                                fontFamily: 'Inter',
-                                fontWeight: FontWeight.w900,
-                                fontSize: 36,
-                                height: 1.15,
-                                letterSpacing: -0.8,
-                                color: Color(0xFF111827),
-                              ),
-                              children: [
-                                TextSpan(text: 'Choose Your '),
-                                TextSpan(
-                                  text: 'Learning',
-                                  style: TextStyle(color: AppColors.gold),
-                                ),
-                                TextSpan(text: ' Path'),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          SizedBox(
-                            width: maxWidth < 640 ? maxWidth : 640,
-                            child: const Text(
-                              'Find the perfect program to advance your skills and accelerate your career in artificial intelligence.',
+          return Stack(
+            children: [
+              SingleChildScrollView(
+                child: Column(
+                  children: [
+                    // -------- CENTERED CONTENT (with maxWidth) --------
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12, vertical: 32),
+                    child: Center(
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(maxWidth: maxWidth),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            // TITLE
+                            RichText(
                               textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontFamily: 'Inter',
-                                fontSize: 15,
-                                fontWeight: FontWeight.w400,
-                                height: 1.55,
-                                color: Color(0xFF6B7280),
+                              text: const TextSpan(
+                                style: TextStyle(
+                                  fontFamily: 'Inter',
+                                  fontWeight: FontWeight.w900,
+                                  fontSize: 36,
+                                  height: 1.15,
+                                  letterSpacing: -0.8,
+                                  color: Color(0xFF111827),
+                                ),
+                                children: [
+                                  TextSpan(text: 'Choose Your '),
+                                  TextSpan(
+                                    text: 'Learning',
+                                    style: TextStyle(color: AppColors.gold),
+                                  ),
+                                  TextSpan(text: ' Path'),
+                                ],
                               ),
                             ),
-                          ),
-                          const SizedBox(height: 24),
-                          Container(
-                            width: 120,
-                            height: 6,
-                            decoration: BoxDecoration(
-                              color: AppColors.gold.withOpacity(0.9),
-                              borderRadius: BorderRadius.circular(999),
+                            const SizedBox(height: 10),
+                            SizedBox(
+                              width: maxWidth < 640 ? maxWidth : 640,
+                              child: const Text(
+                                'Find the perfect program to advance your skills and accelerate your career in artificial intelligence.',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontFamily: 'Inter',
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w400,
+                                  height: 1.55,
+                                  color: Color(0xFF6B7280),
+                                ),
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 32),
-
-                          // 🔹 Responsive Programs Grid
-                          _ProgramsGrid(
-                            maxWidth: maxWidth,
-                            isMobile: isMobile,
-                          ),
-
-                          const SizedBox(height: 40),
-                        ],
+                            const SizedBox(height: 24),
+                            Container(
+                              width: 120,
+                              height: 6,
+                              decoration: BoxDecoration(
+                                color: AppColors.gold.withOpacity(0.9),
+                                borderRadius: BorderRadius.circular(999),
+                              ),
+                            ),
+                            const SizedBox(height: 32),
+            
+                            // 🔹 Responsive Programs Grid
+                            _ProgramsGrid(
+                              maxWidth: maxWidth,
+                              isMobile: isMobile,
+                            ),
+            
+                            Container(child: RegisterNow(),),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-
-                // -------- FULL-WIDTH FOOTER --------
-                PieFooter(
-                  // ✅ Fixed: Using Named Routes for Footer Links too
-                  onProgramTap: (id) {
-                    switch (id) {
-                      case 'managers':
-                        Navigator.of(context).pushNamed('/program/managers');
-                        break;
-
-                      case 'developers':
-                        Navigator.of(context).pushNamed('/program/agentic-ai-training');
-                        break;
-
-                      case 'ds_intern':
-                        Navigator.of(context).pushNamed('/program/datascience-training');
-                        break;
-
-                      case 'ds_foundation':
-                        Navigator.of(context).pushNamed('/program/datascience-foundation');
-                        break;
-                    }
-                  },
-
-                  // ✅ Global Nav Links
-                  onAboutTap: () => handlePieNavTap(context, 'about'),
-                  onVerticalsTap: () => handlePieNavTap(context, 'verticals'),
-                  onBlogTap: () => handlePieNavTap(context, 'tnc'),
-                  onFaqTap: () => handlePieNavTap(context, 'faq'),
-
-                  // Placeholders
-                  onEmailTap: () {},
-                  onPhoneTap: () {},
-                ),
-              ],
+            
+                  // -------- FULL-WIDTH FOOTER --------
+                  PieFooter(
+                    // ✅ Fixed: Using Named Routes for Footer Links too
+                    onProgramTap: (id) {
+                      switch (id) {
+                        case 'managers':
+                          Navigator.of(context).pushNamed('/program/managers');
+                          break;
+            
+                        case 'developers':
+                          Navigator.of(context).pushNamed('/program/agentic-ai-training');
+                          break;
+            
+                        case 'ds_intern':
+                          Navigator.of(context).pushNamed('/program/datascience-training');
+                          break;
+            
+                        case 'ds_foundation':
+                          Navigator.of(context).pushNamed('/program/datascience-foundation');
+                          break;
+                      }
+                    },
+            
+                    // ✅ Global Nav Links
+                    onAboutTap: () => handlePieNavTap(context, 'about'),
+                    onVerticalsTap: () => handlePieNavTap(context, 'verticals'),
+                    onBlogTap: () => handlePieNavTap(context, 'tnc'),
+                    onFaqTap: () => handlePieNavTap(context, 'faq'),
+            
+                    // Placeholders
+                    onEmailTap: () {},
+                    onPhoneTap: () {},
+                  ),
+                ],
+              ),
             ),
+            
+            MobileStickyBottomBar()
+            ],
           );
         },
       ),
