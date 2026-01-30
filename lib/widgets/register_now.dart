@@ -513,7 +513,7 @@ class _RegisterNowState extends State<RegisterNow> {
                     // --- Header ---
                     const Center(
                       child: Text(
-                        "Register Now",
+                        "Get a Call Back",
                         style: TextStyle(
                           fontFamily: 'Inter',
                           fontSize: 32,
@@ -550,9 +550,9 @@ class _RegisterNowState extends State<RegisterNow> {
                                   : constraints.maxWidth,
                               child: _buildTextField(
                                 controller: _nameController,
-                                label: "Full Name",
+                                label: "Full Name *",
                                 icon: Icons.person_outline,
-                                validator: (v) => (v?.trim().isEmpty ?? true) ? "Name is required" : null,
+                                validator: (v) => (v?.trim().isEmpty ?? true) ? "Name is required *" : null,
                               ),
                             ),
                             SizedBox(
@@ -561,11 +561,11 @@ class _RegisterNowState extends State<RegisterNow> {
                                   : constraints.maxWidth,
                               child: _buildTextField(
                                 controller: _emailController,
-                                label: "Email Address",
+                                label: "Email Address *",
                                 icon: Icons.email_outlined,
                                 validator: (v) {
-                                  if (v?.trim().isEmpty ?? true) return "Email is required";
-                                  if (!v!.contains('@')) return "Invalid email";
+                                  if (v?.trim().isEmpty ?? true) return "Email is required *";
+                                  if (!v!.contains('@')) return "Invalid email *";
                                   return null;
                                 },
                               ),
@@ -607,10 +607,10 @@ class _RegisterNowState extends State<RegisterNow> {
                                   Expanded(
                                     child: _buildTextField(
                                       controller: _phoneController,
-                                      label: "Mobile Number",
+                                      label: "Mobile Number *",
                                       icon: Icons.phone_outlined,
                                       inputType: TextInputType.phone,
-                                      validator: (v) => (v?.length ?? 0) < 10 ? "Invalid mobile" : null,
+                                      validator: (v) => (v?.length ?? 0) < 10 ? "Invalid mobile *" : null,
                                     ),
                                   ),
                                 ],
@@ -624,7 +624,7 @@ class _RegisterNowState extends State<RegisterNow> {
                                   : constraints.maxWidth,
                               child: DropdownButtonFormField<String>(
                                 value: _selectedState,
-                                hint: const Text("Select State / Region"),
+                                hint: const Text("Select State / Region *"),
                                 menuMaxHeight: 300,
                                 icon: const Icon(Icons.keyboard_arrow_down_rounded, color: Colors.grey),
                                 items: _indianStates.map((state) => DropdownMenuItem(
@@ -636,7 +636,7 @@ class _RegisterNowState extends State<RegisterNow> {
                                   ),
                                 )).toList(),
                                 onChanged: (val) => setState(() => _selectedState = val),
-                                validator: (v) => v == null ? "State is required" : null,
+                                validator: (v) => v == null ? "State is required *" : null,
                                 decoration: _inputDecoration("State / Region", icon: Icons.map_outlined),
                               ),
                             ),
@@ -656,7 +656,7 @@ class _RegisterNowState extends State<RegisterNow> {
                         child: Text(course, style: const TextStyle(fontSize: 14, fontFamily: 'Inter')),
                       )).toList(),
                       onChanged: (val) => setState(() => _selectedCourse = val),
-                      validator: (v) => v == null ? "Please select a course" : null,
+                      validator: (v) => v == null ? "Please select a course " : null,
                       decoration: _inputDecoration("Interested Course", icon: Icons.school_outlined),
                     ),
                     const SizedBox(height: 24),

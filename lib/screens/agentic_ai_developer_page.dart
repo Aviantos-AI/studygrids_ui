@@ -11,6 +11,7 @@ import 'package:pie_study/screens/main_navigation.dart';
 import 'package:pie_study/widgets/global_floating_button.dart';
 import 'package:pie_study/widgets/mobile_sticky_bottom.dart';
 import 'package:pie_study/widgets/pie_footer.dart';
+import 'package:pie_study/widgets/register_now.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // class AgenticDevelopersDetailPage extends StatelessWidget {
@@ -1058,17 +1059,18 @@ class _AgenticDevelopersDetailPageState extends State<AgenticDevelopersDetailPag
                               horizontal: 20, vertical: 32),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
-                              _HeroSection(),
-                              SizedBox(height: 40),
-                              _WhoShouldAttendSection(),
-                              SizedBox(height: 40),
-                              _LearningSection(),
-                              SizedBox(height: 44),
-                              _CurriculumSection(),
-                              SizedBox(height: 52),
-                              _OutcomeSection(),
-                              SizedBox(height: 32),
+                            children: [
+                              const _HeroSection(),
+                              const SizedBox(height: 40),
+                              const _WhoShouldAttendSection(),
+                              const SizedBox(height: 40),
+                              const _LearningSection(),
+                              const SizedBox(height: 40),
+                              const _CurriculumSection(),
+                              const SizedBox(height: 40),
+                              const _OutcomeSection(),
+                              Container(child:  RegisterNow(),),
+                              const SizedBox(height: 10),
                             ],
                           ),
                         ),

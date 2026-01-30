@@ -10,6 +10,7 @@ import 'package:pie_study/widgets/app_colors.dart';
 import 'package:pie_study/main.dart';
 import 'package:pie_study/widgets/mobile_sticky_bottom.dart';
 import 'package:pie_study/widgets/pie_footer.dart';
+import 'package:pie_study/widgets/register_now.dart';
 import 'package:url_launcher/url_launcher.dart'; // handlePieNavTap
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:pie_study/widgets/global_floating_button.dart';
@@ -132,7 +133,8 @@ class _B2BPageState extends State<B2BPage> with EnrollmentPopupMixin {
                                 _B2BIndustriesSection(isMobile: isMobile),
                                 const SizedBox(height: 40),
                                 _B2BProcessSection(isMobile: isMobile),
-                                const SizedBox(height: 60),
+                                 SizedBox(height: isMobile ? 20 : 40),
+                                 Container(child:    RegisterNow(),),
                               ],
                             ),
                           ),

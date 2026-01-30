@@ -13,6 +13,7 @@ import 'package:pie_study/main.dart'; // handlePieNavTap
 import 'package:pie_study/screens/main_navigation.dart';
 import 'package:pie_study/widgets/global_floating_button.dart';
 import 'package:pie_study/widgets/pie_footer.dart';
+import 'package:pie_study/widgets/register_now.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:pie_study/widgets/mobile_sticky_bottom.dart';
 
@@ -157,6 +158,7 @@ class _DataScienceFoundationDetailPageState
                                 delay: const Duration(milliseconds: 320),
                                 child: const _OutcomeSection(),
                               ),
+                               Container(child:    RegisterNow(),),
         
                               // Small bottom gap before the full-width footer
                               SizedBox(height: isWide ? 28 : 20),

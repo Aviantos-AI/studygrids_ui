@@ -8,6 +8,7 @@ import 'package:pie_study/screens/main_navigation.dart';
 import 'package:pie_study/widgets/app_colors.dart';
 import 'package:pie_study/main.dart'; // handlePieNavTap
 import 'package:pie_study/widgets/pie_footer.dart';
+import 'package:pie_study/widgets/register_now.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:pie_study/widgets/global_floating_button.dart';
 
@@ -124,7 +125,8 @@ class ContactUsPage extends StatelessWidget {
                               isMobile: isMobile,
                               onConnectTap: () => _openMailchimp(context),
                             ),
-                            SizedBox(height: isDesktop ? 72 : (isTablet ? 60 : 40)),
+                            Container(child: RegisterNow(),),
+                            // SizedBox(height: isDesktop ? 72 : (isTablet ? 60 : 40)),
                           ],
                         ),
                       ),

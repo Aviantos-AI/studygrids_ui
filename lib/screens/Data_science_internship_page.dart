@@ -12,7 +12,204 @@ import 'package:pie_study/screens/main_navigation.dart';
 import 'package:pie_study/widgets/global_floating_button.dart';
 import 'package:pie_study/widgets/mobile_sticky_bottom.dart';
 import 'package:pie_study/widgets/pie_footer.dart';
+import 'package:pie_study/widgets/register_now.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+// class DataScienceInternshipDetailPage extends StatefulWidget {
+//   const DataScienceInternshipDetailPage({super.key});
+
+//   @override
+//   State<DataScienceInternshipDetailPage> createState() =>
+//       _DataScienceInternshipDetailPageState();
+// }
+
+// // ✅ FIX 1: Add 'with EnrollmentPopupMixin'
+// class _DataScienceInternshipDetailPageState
+//     extends State<DataScienceInternshipDetailPage> with EnrollmentPopupMixin {
+
+
+//   @override
+//   Widget build(BuildContext context) {
+//     const pageBg = Color(0xFFF5F7FB);
+
+//     final screenWidth = MediaQuery.of(context).size.width;
+//     final isWide = screenWidth >= 900;
+
+//     final maxContentWidth = isWide ? 1180.0 : 720.0;
+//     final horizontalPadding = isWide ? 20.0 : 16.0;
+
+//     return Scaffold(
+//       backgroundColor: pageBg,
+//       endDrawer: isWide
+//           ? null
+//           : Drawer(
+//               child: SafeArea(
+//                 child: PieNavDrawer(
+//                   activeId: 'programs',
+//                   onItemTap: (id) {
+//                     Navigator.pop(context);
+//                     handlePieNavTap(context, id);
+//                   },
+//                 ),
+//               ),
+//             ),
+
+//       appBar: AppBar(
+//         leading: const BackButton(color: Colors.black87),
+//         backgroundColor: Colors.white,
+//         elevation: 0.4,
+//         shadowColor: Colors.black12,
+//         surfaceTintColor: Colors.transparent,
+//         titleSpacing: 0,
+//         toolbarHeight: 68,
+
+//         title: Padding(
+//           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+//           child: isWide
+//               ? PieTopNav(
+//                   onItemTap: (id) => handlePieNavTap(context, id),
+//                   activeId: 'programs',
+//                   ctaLabel: 'FAQ',
+//                   onCtaTap: () => handlePieNavTap(context, 'faq'),
+//                 )
+//               : const Align(
+//                   alignment: Alignment.centerLeft,
+//                   child: BrandTitle(),
+//                 ),
+//         ),
+
+//         actions: [
+//           if (!isWide)
+//             Builder(
+//               builder: (ctx) => IconButton(
+//                 icon: const Icon(Icons.menu_rounded, color: Colors.black87),
+//                 onPressed: () => Scaffold.of(ctx).openEndDrawer(),
+//               ),
+//             ),
+//         ],
+//       ),
+
+//       body: Stack(
+//         children: [
+//           SafeArea(
+//             child: SingleChildScrollView(
+//                controller: enrollmentScrollController,
+//               child: Column(
+//                 crossAxisAlignment: CrossAxisAlignment.stretch,
+//                 children: [
+        
+//                 // -------- Main Centered Content --------
+//                 Center(
+//                   child: LayoutBuilder(
+//                     builder: (context, constraints) {
+//                       final maxWidth = constraints.maxWidth > maxContentWidth
+//                           ? maxContentWidth
+//                           : constraints.maxWidth;
+        
+//                       return ConstrainedBox(
+//                         constraints: BoxConstraints(maxWidth: maxWidth),
+//                         child: Padding(
+//                           padding: EdgeInsets.symmetric(
+//                             horizontal: horizontalPadding,
+//                             vertical: 24,
+//                           ),
+//                           child: Column(
+//                             crossAxisAlignment: CrossAxisAlignment.center,
+//                             children: [
+//                               const FadeInSlide(
+//                                 delay: Duration(milliseconds: 0),
+//                                 child: _HeroSection(),
+//                               ),
+//                               const SizedBox(height: 48),
+        
+//                               const FadeInSlide(
+//                                 delay: Duration(milliseconds: 120),
+//                                 child: _WhySection(),
+//                               ),
+//                               const SizedBox(height: 56),
+        
+//                               const FadeInSlide(
+//                                 delay: Duration(milliseconds: 220),
+//                                 child: _WhoSection(),
+//                               ),
+//                               const SizedBox(height: 56),
+        
+//                               const FadeInSlide(
+//                                 delay: Duration(milliseconds: 320),
+//                                 child: _StructureSection(),
+//                               ),
+//                               const SizedBox(height: 56),
+        
+//                               const FadeInSlide(
+//                                 delay: Duration(milliseconds: 420),
+//                                 child: _BenefitsSection(),
+//                               ),
+                            
+//                             ],
+//                           ),
+//                         ),
+//                       );
+//                     },
+//                   ),
+//                 ),
+        
+//                 // -------- FULL WIDTH FOOTER --------
+//                 PieFooter(
+//                   onProgramTap: (id) {
+//                     switch (id) {
+//                       case 'managers':
+//                         Navigator.of(context).push(
+//                           MaterialPageRoute(
+//                             builder: (_) => const AgenticManagersDetailPage(),
+//                           ),
+//                         );
+//                         break;
+        
+//                       case 'developers':
+//                         Navigator.of(context).push(
+//                           MaterialPageRoute(
+//                             builder: (_) => const AgenticDevelopersDetailPage(),
+//                           ),
+//                         );
+//                         break;
+        
+//                       case 'ds_intern':
+//                         Navigator.of(context).push(
+//                           MaterialPageRoute(
+//                             builder: (_) => DataScienceInternshipDetailPage(),
+//                           ),
+//                         );
+//                         break;
+        
+//                       case 'ds_foundation':
+//                         Navigator.of(context).push(
+//                           MaterialPageRoute(
+//                             builder: (_) => const DataScienceFoundationDetailPage(),
+//                           ),
+//                         );
+//                         break;
+//                     }
+//                   },
+        
+//                   onAboutTap: () => handlePieNavTap(context, 'about'),
+//                   onVerticalsTap: () => handlePieNavTap(context, 'verticals'),
+//                   onBlogTap: () => handlePieNavTap(context, 'tnc'),
+//                   onFaqTap: () => handlePieNavTap(context, 'faq'),
+        
+//                   onEmailTap: () {},
+//                   onPhoneTap: () {},
+//                 ),
+//               const SizedBox(height: 45),
+//               ],
+//             ),
+//           ),
+//         ),
+//         MobileStickyBottomBar()
+//      ], ),
+//     );
+//   }
+// }
 
 class DataScienceInternshipDetailPage extends StatefulWidget {
   const DataScienceInternshipDetailPage({super.key});
@@ -22,24 +219,21 @@ class DataScienceInternshipDetailPage extends StatefulWidget {
       _DataScienceInternshipDetailPageState();
 }
 
-// ✅ FIX 1: Add 'with EnrollmentPopupMixin'
 class _DataScienceInternshipDetailPageState
-    extends State<DataScienceInternshipDetailPage> with EnrollmentPopupMixin {
-
+    extends State<DataScienceInternshipDetailPage>
+    with EnrollmentPopupMixin {
 
   @override
   Widget build(BuildContext context) {
     const pageBg = Color(0xFFF5F7FB);
 
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isWide = screenWidth >= 900;
-
-    final maxContentWidth = isWide ? 1180.0 : 720.0;
-    final horizontalPadding = isWide ? 20.0 : 16.0;
+    final isDesktop = ResponsiveBreakpoints.of(context).largerThan(TABLET);
+    final maxContentWidth = isDesktop ? 1180.0 : 720.0;
+    final horizontalPadding = isDesktop ? 20.0 : 16.0;
 
     return Scaffold(
       backgroundColor: pageBg,
-      endDrawer: isWide
+      endDrawer: isDesktop
           ? null
           : Drawer(
               child: SafeArea(
@@ -52,7 +246,6 @@ class _DataScienceInternshipDetailPageState
                 ),
               ),
             ),
-
       appBar: AppBar(
         leading: const BackButton(color: Colors.black87),
         backgroundColor: Colors.white,
@@ -61,10 +254,9 @@ class _DataScienceInternshipDetailPageState
         surfaceTintColor: Colors.transparent,
         titleSpacing: 0,
         toolbarHeight: 68,
-
         title: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-          child: isWide
+          child: isDesktop
               ? PieTopNav(
                   onItemTap: (id) => handlePieNavTap(context, id),
                   activeId: 'programs',
@@ -76,9 +268,8 @@ class _DataScienceInternshipDetailPageState
                   child: BrandTitle(),
                 ),
         ),
-
         actions: [
-          if (!isWide)
+          if (!isDesktop)
             Builder(
               builder: (ctx) => IconButton(
                 icon: const Icon(Icons.menu_rounded, color: Colors.black87),
@@ -87,127 +278,74 @@ class _DataScienceInternshipDetailPageState
             ),
         ],
       ),
-
       body: Stack(
         children: [
           SafeArea(
             child: SingleChildScrollView(
-               controller: enrollmentScrollController,
+              controller: enrollmentScrollController,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-        
-                // -------- Main Centered Content --------
-                Center(
-                  child: LayoutBuilder(
-                    builder: (context, constraints) {
-                      final maxWidth = constraints.maxWidth > maxContentWidth
-                          ? maxContentWidth
-                          : constraints.maxWidth;
-        
-                      return ConstrainedBox(
-                        constraints: BoxConstraints(maxWidth: maxWidth),
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: horizontalPadding,
-                            vertical: 24,
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: const [
-                              FadeInSlide(
-                                delay: Duration(milliseconds: 0),
-                                child: _HeroSection(),
-                              ),
-                              SizedBox(height: 48),
-        
-                              FadeInSlide(
-                                delay: Duration(milliseconds: 120),
-                                child: _WhySection(),
-                              ),
-                              SizedBox(height: 56),
-        
-                              FadeInSlide(
-                                delay: Duration(milliseconds: 220),
-                                child: _WhoSection(),
-                              ),
-                              SizedBox(height: 56),
-        
-                              FadeInSlide(
-                                delay: Duration(milliseconds: 320),
-                                child: _StructureSection(),
-                              ),
-                              SizedBox(height: 56),
-        
-                              FadeInSlide(
-                                delay: Duration(milliseconds: 420),
-                                child: _BenefitsSection(),
-                              ),
-        
-                            ],
-                          ),
+                  Center(
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: maxContentWidth),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: horizontalPadding,
+                          vertical: 24,
                         ),
-                      );
-                    },
+                        child: Column(
+                          children: [
+                            const FadeInSlide(child: _HeroSection()),
+                            const SizedBox(height: 48),
+                            const FadeInSlide(child: _WhySection()),
+                            const SizedBox(height: 56),
+                            const FadeInSlide(child: _WhoSection()),
+                            const SizedBox(height: 56),
+                            const FadeInSlide(child: _StructureSection()),
+                            const SizedBox(height: 56),
+                            const FadeInSlide(child: _BenefitsSection()),
+                            Container(child:    RegisterNow(),),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-        
-                // -------- FULL WIDTH FOOTER --------
-                PieFooter(
-                  onProgramTap: (id) {
-                    switch (id) {
-                      case 'managers':
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => const AgenticManagersDetailPage(),
-                          ),
-                        );
-                        break;
-        
-                      case 'developers':
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => const AgenticDevelopersDetailPage(),
-                          ),
-                        );
-                        break;
-        
-                      case 'ds_intern':
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => DataScienceInternshipDetailPage(),
-                          ),
-                        );
-                        break;
-        
-                      case 'ds_foundation':
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => const DataScienceFoundationDetailPage(),
-                          ),
-                        );
-                        break;
-                    }
-                  },
-        
-                  onAboutTap: () => handlePieNavTap(context, 'about'),
-                  onVerticalsTap: () => handlePieNavTap(context, 'verticals'),
-                  onBlogTap: () => handlePieNavTap(context, 'tnc'),
-                  onFaqTap: () => handlePieNavTap(context, 'faq'),
-        
-                  onEmailTap: () {},
-                  onPhoneTap: () {},
-                ),
-              const SizedBox(height: 45),
-              ],
+                  PieFooter(
+                    onProgramTap: (id) {
+                      if (id == 'managers') {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (_) => const AgenticManagersDetailPage()));
+                      } else if (id == 'developers') {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (_) => const AgenticDevelopersDetailPage()));
+                      } else if (id == 'ds_intern') {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (_) => const DataScienceInternshipDetailPage()));
+                      } else if (id == 'ds_foundation') {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (_) => const DataScienceFoundationDetailPage()));
+                      }
+                    },
+                    onAboutTap: () => handlePieNavTap(context, 'about'),
+                    onVerticalsTap: () => handlePieNavTap(context, 'verticals'),
+                    onBlogTap: () => handlePieNavTap(context, 'tnc'),
+                    onFaqTap: () => handlePieNavTap(context, 'faq'),
+                    onEmailTap: () {},
+                    onPhoneTap: () {},
+                  ),
+                  const SizedBox(height: 45),
+                ],
+              ),
             ),
           ),
-        ),
-        MobileStickyBottomBar()
-     ], ),
+          const MobileStickyBottomBar(),
+        ],
+      ),
     );
   }
 }
+
 
 const String mailchimpUrl = 'https://mailchi.mp/ad52932183fa/piestudy';
 
@@ -241,6 +379,212 @@ const String mailchimpUrl = 'https://mailchi.mp/ad52932183fa/piestudy';
 
 /* ================= HERO ================= */
 
+// class _HeroSection extends StatelessWidget {
+//   const _HeroSection();
+
+//   @override
+//   Widget build(BuildContext context) {
+//     final width = MediaQuery.of(context).size.width;
+//     final isWide = width >= 900;
+//     final titleSize = isWide ? 32.0 : 26.0;
+
+//     return Flex(
+//       direction: isWide ? Axis.horizontal : Axis.vertical,
+//       crossAxisAlignment: CrossAxisAlignment.start,
+//       children: [
+//         // LEFT TEXT
+//         Expanded(
+//           flex: 3,
+//           child: Column(
+//             crossAxisAlignment: CrossAxisAlignment.start,
+//             children: [
+//               // small badge
+//               Container(
+//                 padding:
+//                     const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+//                 decoration: BoxDecoration(
+//                   color: const Color(0xFFE0F2FE),
+//                   borderRadius: BorderRadius.circular(999),
+//                 ),
+//                 child: const Text(
+//                   '3-Month Data Science + Internship',
+//                   style: TextStyle(
+//                     fontFamily: 'Inter',
+//                     fontWeight: FontWeight.w600,
+//                     fontSize: 11.5,
+//                     color: Color(0xFF0369A1),
+//                   ),
+//                 ),
+//               ),
+//               const SizedBox(height: 14),
+//               Stack(
+//                 children: [
+//                   Text(
+//                     'Become a Job-\nReady Data\nScientist with\nInternship\nExperience.',
+//                     style: TextStyle(
+//                       fontFamily: 'Inter',
+//                       fontWeight: FontWeight.w900,
+//                       fontSize: titleSize,
+//                       height: 1.1,
+//                       letterSpacing: -0.3,
+//                       color: const Color(0xFF020617),
+//                     ),
+//                   ),
+//                   Text(
+//                     'Become a Job-\nReady Data\nScientist with\nInternship\nExperience.',
+//                     style: TextStyle(
+//                       fontFamily: 'Inter',
+//                       fontWeight: FontWeight.w900,
+//                       fontSize: titleSize,
+//                       height: 1.1,
+//                       letterSpacing: -0.3,
+//                       color: const Color(0xFF071827),
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//               const SizedBox(height: 14),
+//               const SizedBox(
+//                 width: 460,
+//                 child: Text(
+//                   'Transform your career with our comprehensive program that combines in-depth '
+//                   'data science training with invaluable, real-world internship experience.',
+//                   style: TextStyle(
+//                     fontFamily: 'Inter',
+//                     fontSize: 14,
+//                     height: 1.6,
+//                     color: Color(0xFF6B7280),
+//                   ),
+//                 ),
+//               ),
+//               const SizedBox(height: 22),
+//               Wrap(
+//                 spacing: 12,
+//                 runSpacing: 10,
+//                 children: [
+//                   ElevatedButton(
+//                     // onPressed: () {},
+//                  onPressed: () => _openEnrollmentDialog(context),
+//                     style: ElevatedButton.styleFrom(
+//                       backgroundColor: const Color(0xFFFF7E21),
+//                       foregroundColor: Colors.white,
+//                       padding: const EdgeInsets.symmetric(
+//                           horizontal: 24, vertical: 12),
+//                       shape: RoundedRectangleBorder(
+//                         borderRadius: BorderRadius.circular(999),
+//                       ),
+//                       elevation: 0,
+//                     ),
+//                     child: const Text(
+//                       'Enroll Now',
+//                       style: TextStyle(
+//                         fontFamily: 'Inter',
+//                         fontWeight: FontWeight.w700,
+//                         fontSize: 13,
+//                       ),
+//                     ),
+//                   ),
+//                   // OutlinedButton(
+//                   //   onPressed: () {},
+//                   //   style: OutlinedButton.styleFrom(
+//                   //     foregroundColor: const Color(0xFF111827),
+//                   //     side: const BorderSide(color: Color(0xFFD1D5DB)),
+//                   //     padding: const EdgeInsets.symmetric(
+//                   //         horizontal: 24, vertical: 12),
+//                   //     shape: RoundedRectangleBorder(
+//                   //       borderRadius: BorderRadius.circular(999),
+//                   //     ),
+//                   //   ),
+//                   //   child: const Text(
+//                   //     'Download Brochure',
+//                   //     style: TextStyle(
+//                   //       fontFamily: 'Inter',
+//                   //       fontWeight: FontWeight.w600,
+//                   //       fontSize: 13,
+//                   //     ),
+//                   //   ),
+//                   // ),
+//                 ],
+//               ),
+//             ],
+//           ),
+//         ),
+
+//         const SizedBox(width: 32, height: 32),
+
+//         // RIGHT VISUAL: image if available, else icon
+//         Expanded(
+//           flex: 3,
+//           child: SizedBox(
+//             height: isWide ? 260 : 220,
+//             child: ClipRRect(
+//               borderRadius: BorderRadius.circular(24),
+//               child: Image.asset(
+//                 // path must match pubspec.yaml
+//                 'lib/assets/images/data_science.png',
+//                 fit: BoxFit.cover,
+//                 errorBuilder: (context, error, stackTrace) {
+//                   return Container(
+//                     decoration: const BoxDecoration(
+//                       gradient: LinearGradient(
+//                         begin: Alignment.topLeft,
+//                         end: Alignment.bottomRight,
+//                         colors: [
+//                           Color(0xFF052638),
+//                           Color(0xFF0B3B57),
+//                         ],
+//                       ),
+//                     ),
+//                     child: Stack(
+//                       alignment: Alignment.center,
+//                       children: [
+//                         Container(
+//                           width: 190,
+//                           height: 190,
+//                           decoration: BoxDecoration(
+//                             shape: BoxShape.circle,
+//                             gradient: RadialGradient(
+//                               colors: [
+//                                 AppColors.gold.withOpacity(0.18),
+//                                 Colors.transparent,
+//                               ],
+//                             ),
+//                           ),
+//                         ),
+//                         Column(
+//                           mainAxisSize: MainAxisSize.min,
+//                           children: const [
+//                             Icon(
+//                               Icons.show_chart_rounded,
+//                               size: 52,
+//                               color: Colors.white,
+//                             ),
+//                             SizedBox(height: 8),
+//                             Text(
+//                               'Live Projects • Real Data',
+//                               textAlign: TextAlign.center,
+//                               style: TextStyle(
+//                                 fontFamily: 'Inter',
+//                                 fontSize: 11.5,
+//                                 color: Color(0xFFE5E7EB),
+//                               ),
+//                             ),
+//                           ],
+//                         ),
+//                       ],
+//                     ),
+//                   );
+//                 },
+//               ),
+//             ),
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+// }
+
+
 class _HeroSection extends StatelessWidget {
   const _HeroSection();
 
@@ -250,197 +594,174 @@ class _HeroSection extends StatelessWidget {
     final isWide = width >= 900;
     final titleSize = isWide ? 32.0 : 26.0;
 
+    // --- Left Text Content ---
+    Widget leftTextPart = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // small badge
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          decoration: BoxDecoration(
+            color: const Color(0xFFE0F2FE),
+            borderRadius: BorderRadius.circular(999),
+          ),
+          child: const Text(
+            '3-Month Data Science + Internship',
+            style: TextStyle(
+              fontFamily: 'Inter',
+              fontWeight: FontWeight.w600,
+              fontSize: 11.5,
+              color: Color(0xFF0369A1),
+            ),
+          ),
+        ),
+        const SizedBox(height: 14),
+        Stack(
+          children: [
+            Text(
+              'Become a Job-\nReady Data\nScientist with\nInternship\nExperience.',
+              style: TextStyle(
+                fontFamily: 'Inter',
+                fontWeight: FontWeight.w900,
+                fontSize: titleSize,
+                height: 1.1,
+                letterSpacing: -0.3,
+                color: const Color(0xFF020617),
+              ),
+            ),
+            Text(
+              'Become a Job-\nReady Data\nScientist with\nInternship\nExperience.',
+              style: TextStyle(
+                fontFamily: 'Inter',
+                fontWeight: FontWeight.w900,
+                fontSize: titleSize,
+                height: 1.1,
+                letterSpacing: -0.3,
+                color: const Color(0xFF071827),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 14),
+        const SizedBox(
+          width: 460,
+          child: Text(
+            'Transform your career with our comprehensive program that combines in-depth '
+            'data science training with invaluable, real-world internship experience.',
+            style: TextStyle(
+              fontFamily: 'Inter',
+              fontSize: 14,
+              height: 1.6,
+              color: Color(0xFF6B7280),
+            ),
+          ),
+        ),
+        const SizedBox(height: 22),
+        Wrap(
+          spacing: 12,
+          runSpacing: 10,
+          children: [
+            ElevatedButton(
+              onPressed: () => _openEnrollmentDialog(context),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFFFF7E21),
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(999),
+                ),
+                elevation: 0,
+              ),
+              child: const Text(
+                'Enroll Now',
+                style: TextStyle(
+                  fontFamily: 'Inter',
+                  fontWeight: FontWeight.w700,
+                  fontSize: 13,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+
+    // --- Right Visual Content ---
+    Widget rightVisualPart = SizedBox(
+      height: isWide ? 260 : 220,
+      width: double.infinity, // Mobile par full width ke liye
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(24),
+        child: Image.asset(
+          'lib/assets/images/data_science.png',
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) {
+            return Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    Color(0xFF052638),
+                    Color(0xFF0B3B57),
+                  ],
+                ),
+              ),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Container(
+                    width: 190,
+                    height: 190,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: RadialGradient(
+                        colors: [
+                          AppColors.gold.withOpacity(0.18),
+                          Colors.transparent,
+                        ],
+                      ),
+                    ),
+                  ),
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: const [
+                      Icon(
+                        Icons.show_chart_rounded,
+                        size: 52,
+                        color: Colors.white,
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        'Live Projects • Real Data',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontFamily: 'Inter',
+                          fontSize: 11.5,
+                          color: Color(0xFFE5E7EB),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+      ),
+    );
+
     return Flex(
       direction: isWide ? Axis.horizontal : Axis.vertical,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // LEFT TEXT
-        Expanded(
-          flex: 3,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // small badge
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFE0F2FE),
-                  borderRadius: BorderRadius.circular(999),
-                ),
-                child: const Text(
-                  '3-Month Data Science + Internship',
-                  style: TextStyle(
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.w600,
-                    fontSize: 11.5,
-                    color: Color(0xFF0369A1),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 14),
-              Stack(
-                children: [
-                  Text(
-                    'Become a Job-\nReady Data\nScientist with\nInternship\nExperience.',
-                    style: TextStyle(
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.w900,
-                      fontSize: titleSize,
-                      height: 1.1,
-                      letterSpacing: -0.3,
-                      color: const Color(0xFF020617),
-                    ),
-                  ),
-                  Text(
-                    'Become a Job-\nReady Data\nScientist with\nInternship\nExperience.',
-                    style: TextStyle(
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.w900,
-                      fontSize: titleSize,
-                      height: 1.1,
-                      letterSpacing: -0.3,
-                      color: const Color(0xFF071827),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 14),
-              const SizedBox(
-                width: 460,
-                child: Text(
-                  'Transform your career with our comprehensive program that combines in-depth '
-                  'data science training with invaluable, real-world internship experience.',
-                  style: TextStyle(
-                    fontFamily: 'Inter',
-                    fontSize: 14,
-                    height: 1.6,
-                    color: Color(0xFF6B7280),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 22),
-              Wrap(
-                spacing: 12,
-                runSpacing: 10,
-                children: [
-                  ElevatedButton(
-                    // onPressed: () {},
-                 onPressed: () => _openEnrollmentDialog(context),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFFF7E21),
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 24, vertical: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(999),
-                      ),
-                      elevation: 0,
-                    ),
-                    child: const Text(
-                      'Enroll Now',
-                      style: TextStyle(
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w700,
-                        fontSize: 13,
-                      ),
-                    ),
-                  ),
-                  // OutlinedButton(
-                  //   onPressed: () {},
-                  //   style: OutlinedButton.styleFrom(
-                  //     foregroundColor: const Color(0xFF111827),
-                  //     side: const BorderSide(color: Color(0xFFD1D5DB)),
-                  //     padding: const EdgeInsets.symmetric(
-                  //         horizontal: 24, vertical: 12),
-                  //     shape: RoundedRectangleBorder(
-                  //       borderRadius: BorderRadius.circular(999),
-                  //     ),
-                  //   ),
-                  //   child: const Text(
-                  //     'Download Brochure',
-                  //     style: TextStyle(
-                  //       fontFamily: 'Inter',
-                  //       fontWeight: FontWeight.w600,
-                  //       fontSize: 13,
-                  //     ),
-                  //   ),
-                  // ),
-                ],
-              ),
-            ],
-          ),
-        ),
+        // ✅ FIX: Expanded sirf tab use hoga jab space Horizontal ho (Wide Screen)
+        if (isWide) Expanded(flex: 3, child: leftTextPart) else leftTextPart,
 
         const SizedBox(width: 32, height: 32),
 
-        // RIGHT VISUAL: image if available, else icon
-        Expanded(
-          flex: 3,
-          child: SizedBox(
-            height: isWide ? 260 : 220,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(24),
-              child: Image.asset(
-                // path must match pubspec.yaml
-                'lib/assets/images/data_science.png',
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return Container(
-                    decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          Color(0xFF052638),
-                          Color(0xFF0B3B57),
-                        ],
-                      ),
-                    ),
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        Container(
-                          width: 190,
-                          height: 190,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            gradient: RadialGradient(
-                              colors: [
-                                AppColors.gold.withOpacity(0.18),
-                                Colors.transparent,
-                              ],
-                            ),
-                          ),
-                        ),
-                        Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: const [
-                            Icon(
-                              Icons.show_chart_rounded,
-                              size: 52,
-                              color: Colors.white,
-                            ),
-                            SizedBox(height: 8),
-                            Text(
-                              'Live Projects • Real Data',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontFamily: 'Inter',
-                                fontSize: 11.5,
-                                color: Color(0xFFE5E7EB),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ),
-          ),
-        ),
+        // ✅ FIX: Right part ke liye bhi Expanded conditional hai
+        if (isWide) Expanded(flex: 3, child: rightVisualPart) else rightVisualPart,
       ],
     );
   }
@@ -918,102 +1239,113 @@ class _BenefitsSection extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final isWide = constraints.maxWidth >= 900;
-        return Flex(
-          direction: isWide ? Axis.horizontal : Axis.vertical,
+
+        // --- Left Part UI ---
+        Widget leftPart = Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              flex: 2,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  Text(
-                    'Internship Benefits',
-                    style: TextStyle(
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.w800,
-                      fontSize: 20,
-                      color: Color(0xFF111827),
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  SizedBox(
-                    width: 420,
-                    child: Text(
-                      'Our internship isn’t just a certificate—it’s your launchpad into the data science industry, '
-                      'equipped with the experience and tools you need to succeed.',
-                      style: TextStyle(
-                        fontFamily: 'Inter',
-                        fontSize: 13.5,
-                        height: 1.7,
-                        color: Color(0xFF4B5563),
-                      ),
-                    ),
-                  ),
-                ],
+          children: const [
+            Text(
+              'Internship Benefits',
+              style: TextStyle(
+                fontFamily: 'Inter',
+                fontWeight: FontWeight.w800,
+                fontSize: 20,
+                color: Color(0xFF111827),
               ),
             ),
-            const SizedBox(width: 40, height: 32),
-            Expanded(
-              flex: 3,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: benefits
-                    .map(
-                      (b) => Padding(
-                        padding: const EdgeInsets.only(bottom: 10),
-                        child: Row(
+            SizedBox(height: 10),
+            SizedBox(
+              width: 420,
+              child: Text(
+                'Our internship isn’t just a certificate—it’s your launchpad into the data science industry, '
+                'equipped with the experience and tools you need to succeed.',
+                style: TextStyle(
+                  fontFamily: 'Inter',
+                  fontSize: 13.5,
+                  height: 1.7,
+                  color: Color(0xFF4B5563),
+                ),
+              ),
+            ),
+          ],
+        );
+
+        // --- Right Part UI ---
+        Widget rightPart = Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: benefits
+              .map(
+                (b) => Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: 22,
+                        height: 22,
+                        alignment: Alignment.center,
+                        margin: const EdgeInsets.only(top: 2),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFE0F2FE),
+                          borderRadius: BorderRadius.circular(999),
+                        ),
+                        child: const Icon(
+                          Icons.check_rounded,
+                          size: 14,
+                          color: Color(0xFF0EA5E9),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Container(
-                              width: 22,
-                              height: 22,
-                              alignment: Alignment.center,
-                              margin: const EdgeInsets.only(top: 2),
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFE0F2FE),
-                                borderRadius: BorderRadius.circular(999),
-                              ),
-                              child: const Icon(
-                                Icons.check_rounded,
-                                size: 14,
-                                color: Color(0xFF0EA5E9),
+                            Text(
+                              b.$1,
+                              style: const TextStyle(
+                                fontFamily: 'Inter',
+                                fontWeight: FontWeight.w700,
+                                fontSize: 13.5,
+                                color: Color(0xFF111827),
                               ),
                             ),
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    b.$1,
-                                    style: const TextStyle(
-                                      fontFamily: 'Inter',
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 13.5,
-                                      color: Color(0xFF111827),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 2),
-                                  Text(
-                                    b.$2,
-                                    style: const TextStyle(
-                                      fontFamily: 'Inter',
-                                      fontSize: 13,
-                                      height: 1.6,
-                                      color: Color(0xFF4B5563),
-                                    ),
-                                  ),
-                                ],
+                            const SizedBox(height: 2),
+                            Text(
+                              b.$2,
+                              style: const TextStyle(
+                                fontFamily: 'Inter',
+                                fontSize: 13,
+                                height: 1.6,
+                                color: Color(0xFF4B5563),
                               ),
                             ),
                           ],
                         ),
                       ),
-                    )
-                    .toList(),
-              ),
-            ),
+                    ],
+                  ),
+                ),
+              )
+              .toList(),
+        );
+
+        return Flex(
+          direction: isWide ? Axis.horizontal : Axis.vertical,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // ✅ Fix: Only use Expanded in Horizontal mode (Desktop)
+            if (isWide)
+              Expanded(flex: 2, child: leftPart)
+            else
+              leftPart,
+
+            const SizedBox(width: 40, height: 32),
+
+            // ✅ Fix: Only use Expanded in Horizontal mode (Desktop)
+            if (isWide)
+              Expanded(flex: 3, child: rightPart)
+            else
+              rightPart,
           ],
         );
       },

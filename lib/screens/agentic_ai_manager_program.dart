@@ -11,6 +11,7 @@ import 'package:pie_study/utils/enrollment_mixin.dart';
 import 'package:pie_study/widgets/global_floating_button.dart';
 import 'package:pie_study/widgets/mobile_sticky_bottom.dart';
 import 'package:pie_study/widgets/pie_footer.dart';
+import 'package:pie_study/widgets/register_now.dart';
 import 'package:url_launcher/url_launcher.dart'; // handlePieNavTap
 
 
@@ -950,23 +951,24 @@ class _AgenticManagersDetailPageState extends State<AgenticManagersDetailPage> w
                 Center(
                   child: ConstrainedBox(
                     constraints: const BoxConstraints(maxWidth: 1180),
-                    child: const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 32),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 32),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _HeroSection(),
-                          SizedBox(height: 32),
-                          _StatsRow(),
-                          SizedBox(height: 40),
-                          _AudienceSection(),
-                          SizedBox(height: 40),
-                          _LearningSection(),
-                          SizedBox(height: 40),
-                          _CurriculumSection(),
-                          SizedBox(height: 40),
-                          _OutcomeSection(),
-                          SizedBox(height: 40),
+                          const _HeroSection(),
+                          const SizedBox(height: 32),
+                          const _StatsRow(),
+                          const SizedBox(height: 40),
+                          const _AudienceSection(),
+                          const SizedBox(height: 40),
+                          const _LearningSection(),
+                          const SizedBox(height: 40),
+                          const _CurriculumSection(),
+                          const SizedBox(height: 40),
+                          const _OutcomeSection(),
+                          const SizedBox(height: 40),
+                          Container(child:   RegisterNow(),),
                         ],
                       ),
                     ),

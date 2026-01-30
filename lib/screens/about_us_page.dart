@@ -8,6 +8,7 @@ import 'package:pie_study/widgets/app_colors.dart';
 import 'package:pie_study/main.dart'; // handlePieNavTap
 import 'package:pie_study/widgets/pie_footer.dart'; // ✅ Footer import
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:pie_study/widgets/register_now.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:pie_study/widgets/global_floating_button.dart';
 
@@ -93,27 +94,28 @@ class PieStudyAboutPage extends StatelessWidget {
                   child: Center(
                     child: ConstrainedBox(
                       constraints: BoxConstraints(maxWidth: maxWidth),
-                      child: const Column(
+                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          _HeroSection(),
-                          SizedBox(height: 40),
-                          _MissionSection(),
-                          SizedBox(height: 32),
-                          _VisionSection(),
-                          SizedBox(height: 32),
-                          _ValuesSection(),
-                          SizedBox(height: 32),
-                          _ApproachSection(),
-                          SizedBox(height: 32),
-                          _WhyChooseSection(),
-                          SizedBox(height: 40),
-                          _ShapingFutureSection(),
-                          SizedBox(height: 40),
-                          _TeamSection(),
-                          SizedBox(height: 40),
-                          _BottomCtaSection(),
-                          SizedBox(height: 24),
+                          const _HeroSection(),
+                          const SizedBox(height: 40),
+                          const _MissionSection(),
+                          const SizedBox(height: 32),
+                          const _VisionSection(),
+                          const SizedBox(height: 32),
+                          const _ValuesSection(),
+                          const SizedBox(height: 32),
+                          const _ApproachSection(),
+                          const SizedBox(height: 32),
+                          const _WhyChooseSection(),
+                          const SizedBox(height: 40),
+                          const _ShapingFutureSection(),
+                          const SizedBox(height: 40),
+                          const _TeamSection(),
+                          const SizedBox(height: 40),
+                          const _BottomCtaSection(),
+                          // SizedBox(height: 24),
+                          Container(child:  RegisterNow(),)
                         ],
                       ),
                     ),

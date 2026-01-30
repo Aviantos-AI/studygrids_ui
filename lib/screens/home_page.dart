@@ -747,7 +747,7 @@ class _RightHeroCardAnimated extends StatelessWidget {
                               const _PulsingBadge(text: 'Limited Seats 🔥'),
                             ],
                           ),
-                          SizedBox(height: isMobile ? 10 : 14),
+                          SizedBox(height: isMobile ? 8 : 14),
                           
                           // ✅ Smaller Title for Mobile
                           Text(
@@ -755,7 +755,7 @@ class _RightHeroCardAnimated extends StatelessWidget {
                             style: TextStyle(
                               fontFamily: 'Inter',
                               fontWeight: FontWeight.w900,
-                              fontSize: isMobile ? 20 : 24, 
+                              fontSize: isMobile ? 18 : 24, 
                               height: 1.05,
                               letterSpacing: -0.5,
                               color: Colors.white, // Text White on dark orange looks better
@@ -835,7 +835,7 @@ class _RightHeroCardAnimated extends StatelessWidget {
                 
                 // Footer
                 Container(
-                  padding: EdgeInsets.all(isMobile ? 14 : 18),
+                  padding: EdgeInsets.all(isMobile ? 8 : 18),
                   color: const Color(0xFFFFF7ED), // Very Light Orange-White
                   child: Column(
                     children: [
@@ -845,11 +845,11 @@ class _RightHeroCardAnimated extends StatelessWidget {
                         style: TextStyle(
                           fontFamily: 'Inter',
                           fontWeight: FontWeight.w800,
-                          fontSize: isMobile ? 13 : 15,
+                          fontSize: isMobile ? 11 : 15,
                           color: const Color(0xFF9A3412), // Dark Orange Text
                         ),
                       ),
-                      const SizedBox(height: 10),
+                      const SizedBox(height: 8),
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(

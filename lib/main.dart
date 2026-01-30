@@ -1,10 +1,3 @@
-
-
-
-
-
-
-
 import 'package:flutter/material.dart';
 import 'package:pie_study/screens/about_us_page.dart';
 import 'package:pie_study/screens/b2b_page.dart';
@@ -16,22 +9,12 @@ import 'package:pie_study/screens/programs_page.dart';
 import 'package:pie_study/screens/term&Conditions_page.dart';
 import 'package:pie_study/widgets/app_colors.dart';
 import 'package:pie_study/widgets/global_floating_button.dart';
-
-
-
-
-
 import 'package:pie_study/screens/agentic_ai_manager_program.dart';
 import 'package:pie_study/screens/agentic_ai_developer_page.dart';
 import 'package:pie_study/screens/Data_science_internship_page.dart';
 import 'package:pie_study/screens/data_science_course_page.dart';
 import 'package:responsive_framework/responsive_framework.dart';
-
-
-
-
-
-import 'package:url_strategy/url_strategy.dart'; // ✅ 1. Naya Package Import karein
+import 'package:url_strategy/url_strategy.dart'; 
 
 void main() {
   // ✅ 2. Activate Path Url Strategy (Removes # from URL)

@@ -12,6 +12,7 @@ import 'package:pie_study/widgets/global_floating_button.dart';
 import 'package:pie_study/widgets/mobile_sticky_bottom.dart';
 import 'package:pie_study/widgets/pie_footer.dart'; // handlePieNavTap
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:pie_study/widgets/register_now.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 
@@ -1211,7 +1212,8 @@ class _B2CPageState extends State<B2CPage> with EnrollmentPopupMixin {
                                 _B2CLearningJourneySection(isMobile: isMobile),
                                 const SizedBox(height: 32),
                                 _B2CHighlightCTASection(isMobile: isMobile),
-                                const SizedBox(height: 60),
+                                Container(child: RegisterNow(),),
+                               
                               ],
                             ),
                           ),

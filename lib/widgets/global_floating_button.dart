@@ -904,19 +904,19 @@ class _CustomEnrollmentDialogState extends State<CustomEnrollmentDialog> {
                 const SizedBox(height: 8),
 
                 // --- 1. Full Name ---
-                _buildLabel("Full Name"),
+                _buildLabel("Full Name *"),
                 const SizedBox(height: 6),
                 _buildTextField(
                   controller: _nameController,
                   hint: "e.g. Rahul Sharma",
                   icon: Icons.person_outline_rounded,
-                  validator: (v) => (v?.trim().isEmpty ?? true) ? "Name is required" : null,
+                  validator: (v) => (v?.trim().isEmpty ?? true) ? "Name is required *" : null,
                 ),
                 
                 const SizedBox(height: 12),
 
                 // --- 2. Email ---
-                _buildLabel("Email Address"),
+                _buildLabel("Email Address *"),
                 const SizedBox(height: 6),
                 _buildTextField(
                   controller: _emailController,
@@ -924,8 +924,8 @@ class _CustomEnrollmentDialogState extends State<CustomEnrollmentDialog> {
                   icon: Icons.email_outlined,
                   inputType: TextInputType.emailAddress,
                   validator: (v) {
-                    if (v?.trim().isEmpty ?? true) return "Email is required";
-                    if (!v!.contains('@') || !v.contains('.')) return "Enter a valid email";
+                    if (v?.trim().isEmpty ?? true) return "Email is required *";
+                    if (!v!.contains('@') || !v.contains('.')) return "Enter a valid email *";
                     return null;
                   },
                 ),
@@ -933,7 +933,7 @@ class _CustomEnrollmentDialogState extends State<CustomEnrollmentDialog> {
                 const SizedBox(height: 12),
 
                 // --- 3. Mobile ---
-                _buildLabel("Phone Number"),
+                _buildLabel("Phone Number *"),
                 const SizedBox(height: 6),
                 _buildTextField(
                   controller: _phoneController,
@@ -941,8 +941,8 @@ class _CustomEnrollmentDialogState extends State<CustomEnrollmentDialog> {
                   icon: Icons.phone_outlined,
                   inputType: TextInputType.phone,
                   validator: (v) {
-                     if (v?.trim().isEmpty ?? true) return "Phone number is required";
-                     if (v!.length < 10) return "Valid phone number required";
+                     if (v?.trim().isEmpty ?? true) return "Phone number is required *";
+                     if (v!.length < 10) return "Valid phone number required *";
                      return null;
                   },
                 ),
@@ -950,7 +950,7 @@ class _CustomEnrollmentDialogState extends State<CustomEnrollmentDialog> {
                 const SizedBox(height: 12),
 
                 // --- 4. Nature of Enquiry (Mapped to course_suggestion) ---
-                _buildLabel("Nature of Enquiry / Course Interest"),
+                _buildLabel("Nature of Enquiry / Course Interest *"),
                 const SizedBox(height: 6),
                 _buildTextField(
                   controller: _enquiryController,
