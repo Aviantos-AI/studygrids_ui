@@ -115,7 +115,7 @@ class _EnrollmentFormDialogState extends State<EnrollmentFormDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Enroll now for free webinar'),
+      title: const Text('Get a Call Back'),
       content: SingleChildScrollView(
         child: Form(
           key: _formKey,
