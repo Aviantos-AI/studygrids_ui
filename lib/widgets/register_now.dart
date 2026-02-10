@@ -432,7 +432,7 @@ class _RegisterNowState extends State<RegisterNow> {
     setState(() => _isLoading = true);
 
     // API Endpoint
-    final url = Uri.parse('https://trains-sole-tender-follow.trycloudflare.com/leads/interest');
+    final url = Uri.parse('https://paperback-wines-total-eating.trycloudflare.com/leads/interest');
 
     // Request Payload
     final Map<String, dynamic> requestBody = {

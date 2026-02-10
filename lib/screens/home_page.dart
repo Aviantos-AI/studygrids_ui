@@ -777,7 +777,7 @@ class _RightHeroCardAnimated extends StatelessWidget {
                                   ),
                                 ),
                                 TextSpan(
-                                  text: '· Starts 7th Feb',
+                                  text: '· Starts 19th Feb',
                                   style: TextStyle(
                                     fontFamily: 'Inter',
                                     fontWeight: FontWeight.w800,
@@ -879,7 +879,7 @@ class _RightHeroCardAnimated extends StatelessWidget {
                       if (!isMobile) ...[
                         const SizedBox(height: 8),
                         const Text(
-                          'Batch Starts From 7th Feb',
+                          'Batch Starts From 19th Feb',
                           style: TextStyle(
                             fontFamily: 'Inter',
                             fontSize: 11,
@@ -981,7 +981,7 @@ class CountdownTimerWidget extends StatefulWidget {
 
 class _CountdownTimerWidgetState extends State<CountdownTimerWidget> {
   late Timer _timer;
-  final DateTime _targetDate = DateTime(DateTime.now().year, 02, 07, 0, 0, 0);
+  final DateTime _targetDate = DateTime(DateTime.now().year, 02, 19, 0, 0, 0);
   Duration _timeLeft = Duration.zero;
 
   @override
