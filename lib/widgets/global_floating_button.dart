@@ -9,7 +9,7 @@ class GlobalFloatingButton extends StatelessWidget {
   const GlobalFloatingButton({super.key});
 
   Future<void> _openWhatsApp() async {
-    final uri = Uri.parse('https://wa.me/919840540165');
+    final uri = Uri.parse('https://wa.me/919309758526');
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
     }
@@ -68,7 +68,7 @@ class _EnrollmentFormDialogState extends State<EnrollmentFormDialog> {
       try {
         final response = await http.post(
           Uri.parse(
-            'https://maiden-pubmed-stickers-administered.trycloudflare.com/leads/submit',
+            'https://paperback-wines-total-eating.trycloudflare.com/leads/submit',
           ),
           headers: {
             'accept': 'application/json',
@@ -663,7 +663,7 @@ class _EnrollmentFormDialogState extends State<EnrollmentFormDialog> {
 
 
 // ✅ CORRECTED API URL
-const String _apiEndpoint = 'https://trains-sole-tender-follow.trycloudflare.com/webinar/enroll';
+const String _apiEndpoint = 'https://paperback-wines-total-eating.trycloudflare.com/webinar/enroll';
 
 class CustomEnrollmentDialog extends StatefulWidget {
   final String title;
