@@ -872,7 +872,7 @@ class _TeamSection extends StatelessWidget {
     final team = [
       ('Anand Fadte', 'Founder, CTO', 'Anand.jpg'),
       ('Shivraj K', 'Co Founder and Marketing Director', 'Shivraj.jpg'),
-      ('Latha Ram', 'PMO Head', 'Latha.jpg'),
+      ('Somu Abraham Jacob', 'Director of Operations, North India', 'Latha.jpeg'),
       ('Bhargavi Kulkarni', 'Product Manager', 'bhar.jpg'),
       ('Saurav Shinde', 'AI Researcher', 'Saurav.jpg'),
     ];

@@ -275,42 +275,138 @@ Future<void> _openMailchimp(BuildContext context) async {
 }
 
 // ... (Previous _HeroSection classes commented out) ...
-class _HeroSection extends StatefulWidget {
-  // const _HeroSection();
+
+
+
+
+/*******************commented for sometime ******************/
+
+// class _HeroSection extends StatefulWidget {
+//   // const _HeroSection();
+//   final VoidCallback onRegisterTap;
+//   const _HeroSection({required this.onRegisterTap});
+
+//   @override
+//   State<_HeroSection> createState() => _HeroSectionState();
+// }
+
+// class _HeroSectionState extends State<_HeroSection> {
+//   final PageController _pageController = PageController();
+//   int _currentPage = 0;
+//   Timer? _sliderTimer;
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     _sliderTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
+//       if (_pageController.hasClients) {
+//         int nextPage = _currentPage + 1;
+//         if (nextPage > 1) nextPage = 0;
+//         _pageController.animateToPage(
+//           nextPage,
+//           duration: const Duration(milliseconds: 600),
+//           curve: Curves.easeInOutCubic,
+//         );
+//       }
+//     });
+//   }
+
+//   @override
+//   void dispose() {
+//     _sliderTimer?.cancel();
+//     _pageController.dispose();
+//     super.dispose();
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     final isMobile = ResponsiveBreakpoints.of(context).isMobile;
+
+//     return LayoutBuilder(
+//       builder: (context, constraints) {
+//         final isWide = constraints.maxWidth >= 900;
+//         // const leftSection = _HeroLeft();
+//         final leftSection = _HeroLeft(onRegisterTap: widget.onRegisterTap);
+
+//         // ✅ FIXED HEIGHT: Mobile = 410 (Fits content + Date without overflow)
+//         final rightSlider = SizedBox(
+//           height: isMobile ? 410 : 540, 
+//           child: Column(
+//             children: [
+//               Expanded(
+//                 child: PageView(
+//                   controller: _pageController,
+//                   onPageChanged: (idx) {
+//                     setState(() => _currentPage = idx);
+//                   },
+//                   children: const [
+//                     // Card 1
+//                     Padding(
+//                       padding: EdgeInsets.symmetric(horizontal: 12),
+//                       child: Center(child: _DataScienceHeroCard()),
+//                     ),
+//                     // Card 2
+//                     Padding(
+//                       padding: EdgeInsets.symmetric(horizontal: 12),
+//                       // child: Center(child: _RightHeroCardAnimated()),
+//                        child: Center(child: _DataScienceHeroCard()),
+                    
+//                     ),
+//                   ],
+//                 ),
+//               ),
+//               const SizedBox(height: 12),
+//               // Dots
+//               Row(
+//                 mainAxisAlignment: MainAxisAlignment.center,
+//                 children: List.generate(2, (index) {
+//                   return AnimatedContainer(
+//                     duration: const Duration(milliseconds: 100),
+//                     margin: const EdgeInsets.symmetric(horizontal: 4),
+//                     width: _currentPage == index ? 32 : 8,
+//                     height: 8,
+//                     decoration: BoxDecoration(
+//                       color: _currentPage == index
+//                           ? (_currentPage == 0 ? const Color(0xFF1E3A8A) : AppColors.orange)
+//                           : Colors.grey.shade300,
+//                       borderRadius: BorderRadius.circular(99),
+//                     ),
+//                   );
+//                 }),
+//               ),
+//             ],
+//           ),
+//         );
+
+//         if (isWide) {
+//           return Row(
+//             crossAxisAlignment: CrossAxisAlignment.center,
+//             children: [
+//                Expanded(flex: 5, child: leftSection),
+//               const SizedBox(width: 48),
+//               Expanded(flex: 4, child: rightSlider),
+//             ],
+//           );
+//         } else {
+//           return Column(
+//             crossAxisAlignment: CrossAxisAlignment.start,
+//             children: [
+//               rightSlider,
+//               const SizedBox(height: 24),
+//               leftSection,
+//             ],
+//           );
+//         }
+//       },
+//     );
+//   }
+// }
+
+
+
+class _HeroSection extends StatelessWidget {
   final VoidCallback onRegisterTap;
-  const _HeroSection({required this.onRegisterTap});
-
-  @override
-  State<_HeroSection> createState() => _HeroSectionState();
-}
-
-class _HeroSectionState extends State<_HeroSection> {
-  final PageController _pageController = PageController();
-  int _currentPage = 0;
-  Timer? _sliderTimer;
-
-  @override
-  void initState() {
-    super.initState();
-    _sliderTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
-      if (_pageController.hasClients) {
-        int nextPage = _currentPage + 1;
-        if (nextPage > 1) nextPage = 0;
-        _pageController.animateToPage(
-          nextPage,
-          duration: const Duration(milliseconds: 600),
-          curve: Curves.easeInOutCubic,
-        );
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    _sliderTimer?.cancel();
-    _pageController.dispose();
-    super.dispose();
-  }
+  const _HeroSection({super.key, required this.onRegisterTap});
 
   @override
   Widget build(BuildContext context) {
@@ -319,54 +415,18 @@ class _HeroSectionState extends State<_HeroSection> {
     return LayoutBuilder(
       builder: (context, constraints) {
         final isWide = constraints.maxWidth >= 900;
-        // const leftSection = _HeroLeft();
-        final leftSection = _HeroLeft(onRegisterTap: widget.onRegisterTap);
+        
+        // Left Section जैसा आपने दिया था (onRegisterTap के साथ)
+        final leftSection = _HeroLeft(onRegisterTap: onRegisterTap);
 
-        // ✅ FIXED HEIGHT: Mobile = 410 (Fits content + Date without overflow)
-        final rightSlider = SizedBox(
+        // Right Section: इसमें अब सिर्फ 1 ही कार्ड है जैसा आपने माँगा
+        final rightSection = SizedBox(
           height: isMobile ? 410 : 540, 
-          child: Column(
-            children: [
-              Expanded(
-                child: PageView(
-                  controller: _pageController,
-                  onPageChanged: (idx) {
-                    setState(() => _currentPage = idx);
-                  },
-                  children: const [
-                    // Card 1
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 12),
-                      child: Center(child: _DataScienceHeroCard()),
-                    ),
-                    // Card 2
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 12),
-                      child: Center(child: _RightHeroCardAnimated()),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 12),
-              // Dots
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(2, (index) {
-                  return AnimatedContainer(
-                    duration: const Duration(milliseconds: 300),
-                    margin: const EdgeInsets.symmetric(horizontal: 4),
-                    width: _currentPage == index ? 32 : 8,
-                    height: 8,
-                    decoration: BoxDecoration(
-                      color: _currentPage == index
-                          ? (_currentPage == 0 ? const Color(0xFF1E3A8A) : AppColors.orange)
-                          : Colors.grey.shade300,
-                      borderRadius: BorderRadius.circular(99),
-                    ),
-                  );
-                }),
-              ),
-            ],
+          child: const Center(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 12),
+              child: _DataScienceHeroCard(), // कोई एक्स्ट्रा पैरामीटर नहीं
+            ),
           ),
         );
 
@@ -374,16 +434,16 @@ class _HeroSectionState extends State<_HeroSection> {
           return Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-               Expanded(flex: 5, child: leftSection),
+              Expanded(flex: 5, child: leftSection),
               const SizedBox(width: 48),
-              Expanded(flex: 4, child: rightSlider),
+              Expanded(flex: 4, child: rightSection),
             ],
           );
         } else {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              rightSlider,
+              rightSection,
               const SizedBox(height: 24),
               leftSection,
             ],
@@ -393,8 +453,6 @@ class _HeroSectionState extends State<_HeroSection> {
     );
   }
 }
-
-
 
 class _HeroLeft extends StatelessWidget {
   // const _HeroLeft();
@@ -678,227 +736,227 @@ class _FeatureChip extends StatelessWidget {
 
 
 
-class _RightHeroCardAnimated extends StatelessWidget {
-  const _RightHeroCardAnimated();
+// class _RightHeroCardAnimated extends StatelessWidget {
+//   const _RightHeroCardAnimated();
 
 
 
-  @override
-  Widget build(BuildContext context) {
-    // ✅ Check Mobile for sizing
-    final isMobile = ResponsiveBreakpoints.of(context).isMobile;
+//   @override
+//   Widget build(BuildContext context) {
+//     // ✅ Check Mobile for sizing
+//     final isMobile = ResponsiveBreakpoints.of(context).isMobile;
 
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: () => _openEnrollmentDialog(context),
-        borderRadius: BorderRadius.circular(32),
-        child: Container(
-          decoration: BoxDecoration(
-            // ✅ IMPROVED: More Attractive "Tech Orange" Gradient
-            gradient: const LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                Color(0xFFFF7E21), // Vibrant Bright Orange
-                Color(0xFFC2410C), // Deep Rich Orange-Red
-              ],
-            ),
-            borderRadius: BorderRadius.circular(32),
-            boxShadow: [
-              BoxShadow(
-                color: const Color(0xFFC2410C).withOpacity(0.3),
-                blurRadius: 50,
-                offset: const Offset(0, 22),
-                spreadRadius: -6,
-              ),
-            ],
-            border: Border.all(color: Colors.white.withOpacity(0.2), width: 1),
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(32),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Stack(
-                  children: [
-                    Container(
-                      // ✅ Compact Padding for Mobile
-                      padding: EdgeInsets.fromLTRB(
-                          isMobile ? 16 : 24, 
-                          isMobile ? 16 : 20, 
-                          isMobile ? 16 : 24, 
-                          isMobile ? 16 : 20
-                      ),
-                      width: double.infinity,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              _StatusBadge(
-                                text: 'Live Cohort',
-                                icon: Icons.sensors_rounded,
-                                bgColor: Colors.white.withOpacity(0.2),
-                                textColor: Colors.white,
-                                iconColor: Colors.white,
-                              ),
-                              const _PulsingBadge(text: 'Limited Seats 🔥'),
-                            ],
-                          ),
-                          SizedBox(height: isMobile ? 8 : 14),
+//     return Material(
+//       color: Colors.transparent,
+//       child: InkWell(
+//         onTap: () => _openEnrollmentDialog(context),
+//         borderRadius: BorderRadius.circular(32),
+//         child: Container(
+//           decoration: BoxDecoration(
+//             // ✅ IMPROVED: More Attractive "Tech Orange" Gradient
+//             gradient: const LinearGradient(
+//               begin: Alignment.topLeft,
+//               end: Alignment.bottomRight,
+//               colors: [
+//                 Color(0xFFFF7E21), // Vibrant Bright Orange
+//                 Color(0xFFC2410C), // Deep Rich Orange-Red
+//               ],
+//             ),
+//             borderRadius: BorderRadius.circular(32),
+//             boxShadow: [
+//               BoxShadow(
+//                 color: const Color(0xFFC2410C).withOpacity(0.3),
+//                 blurRadius: 50,
+//                 offset: const Offset(0, 22),
+//                 spreadRadius: -6,
+//               ),
+//             ],
+//             border: Border.all(color: Colors.white.withOpacity(0.2), width: 1),
+//           ),
+//           child: ClipRRect(
+//             borderRadius: BorderRadius.circular(32),
+//             child: Column(
+//               mainAxisSize: MainAxisSize.min,
+//               children: [
+//                 Stack(
+//                   children: [
+//                     Container(
+//                       // ✅ Compact Padding for Mobile
+//                       padding: EdgeInsets.fromLTRB(
+//                           isMobile ? 16 : 24, 
+//                           isMobile ? 16 : 20, 
+//                           isMobile ? 16 : 24, 
+//                           isMobile ? 16 : 20
+//                       ),
+//                       width: double.infinity,
+//                       child: Column(
+//                         crossAxisAlignment: CrossAxisAlignment.start,
+//                         children: [
+//                           Row(
+//                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                             children: [
+//                               _StatusBadge(
+//                                 text: 'Live Cohort',
+//                                 icon: Icons.sensors_rounded,
+//                                 bgColor: Colors.white.withOpacity(0.2),
+//                                 textColor: Colors.white,
+//                                 iconColor: Colors.white,
+//                               ),
+//                               const _PulsingBadge(text: 'Limited Seats 🔥'),
+//                             ],
+//                           ),
+//                           SizedBox(height: isMobile ? 8 : 14),
                           
-                          // ✅ Smaller Title for Mobile
-                          Text(
-                            'Agentic AI Course',
-                            style: TextStyle(
-                              fontFamily: 'Inter',
-                              fontWeight: FontWeight.w900,
-                              fontSize: isMobile ? 18 : 24, 
-                              height: 1.05,
-                              letterSpacing: -0.5,
-                              color: Colors.white, // Text White on dark orange looks better
-                            ),
-                          ),
-                          const SizedBox(height: 6),
+//                           // ✅ Smaller Title for Mobile
+//                           Text(
+//                             'Agentic AI Course',
+//                             style: TextStyle(
+//                               fontFamily: 'Inter',
+//                               fontWeight: FontWeight.w900,
+//                               fontSize: isMobile ? 18 : 24, 
+//                               height: 1.05,
+//                               letterSpacing: -0.5,
+//                               color: Colors.white, // Text White on dark orange looks better
+//                             ),
+//                           ),
+//                           const SizedBox(height: 6),
                           
-                          // Subtitle with White text for contrast
-                          RichText(
-                            text: TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: 'Weekend-friendly batch  ',
-                                  style: TextStyle(
-                                    fontFamily: 'Inter',
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: isMobile ? 12 : 14,
-                                    color: Colors.white.withOpacity(0.9),
-                                  ),
-                                ),
-                                TextSpan(
-                                  text: '· Starts 10th March',
-                                  style: TextStyle(
-                                    fontFamily: 'Inter',
-                                    fontWeight: FontWeight.w800,
-                                    fontSize: isMobile ? 13 : 16,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(height: isMobile ? 12 : 14),
+//                           // Subtitle with White text for contrast
+//                           RichText(
+//                             text: TextSpan(
+//                               children: [
+//                                 TextSpan(
+//                                   text: 'Weekend-friendly batch  ',
+//                                   style: TextStyle(
+//                                     fontFamily: 'Inter',
+//                                     fontWeight: FontWeight.w600,
+//                                     fontSize: isMobile ? 12 : 14,
+//                                     color: Colors.white.withOpacity(0.9),
+//                                   ),
+//                                 ),
+//                                 TextSpan(
+//                                   text: '· Starts 25th April',
+//                                   style: TextStyle(
+//                                     fontFamily: 'Inter',
+//                                     fontWeight: FontWeight.w800,
+//                                     fontSize: isMobile ? 13 : 16,
+//                                     color: Colors.white,
+//                                   ),
+//                                 ),
+//                               ],
+//                             ),
+//                           ),
+//                           SizedBox(height: isMobile ? 12 : 14),
                           
-                          // Timer (Assuming CountdownTimerWidget handles its own text styling)
-                          // You might need to update CountdownTimerWidget to accept 'color' if it's hardcoded brown.
-                          // For now, wrapping in a white container to match the Data Science card style
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                            decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.15),
-                              borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: Colors.white.withOpacity(0.25)),
-                            ),
-                            child: const CountdownTimerWidget(), 
-                          ),
+//                           // Timer (Assuming CountdownTimerWidget handles its own text styling)
+//                           // You might need to update CountdownTimerWidget to accept 'color' if it's hardcoded brown.
+//                           // For now, wrapping in a white container to match the Data Science card style
+//                           Container(
+//                             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+//                             decoration: BoxDecoration(
+//                               color: Colors.white.withOpacity(0.15),
+//                               borderRadius: BorderRadius.circular(12),
+//                               border: Border.all(color: Colors.white.withOpacity(0.25)),
+//                             ),
+//                             child: const CountdownTimerWidget(), 
+//                           ),
 
-                          SizedBox(height: isMobile ? 12 : 14),
-                          Wrap(
-                            spacing: 6,
-                            runSpacing: 6,
-                            children: const [
-                              _BannerChipLight(label: 'RAG + N8N Projects'), // Use Light chip for dark bg
-                              _BannerChipLight(label: 'Agent Workflows'),
-                              _BannerChipLight(label: 'Internship Ready'),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
+//                           SizedBox(height: isMobile ? 12 : 14),
+//                           Wrap(
+//                             spacing: 6,
+//                             runSpacing: 6,
+//                             children: const [
+//                               _BannerChipLight(label: 'RAG + N8N Projects'), // Use Light chip for dark bg
+//                               _BannerChipLight(label: 'Agent Workflows'),
+//                               _BannerChipLight(label: 'Internship Ready'),
+//                             ],
+//                           ),
+//                         ],
+//                       ),
+//                     ),
                     
-                    // Decorative Circle
-                    Positioned(
-                      top: -36,
-                      right: -36,
-                      child: Container(
-                        width: 110,
-                        height: 110,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.white.withOpacity(0.1),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+//                     // Decorative Circle
+//                     Positioned(
+//                       top: -36,
+//                       right: -36,
+//                       child: Container(
+//                         width: 110,
+//                         height: 110,
+//                         decoration: BoxDecoration(
+//                           shape: BoxShape.circle,
+//                           color: Colors.white.withOpacity(0.1),
+//                         ),
+//                       ),
+//                     ),
+//                   ],
+//                 ),
                 
-                // Footer
-                Container(
-                  padding: EdgeInsets.all(isMobile ? 8 : 18),
-                  color: const Color(0xFFFFF7ED), // Very Light Orange-White
-                  child: Column(
-                    children: [
-                      Text(
-                        'Master the future of AI Automation',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontFamily: 'Inter',
-                          fontWeight: FontWeight.w800,
-                          fontSize: isMobile ? 11 : 15,
-                          color: const Color(0xFF9A3412), // Dark Orange Text
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () => _openEnrollmentDialog(context),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFFEA580C), // Deep Orange Button
-                            foregroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            elevation: 4,
-                            shadowColor: const Color(0xFFEA580C).withOpacity(0.4),
-                          ),
-                          child: Text(
-                            'Secure Your Free Webinar Spot',
-                            style: TextStyle(
-                              fontFamily: 'Inter',
-                              fontWeight: FontWeight.w800,
-                              fontSize: isMobile ? 13 : 15,
-                            ),
-                          ),
-                        ),
-                      ),
+//                 // Footer
+//                 Container(
+//                   padding: EdgeInsets.all(isMobile ? 8 : 18),
+//                   color: const Color(0xFFFFF7ED), // Very Light Orange-White
+//                   child: Column(
+//                     children: [
+//                       Text(
+//                         'Master the future of AI Automation',
+//                         textAlign: TextAlign.center,
+//                         style: TextStyle(
+//                           fontFamily: 'Inter',
+//                           fontWeight: FontWeight.w800,
+//                           fontSize: isMobile ? 11 : 15,
+//                           color: const Color(0xFF9A3412), // Dark Orange Text
+//                         ),
+//                       ),
+//                       const SizedBox(height: 8),
+//                       SizedBox(
+//                         width: double.infinity,
+//                         child: ElevatedButton(
+//                           onPressed: () => _openEnrollmentDialog(context),
+//                           style: ElevatedButton.styleFrom(
+//                             backgroundColor: const Color(0xFFEA580C), // Deep Orange Button
+//                             foregroundColor: Colors.white,
+//                             padding: const EdgeInsets.symmetric(vertical: 12),
+//                             shape: RoundedRectangleBorder(
+//                               borderRadius: BorderRadius.circular(16),
+//                             ),
+//                             elevation: 4,
+//                             shadowColor: const Color(0xFFEA580C).withOpacity(0.4),
+//                           ),
+//                           child: Text(
+//                             'Secure Your Free Webinar Spot',
+//                             style: TextStyle(
+//                               fontFamily: 'Inter',
+//                               fontWeight: FontWeight.w800,
+//                               fontSize: isMobile ? 13 : 15,
+//                             ),
+//                           ),
+//                         ),
+//                       ),
                       
-                      // ✅ HIDDEN ON MOBILE: Batch Date Row
-                      if (!isMobile) ...[
-                        const SizedBox(height: 8),
-                        const Text(
-                          'Batch Starts From 10th March',
-                          style: TextStyle(
-                            fontFamily: 'Inter',
-                            fontSize: 11,
-                            fontWeight: FontWeight.w600,
-                            color: Color(0xFF9A3412),
-                          ),
-                        ),
-                      ],
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
+//                       // ✅ HIDDEN ON MOBILE: Batch Date Row
+//                       if (!isMobile) ...[
+//                         const SizedBox(height: 8),
+//                         const Text(
+//                           'Batch Starts From 25th April',
+//                           style: TextStyle(
+//                             fontFamily: 'Inter',
+//                             fontSize: 11,
+//                             fontWeight: FontWeight.w600,
+//                             color: Color(0xFF9A3412),
+//                           ),
+//                         ),
+//                       ],
+//                     ],
+//                   ),
+//                 ),
+//               ],
+//             ),
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
 
 
 class _PulsingBadge extends StatefulWidget {
@@ -965,6 +1023,7 @@ class _PulsingBadgeState extends State<_PulsingBadge>
                 color: Colors.white,
               ),
             ),
+            
           ),
         );
       },
@@ -981,7 +1040,7 @@ class CountdownTimerWidget extends StatefulWidget {
 
 class _CountdownTimerWidgetState extends State<CountdownTimerWidget> {
   late Timer _timer;
-  final DateTime _targetDate = DateTime(DateTime.now().year, 03, 10, 0, 0, 0);
+  final DateTime _targetDate = DateTime(DateTime.now().year, 05, 25, 0, 0, 0);
   Duration _timeLeft = Duration.zero;
 
   @override
